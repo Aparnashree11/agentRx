@@ -1,0 +1,58 @@
+{
+  "trajectory_id": "tau_retail_walkthrough_01",
+  "instruction": "Please check order #W1234567 and cancel it if it is still pending.",
+  "events": [
+    {
+      "role": "user",
+      "content": "Please check order #W1234567 and cancel it if it is still pending."
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "call_walkthrough_1",
+          "type": "function",
+          "function": {
+            "name": "get_order_details",
+            "arguments": "{\"order_id\":\"#W1234567\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_walkthrough_1",
+      "name": "get_order_details",
+      "content": "{\"order_id\":\"#W1234567\",\"status\":\"pending\",\"total\":\"$84.50\",\"items\":[{\"item_id\":\"ITEM-1001\",\"name\":\"Desk lamp\",\"price\":\"$84.50\"}]}"
+    },
+    {
+      "role": "assistant",
+      "content": "Order #W1234567 is pending. I will cancel it now; the $84.50 refund will go to your original payment method."
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "tool_calls": [
+        {
+          "id": "call_walkthrough_2",
+          "type": "function",
+          "function": {
+            "name": "cancel_pending_order",
+            "arguments": "{\"order_id\":\"#W1234567\",\"reason\":\"no longer needed\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "call_walkthrough_2",
+      "name": "cancel_pending_order",
+      "content": "{\"order_id\":\"#W1234567\",\"status\":\"cancelled\",\"refund\":\"$84.50\"}"
+    },
+    {
+      "role": "assistant",
+      "content": "The order is cancelled. Your $84.50 refund will be returned to the original payment method."
+    }
+  ]
+}

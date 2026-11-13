@@ -212,7 +212,9 @@ def load_trajectories(path: str) -> List[Trajectory]:
                 return v  # type: ignore[return-value]
         return [obj]
 
-
+    # Read the file as UTF-8, allowing a BOM, and trim surrounding whitespace.
+    # An empty file becomes one empty trajectory named from the file; otherwise
+    # the filename stem is kept as the fallback trajectory ID.
     raw = open(path, "r", encoding="utf-8-sig").read().strip()
     if not raw:
         return [{"trajectory_id": filename_stem(), "instruction": "", "events": []}]

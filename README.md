@@ -14,31 +14,55 @@ Raw logs ──▶ Trajectory IR ──▶ Invariants ──▶ Checker ──�
 
 ---
 
-## Quick Start
+## Setup and Run a One-Trajectory Demo
+
+### 1. Set up a new system
+
+You need Python 3.10 or newer, Git, and Node.js/npm for the GitHub Copilot CLI.
 
 ```bash
-# Setup
-python -m venv .venv
-.venv/Scripts/activate          # Windows; use `source .venv/bin/activate` on Linux/Mac
-pip install -e .                # installs agentrx + all dependencies
-cp .env.example .env            # Fill in your Azure or TRAPI endpoint details
-
-# Local dev: skip ManagedIdentity IMDS probe
-export AZURE_TOKEN_CREDENTIALS=dev  # or add to your .env file
-
-# Run the full pipeline end-to-end
-python run.py trajectory.json
-
-# Specify domain explicitly
-python run.py trajectory.json --domain tau
+git clone https://github.com/microsoft/AgentRx.git
+cd AgentRx
+python3 -m venv .venv
+source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -e .
+npm install -g @github/copilot
+copilot login
+cp .env.example .env
 ```
+
+`copilot login` opens a browser or provides a device-code flow to sign in with your GitHub account. The Copilot CLI uses that sign-in; AgentRx does not need a GitHub API key.
+
+### 2. Configure Copilot in `.env`
+
+Set the endpoint to Copilot and select one model option in `.env`:
+
+```env
+AGENT_VERIFY_ENDPOINT_TYPE=copilot
+AGENT_VERIFY_COPILOT_MODEL=auto
+```
+
+Use `auto` for Copilot to choose an available model, `fusion` for Copilot Fusion, or replace `auto` with a model ID available to your account. To see available choices, start `copilot` and enter `/model`.
+
+### 3. Run one Tau retail trajectory through the full pipeline
+
+This command runs all stages—IR conversion, static and dynamic invariant generation, checking, judging, and reporting—on one example trajectory:
+
+```bash
+python run.py trajectories/tau-retail/agentrx_walkthrough.json \
+  --domain tau \
+  --run-name tau_walkthrough
+```
+
+The walkthrough is a small synthetic trace intended for learning. Outputs are saved under `runs/tau_walkthrough/`, including `trajectory_ir.json`, `static_invariants.json`, `dynamic_invariants/`, `checker_results/`, `judge_output/`, and `plots/`.
+
+For a real Tau retail example, replace the input path with a file such as `trajectories/tau-retail/instruction_adherence_failure.json`.
 
 You can also install directly from GitHub without cloning:
 ```bash
 pip install git+https://github.com/microsoft/AgentRx.git
 ```
-
-All outputs are saved to `runs/<run_name>/`.
 
 ---
 
@@ -114,30 +138,11 @@ AgentRx/
 
 ---
 
-## Configuration
+## Other LLM Endpoints (Optional)
 
-LLM settings are loaded from environment variables (via `.env` or shell):
+Copilot CLI is the default endpoint. To use Azure OpenAI instead, set `AGENT_VERIFY_ENDPOINT_TYPE=azure` or pass `--endpoint azure`, then configure `AGENT_VERIFY_ENDPOINT`, `AGENT_VERIFY_DEPLOYMENT`, and `AGENT_VERIFY_MODEL_NAME` in `.env`. Azure authentication uses Azure identity credentials, for example `az login` for local development.
 
-Copy the template and fill in your values:
-```bash
-cp .env.example .env
-```
-
-```bash
-# Azure OpenAI (default endpoint)
-AGENT_VERIFY_ENDPOINT=                # e.g., "https://my-resource.openai.azure.com/"
-AGENT_VERIFY_DEPLOYMENT=              # e.g., "gpt-5"
-AGENT_VERIFY_MODEL_NAME=              # e.g., "gpt-5" (must match deployment; used by judge)
-
-# TRAPI (Microsoft Research internal, use --endpoint trapi)
-AGENT_VERIFY_TRAPI_INSTANCE=          # e.g., "my-instance/my-pool"
-AGENT_VERIFY_TRAPI_DEPLOYMENT_NAME=   # e.g., "my-deployment-name"
-SCOPE=                                # Azure AD scope for TRAPI
-```
-
-Both endpoints use **Azure AD token-based auth** (`az login` or Managed Identity).
-
-> **Note:** TRAPI is a Microsoft Research internal endpoint. External teams should use `--endpoint azure` (default).
+TRAPI is a Microsoft Research internal endpoint. To use it, set `AGENT_VERIFY_ENDPOINT_TYPE=trapi` or pass `--endpoint trapi`, then configure `AGENT_VERIFY_TRAPI_INSTANCE`, `AGENT_VERIFY_TRAPI_DEPLOYMENT_NAME`, and `SCOPE`. TRAPI uses Azure AD authentication.
 
 ---
 
