@@ -21,7 +21,7 @@ Raw logs ──▶ Trajectory IR ──▶ Invariants ──▶ Checker ──�
 You need Python 3.10 or newer, Git, and Node.js/npm for the GitHub Copilot CLI.
 
 ```bash
-git clone https://github.com/microsoft/AgentRx.git
+git clone https://github.com/aparnashree11/agentRx.git
 cd AgentRx
 python3 -m venv .venv
 source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
@@ -61,8 +61,33 @@ For a real Tau retail example, replace the input path with a file such as `traje
 
 You can also install directly from GitHub without cloning:
 ```bash
-pip install git+https://github.com/microsoft/AgentRx.git
+pip install git+https://github.com/aparnashree11/agentRx.git
 ```
+
+---
+
+## Benchmark Dataset Versions
+
+Tau Retail and Magentic-One have independent baseline releases under `data/benchmark_versions/`. These contain byte-for-byte frozen copies of the trajectory and ground-truth files selected for the project baseline. The manifests retain the original source paths as provenance; the versioned release files are self-contained.
+
+- [Tau Retail baseline v1.0.0](data/benchmark_versions/tau_retail/baseline/v1.0.0/manifest.json)
+- [Magentic-One baseline v1.0.0](data/benchmark_versions/magentic_one/baseline/v1.0.0/manifest.json)
+
+The Tau Retail baseline has 29 failed trajectories and 29 labels. The Magentic-One baseline has 58 trajectories and 44 labels. Each manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
+
+### Run the full Tau Retail baseline
+
+This input file contains all 29 Tau baseline trajectories. The command runs the full pipeline on them and supplies the matching labels for evaluation:
+
+```bash
+python run.py \
+  data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_dataset_failed.json \
+  --domain tau \
+  --ground-truth data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_ground_truth.json \
+  --run-name tau_baseline_v1
+```
+
+Outputs are written to `runs/tau_baseline_v1/`. Use a distinct `--run-name` for each judge model so each model's results are kept separately.
 
 ---
 
@@ -120,7 +145,10 @@ AgentRx/
 │   ├── llm_clients/             # Azure OpenAI & TRAPI clients
 │   ├── pipeline/                # Config (globals.py), utilities
 │   └── reports/                 # Analysis & visualization
-├── data/                        # Domain policies, tool schemas, ground truth
+├── data/
+│   ├── benchmark_versions/      # Frozen benchmark inputs, labels, and manifests
+│   ├── policies/                # Domain policies
+│   └── tool_schemas/            # Domain tool schemas
 ├── trajectories/                # Sample trajectories (tau, magentic, test)
 └── runs/                        # Pipeline outputs (one folder per run)
 ```

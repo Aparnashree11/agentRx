@@ -1,0 +1,384 @@
+{
+  "manifest_schema_version": 1,
+  "release": {
+    "domain": "magentic_one",
+    "variant": "baseline",
+    "version": "v1.0.0",
+    "parent_release": null
+  },
+  "source": "Existing project data, copied byte-for-byte. No normalization, filtering, or cleanup performed.",
+  "artifacts": {
+    "trajectories": {
+      "source_directory": "data/magentic_dataset",
+      "versioned_directory": "magentic_one/baseline/v1.0.0/trajectories",
+      "records": 58,
+      "trajectory_ids": [
+        "08cae58d-4084-4616-b6dd-dd6534e4825b",
+        "0a3cd321-3e76-4622-911b-0fda2e5d6b1a",
+        "0a65cb96-cb6e-4a6a-8aae-c1084f613456",
+        "0ec4371851b96837b0a81b3dd3df401415061bb532fbafeb4609f3337c358508",
+        "114d5fd0-e2ae-4b6d-a65a-870da2d19c08",
+        "14569e28-c88c-43e4-8c32-097d35b9a67d",
+        "16d825ff-1623-4176-a5b5-42e0f5c2b0ac",
+        "1f975693-876d-457b-a649-393859e79bf3",
+        "291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918",
+        "2aa5dd83fbcd0dce9a3dd4592106e5b5edf738008d932e357d477bba80e59ccf",
+        "2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294",
+        "2dfc4c37-fec1-4518-84a7-10095d30ad75",
+        "3af8028c2a59e28ca88baff0e6d91f2a9f170c5ef91003f1c8406755a2760ad4",
+        "42576abe-0deb-4869-8c63-225c2d75a95a",
+        "42d4198c-5895-4f0a-b0c0-424a66465d83",
+        "4dbedc5e1a0205e14b7ff3ba89bce3060dab15d0ada3b7e1351a6f2aa8287aec",
+        "52f7224e9c79431e7926afe317782711a0028750693e7456cde22ef6f4bd8bd5",
+        "557e78eceec08ca8b0da5f9fdaca6e1c7ec6140a8ce600983ee716327dab005e",
+        "55f4258484c5b398956133128a50462a767da211f8f72aa5ac5bbffb9bcbba1a",
+        "56137764-b4e0-45b8-9c52-1866420c3df5",
+        "57d9dc6935e8a40b02e7f8ec81768fe70e68a0c05f6866927c9fda38db38a486",
+        "5d0080cb-90d7-4712-bc33-848150e917d3",
+        "5f982798-16b9-4051-ab57-cfc7ebdb2a91",
+        "624cbf11-6a41-4692-af9c-36b3e5ca3130",
+        "6b06d186921b8b390c65aebd0d16f09f60a47d2f1288ebe36953f734e84c0a3c",
+        "6e3be83d1949fa52cba03fb1ce4b5b3bf7e37a83fd7d67694b10b2e439d90cf8",
+        "6f224e7730ed027cbac73aebb1aea7f954053082041b02b19f4ff126a0a8a208",
+        "72c06643-a2fa-4186-aa5c-9ec33ae9b445",
+        "72e110e7-464c-453c-a309-90a95aed6538",
+        "73c1b9fe-ee1d-4cf4-96ca-35c08f97b054",
+        "748899d9d70c09beb3bd48ac8a3658bdcfd2f9114fe6dc4c4b8d2f9541ef4607",
+        "7619a514-5fa8-43ef-9143-83b66a43d7a4",
+        "7673d772-ef80-4f0f-a602-1bf4485c9b43",
+        "797f7a5b65ca28b7e7156e7db1e9f117bd4a021de0cd512bfdbb0be897d89eab",
+        "840bfca7-4f7b-481a-8794-c560c340185d",
+        "8ad84bd6fe38481ba49e7ad1f6fbd43219a999074e5c6fc940003281f55ec65b",
+        "8b3379c0-0981-4f5b-8407-6444610cb212",
+        "8d46b8d6-b38a-47ff-ac74-cda14cf2d19b",
+        "929b45f34805280d77c61d1e093e3d4e551d77ddb6ecd73552b12b1af286388d",
+        "9baaa267c95f9d8b75741ee9169c50563d297cfa592c20deaffd30dbc5984c74",
+        "9bdca8677af1e25cb7b0c7992dc62670c3e58e4afcd5ae60bcaa2483556bba00",
+        "9e31099fffa6a3891c94934fd4fc2f3f522d51c1904ff3561f3a10e4bf245821",
+        "a0c07678-e491-4bbc-8f0b-07405144218f",
+        "a1e91b78-d3d8-4675-bb8d-62741b4b68a6",
+        "a3fbeb63-0e8c-4a11-bff6-0e3b484c3e9c",
+        "a9074997e698f912b9e751779ea19c1e92fa148404e90e0ae997acea3f9559b0",
+        "b36ef2d8f2643b80e74a44ce3403f674ecb2aed7fd36afeaa289061a59feef92",
+        "b816bfce-3d80-4913-a07d-69b752ce6377",
+        "c7afe00869f98cf363fd83677ac41757ed5e57f03eacc3d1304feb0a92084bd1",
+        "cca4776df3c73e7f9430a2e624aafad056b14322a0b7ca6c0c22b7e7f3f0890a",
+        "ccec2229ced20a4b0cb4897e3a99120a3017ea030903e01c9bda6b13d40b0b14",
+        "db4fd70a-2d37-40ea-873f-9433dc5e301f",
+        "e2d69698-bc99-4e85-9880-67eaccd66e6c",
+        "e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408",
+        "ebbc1f13-d24d-40df-9068-adcf735b4240",
+        "ed58682d-bc52-4baa-9eb0-4eb81e1edacc",
+        "efc0f3a47e9ed2ecdbcc037c2093865fe6e39f4d413a5d1ccdc7357160a4606b",
+        "f88066d274e265edd6cd9d61cd80a41accb3a14baf2297652fdd05cdf716d455"
+      ],
+      "files": {
+        "08cae58d-4084-4616-b6dd-dd6534e4825b.json": {
+          "sha256": "fe66492b3f9e72d900ccd6e97579c4ab98897cea483d3e1a0a27f28344321340",
+          "source_path": "data/magentic_dataset/08cae58d-4084-4616-b6dd-dd6534e4825b.json"
+        },
+        "0a3cd321-3e76-4622-911b-0fda2e5d6b1a.json": {
+          "sha256": "6e8b41aa348d2c4e6bc27f8c897ca214435e8ac678794f68c9dcec61504d4e11",
+          "source_path": "data/magentic_dataset/0a3cd321-3e76-4622-911b-0fda2e5d6b1a.json"
+        },
+        "0a65cb96-cb6e-4a6a-8aae-c1084f613456.json": {
+          "sha256": "765869d342883c30d67ebeccd3d3cecb2ce0bcafe4b41560d078696c259afffc",
+          "source_path": "data/magentic_dataset/0a65cb96-cb6e-4a6a-8aae-c1084f613456.json"
+        },
+        "0ec4371851b96837b0a81b3dd3df401415061bb532fbafeb4609f3337c358508.json": {
+          "sha256": "fac852e03b997fe7b2d3df23242ddf1d73d946ab4d679dd24731e931be0749fc",
+          "source_path": "data/magentic_dataset/0ec4371851b96837b0a81b3dd3df401415061bb532fbafeb4609f3337c358508.json"
+        },
+        "114d5fd0-e2ae-4b6d-a65a-870da2d19c08.json": {
+          "sha256": "5d366977020dfd3f7905ae2b7bfaa47159a6185b2478ebd4a8fd4e9784272ef6",
+          "source_path": "data/magentic_dataset/114d5fd0-e2ae-4b6d-a65a-870da2d19c08.json"
+        },
+        "14569e28-c88c-43e4-8c32-097d35b9a67d.json": {
+          "sha256": "00d20295258e64a086b6336051c8095e538a6d187b83d916b140fb304029831e",
+          "source_path": "data/magentic_dataset/14569e28-c88c-43e4-8c32-097d35b9a67d.json"
+        },
+        "16d825ff-1623-4176-a5b5-42e0f5c2b0ac.json": {
+          "sha256": "26e909b769dd9e1c1c09b18ea1d40e0f69868794d3b62d68ceff591f13271119",
+          "source_path": "data/magentic_dataset/16d825ff-1623-4176-a5b5-42e0f5c2b0ac.json"
+        },
+        "1f975693-876d-457b-a649-393859e79bf3.json": {
+          "sha256": "b569564ec9fe4d82376b2c75dd24beff876573a07cadd0b44bce56512fb36268",
+          "source_path": "data/magentic_dataset/1f975693-876d-457b-a649-393859e79bf3.json"
+        },
+        "291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918.json": {
+          "sha256": "d13a8843e0e12149fb08d08e134b31736a6ec750040cc84f77f06aeea3d7a428",
+          "source_path": "data/magentic_dataset/291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918.json"
+        },
+        "2aa5dd83fbcd0dce9a3dd4592106e5b5edf738008d932e357d477bba80e59ccf.json": {
+          "sha256": "949257c3ea5c6161c7720871375f7915d66bd516f3cafe268a60978455fc415a",
+          "source_path": "data/magentic_dataset/2aa5dd83fbcd0dce9a3dd4592106e5b5edf738008d932e357d477bba80e59ccf.json"
+        },
+        "2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294.json": {
+          "sha256": "aa69dec3309224970978405ac95a3a05b4439881584cb9e7699d5ef6362cd0e0",
+          "source_path": "data/magentic_dataset/2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294.json"
+        },
+        "2dfc4c37-fec1-4518-84a7-10095d30ad75.json": {
+          "sha256": "ce8e4379a1c803c001ea87ce6915c7595b1e912227ee4da6f78bf27da3154529",
+          "source_path": "data/magentic_dataset/2dfc4c37-fec1-4518-84a7-10095d30ad75.json"
+        },
+        "3af8028c2a59e28ca88baff0e6d91f2a9f170c5ef91003f1c8406755a2760ad4.json": {
+          "sha256": "23fb14f3e4c896e96f8edd8317098efa418d133262f44ed68e9cb9909bc7c932",
+          "source_path": "data/magentic_dataset/3af8028c2a59e28ca88baff0e6d91f2a9f170c5ef91003f1c8406755a2760ad4.json"
+        },
+        "42576abe-0deb-4869-8c63-225c2d75a95a.json": {
+          "sha256": "f976306e8626ddbcd6f2bbc416b9b76c06d31f2c6bc788cf49ff5eb17591fe30",
+          "source_path": "data/magentic_dataset/42576abe-0deb-4869-8c63-225c2d75a95a.json"
+        },
+        "42d4198c-5895-4f0a-b0c0-424a66465d83.json": {
+          "sha256": "bd0beb90a08cfd5bc0ce251f7582677a414544cbb34013a7ef08b0c2b9920bd7",
+          "source_path": "data/magentic_dataset/42d4198c-5895-4f0a-b0c0-424a66465d83.json"
+        },
+        "4dbedc5e1a0205e14b7ff3ba89bce3060dab15d0ada3b7e1351a6f2aa8287aec.json": {
+          "sha256": "7358611bdf5c534905eef3b7b8bee543a9ffa34cffae825c772a1a7ade443804",
+          "source_path": "data/magentic_dataset/4dbedc5e1a0205e14b7ff3ba89bce3060dab15d0ada3b7e1351a6f2aa8287aec.json"
+        },
+        "52f7224e9c79431e7926afe317782711a0028750693e7456cde22ef6f4bd8bd5.json": {
+          "sha256": "e86b0d2263ddc184665f180a202bae7924f4a950681e78be74abb4965df0edda",
+          "source_path": "data/magentic_dataset/52f7224e9c79431e7926afe317782711a0028750693e7456cde22ef6f4bd8bd5.json"
+        },
+        "557e78eceec08ca8b0da5f9fdaca6e1c7ec6140a8ce600983ee716327dab005e.json": {
+          "sha256": "705a14266fa44aa6dc546933ee9f69f59771d57fac983c0fad01478712cc7779",
+          "source_path": "data/magentic_dataset/557e78eceec08ca8b0da5f9fdaca6e1c7ec6140a8ce600983ee716327dab005e.json"
+        },
+        "55f4258484c5b398956133128a50462a767da211f8f72aa5ac5bbffb9bcbba1a.json": {
+          "sha256": "a35e8e1d96c3ba5cdf3fbf26a39822afaa63440f12453acbff9bad7cc9f0f24e",
+          "source_path": "data/magentic_dataset/55f4258484c5b398956133128a50462a767da211f8f72aa5ac5bbffb9bcbba1a.json"
+        },
+        "56137764-b4e0-45b8-9c52-1866420c3df5.json": {
+          "sha256": "95959abfdb6a6a1b306b6ceae20f344035d553f9a4924c4371ec25d6363c610c",
+          "source_path": "data/magentic_dataset/56137764-b4e0-45b8-9c52-1866420c3df5.json"
+        },
+        "57d9dc6935e8a40b02e7f8ec81768fe70e68a0c05f6866927c9fda38db38a486.json": {
+          "sha256": "0ae3bfd88b85ee9c30bf7dd2bfd5571368a01298d6781e9c809750bb97bc350f",
+          "source_path": "data/magentic_dataset/57d9dc6935e8a40b02e7f8ec81768fe70e68a0c05f6866927c9fda38db38a486.json"
+        },
+        "5d0080cb-90d7-4712-bc33-848150e917d3.json": {
+          "sha256": "636f1290fdd65628513d604687b22d9d7a0df006459919c2f17d28863e0f66b8",
+          "source_path": "data/magentic_dataset/5d0080cb-90d7-4712-bc33-848150e917d3.json"
+        },
+        "5f982798-16b9-4051-ab57-cfc7ebdb2a91.json": {
+          "sha256": "0e7348c1f168477fb74f513207d996028314d8a4e6ab64aeed2da491b22840bc",
+          "source_path": "data/magentic_dataset/5f982798-16b9-4051-ab57-cfc7ebdb2a91.json"
+        },
+        "624cbf11-6a41-4692-af9c-36b3e5ca3130.json": {
+          "sha256": "5226eacf9d07aceff30889bed1076ee9df528753cb11faaddc9d2ff550b544e5",
+          "source_path": "data/magentic_dataset/624cbf11-6a41-4692-af9c-36b3e5ca3130.json"
+        },
+        "6b06d186921b8b390c65aebd0d16f09f60a47d2f1288ebe36953f734e84c0a3c.json": {
+          "sha256": "343c2ad9922a5ef7a24884b0a0324e778324446abe993f45bdf70001b5e4fc39",
+          "source_path": "data/magentic_dataset/6b06d186921b8b390c65aebd0d16f09f60a47d2f1288ebe36953f734e84c0a3c.json"
+        },
+        "6e3be83d1949fa52cba03fb1ce4b5b3bf7e37a83fd7d67694b10b2e439d90cf8.json": {
+          "sha256": "a289f6aa7098b0d6d3dfa9b6c522e1e0a073e2ac9f4ef97b54be3e8c6c2e2951",
+          "source_path": "data/magentic_dataset/6e3be83d1949fa52cba03fb1ce4b5b3bf7e37a83fd7d67694b10b2e439d90cf8.json"
+        },
+        "6f224e7730ed027cbac73aebb1aea7f954053082041b02b19f4ff126a0a8a208.json": {
+          "sha256": "130b77ff66abba485083098eb1b331fb24a7c3b5a762443c758e7999838cad67",
+          "source_path": "data/magentic_dataset/6f224e7730ed027cbac73aebb1aea7f954053082041b02b19f4ff126a0a8a208.json"
+        },
+        "72c06643-a2fa-4186-aa5c-9ec33ae9b445.json": {
+          "sha256": "84f9fd02d2ae1e289fca1cca61f92ac51920ade5dbb124293b24aa4a25d67035",
+          "source_path": "data/magentic_dataset/72c06643-a2fa-4186-aa5c-9ec33ae9b445.json"
+        },
+        "72e110e7-464c-453c-a309-90a95aed6538.json": {
+          "sha256": "f13c4db51196f41a28172709c7761e4ae42201d51aa207eb254cd3891ec5d90a",
+          "source_path": "data/magentic_dataset/72e110e7-464c-453c-a309-90a95aed6538.json"
+        },
+        "73c1b9fe-ee1d-4cf4-96ca-35c08f97b054.json": {
+          "sha256": "5fa20abb78c48ed90a6343130d88abdc094ccbbdf8de1006272aa513e9158d49",
+          "source_path": "data/magentic_dataset/73c1b9fe-ee1d-4cf4-96ca-35c08f97b054.json"
+        },
+        "748899d9d70c09beb3bd48ac8a3658bdcfd2f9114fe6dc4c4b8d2f9541ef4607.json": {
+          "sha256": "e3bc50f6868626b2b0ab362c1ac66f76f7aacff50d55fc25888a74341bebdfb4",
+          "source_path": "data/magentic_dataset/748899d9d70c09beb3bd48ac8a3658bdcfd2f9114fe6dc4c4b8d2f9541ef4607.json"
+        },
+        "7619a514-5fa8-43ef-9143-83b66a43d7a4.json": {
+          "sha256": "f5687c5a72347f4c583c8dbbe09a30298fc389d015c5b25ed75436d212f57882",
+          "source_path": "data/magentic_dataset/7619a514-5fa8-43ef-9143-83b66a43d7a4.json"
+        },
+        "7673d772-ef80-4f0f-a602-1bf4485c9b43.json": {
+          "sha256": "1d5e860efa0d74d28972fc4a0457932b7244ae84c69525a7349fdb9fb66a7d6a",
+          "source_path": "data/magentic_dataset/7673d772-ef80-4f0f-a602-1bf4485c9b43.json"
+        },
+        "797f7a5b65ca28b7e7156e7db1e9f117bd4a021de0cd512bfdbb0be897d89eab.json": {
+          "sha256": "a5db373ee6cc836be8659023c262a4790759c6896c8a662a53a553e061b93631",
+          "source_path": "data/magentic_dataset/797f7a5b65ca28b7e7156e7db1e9f117bd4a021de0cd512bfdbb0be897d89eab.json"
+        },
+        "840bfca7-4f7b-481a-8794-c560c340185d.json": {
+          "sha256": "d64df13d285cfa2b53d8e1881569f3fd25ad29311aa261fb673ff21ed3debe73",
+          "source_path": "data/magentic_dataset/840bfca7-4f7b-481a-8794-c560c340185d.json"
+        },
+        "8ad84bd6fe38481ba49e7ad1f6fbd43219a999074e5c6fc940003281f55ec65b.json": {
+          "sha256": "b22f5b9b401c141de56357b3f2b75c4c000a72a666bab524e8def759628d76ca",
+          "source_path": "data/magentic_dataset/8ad84bd6fe38481ba49e7ad1f6fbd43219a999074e5c6fc940003281f55ec65b.json"
+        },
+        "8b3379c0-0981-4f5b-8407-6444610cb212.json": {
+          "sha256": "70aba5dbf730356f603279fd53355d32a64368c39cf96373036bfe0ba1a08048",
+          "source_path": "data/magentic_dataset/8b3379c0-0981-4f5b-8407-6444610cb212.json"
+        },
+        "8d46b8d6-b38a-47ff-ac74-cda14cf2d19b.json": {
+          "sha256": "ad0e306c6ddf6cf0fe4c1cb3373f55fbac76f25ff44a88c8ee7f23bf368fb0ed",
+          "source_path": "data/magentic_dataset/8d46b8d6-b38a-47ff-ac74-cda14cf2d19b.json"
+        },
+        "929b45f34805280d77c61d1e093e3d4e551d77ddb6ecd73552b12b1af286388d.json": {
+          "sha256": "8fdb1a83be3dd05a4c1499ef73f49c4c3c1dcd6e3877af9eb61caee3b282b8ac",
+          "source_path": "data/magentic_dataset/929b45f34805280d77c61d1e093e3d4e551d77ddb6ecd73552b12b1af286388d.json"
+        },
+        "9baaa267c95f9d8b75741ee9169c50563d297cfa592c20deaffd30dbc5984c74.json": {
+          "sha256": "563aa312b0f60fdfecff535892cd72a1d3401f7058563bdd12eb6f8e34248542",
+          "source_path": "data/magentic_dataset/9baaa267c95f9d8b75741ee9169c50563d297cfa592c20deaffd30dbc5984c74.json"
+        },
+        "9bdca8677af1e25cb7b0c7992dc62670c3e58e4afcd5ae60bcaa2483556bba00.json": {
+          "sha256": "f9e18d91d7b23516bf09ba033c34ca73265199ec13e7a9a9d47a65775a7215da",
+          "source_path": "data/magentic_dataset/9bdca8677af1e25cb7b0c7992dc62670c3e58e4afcd5ae60bcaa2483556bba00.json"
+        },
+        "9e31099fffa6a3891c94934fd4fc2f3f522d51c1904ff3561f3a10e4bf245821.json": {
+          "sha256": "24d28ee132903fd2e34aef9942d73aec1cf3fd993a2d1a70935b7e2dbfa4c429",
+          "source_path": "data/magentic_dataset/9e31099fffa6a3891c94934fd4fc2f3f522d51c1904ff3561f3a10e4bf245821.json"
+        },
+        "a0c07678-e491-4bbc-8f0b-07405144218f.json": {
+          "sha256": "7c8dab9fb6f9a70fd764e4afcd1bb8663a4319d143044ba726cc4e23dd4df7b8",
+          "source_path": "data/magentic_dataset/a0c07678-e491-4bbc-8f0b-07405144218f.json"
+        },
+        "a1e91b78-d3d8-4675-bb8d-62741b4b68a6.json": {
+          "sha256": "08e6358f4069c90c54beb01b188c1c5f2eb185a970fc49a05c20cca3b6e1f327",
+          "source_path": "data/magentic_dataset/a1e91b78-d3d8-4675-bb8d-62741b4b68a6.json"
+        },
+        "a3fbeb63-0e8c-4a11-bff6-0e3b484c3e9c.json": {
+          "sha256": "2e0979cbf8b4c77362b9a111a5e9c1c9f3fd059ae6aea80f48f949ef20a72c7c",
+          "source_path": "data/magentic_dataset/a3fbeb63-0e8c-4a11-bff6-0e3b484c3e9c.json"
+        },
+        "a9074997e698f912b9e751779ea19c1e92fa148404e90e0ae997acea3f9559b0.json": {
+          "sha256": "9b035aca5b89d6624b90b850e7be91b4c82d78a355520d143aeead3c84a2de91",
+          "source_path": "data/magentic_dataset/a9074997e698f912b9e751779ea19c1e92fa148404e90e0ae997acea3f9559b0.json"
+        },
+        "b36ef2d8f2643b80e74a44ce3403f674ecb2aed7fd36afeaa289061a59feef92.json": {
+          "sha256": "adb7d25b36c9429481255e3dd1e134ea38e4c3b958a892b1f8dfc9f937f326c8",
+          "source_path": "data/magentic_dataset/b36ef2d8f2643b80e74a44ce3403f674ecb2aed7fd36afeaa289061a59feef92.json"
+        },
+        "b816bfce-3d80-4913-a07d-69b752ce6377.json": {
+          "sha256": "5feebd5d4f64a205eeac881d4bca31a5416533301e510639ef2cd99c183e5233",
+          "source_path": "data/magentic_dataset/b816bfce-3d80-4913-a07d-69b752ce6377.json"
+        },
+        "c7afe00869f98cf363fd83677ac41757ed5e57f03eacc3d1304feb0a92084bd1.json": {
+          "sha256": "06964e63799784640839c733cc76ada32690694ce16eaa1acc0a316e026ce72e",
+          "source_path": "data/magentic_dataset/c7afe00869f98cf363fd83677ac41757ed5e57f03eacc3d1304feb0a92084bd1.json"
+        },
+        "cca4776df3c73e7f9430a2e624aafad056b14322a0b7ca6c0c22b7e7f3f0890a.json": {
+          "sha256": "f9cf01bae1d0f8857e96e7a01be7c41aef91ab7b7a62b501d53bc7cb183faa84",
+          "source_path": "data/magentic_dataset/cca4776df3c73e7f9430a2e624aafad056b14322a0b7ca6c0c22b7e7f3f0890a.json"
+        },
+        "ccec2229ced20a4b0cb4897e3a99120a3017ea030903e01c9bda6b13d40b0b14.json": {
+          "sha256": "fe8d9abd858d80cd980d9c2300d4af08dffb95e1608dd12e71d4c0a48a232b94",
+          "source_path": "data/magentic_dataset/ccec2229ced20a4b0cb4897e3a99120a3017ea030903e01c9bda6b13d40b0b14.json"
+        },
+        "db4fd70a-2d37-40ea-873f-9433dc5e301f.json": {
+          "sha256": "7256c959e5319e65d80589ea20b47c2e71e970ac1f668ca66fe3131799c6bf86",
+          "source_path": "data/magentic_dataset/db4fd70a-2d37-40ea-873f-9433dc5e301f.json"
+        },
+        "e2d69698-bc99-4e85-9880-67eaccd66e6c.json": {
+          "sha256": "803e455f9a1ef11ef69b56dedf2e1cafe502b446622ec78cc369d4ab4de31964",
+          "source_path": "data/magentic_dataset/e2d69698-bc99-4e85-9880-67eaccd66e6c.json"
+        },
+        "e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408.json": {
+          "sha256": "8da001786a7ec67b75a8b48e249f323f10a48783e18e42d35655b46d82609464",
+          "source_path": "data/magentic_dataset/e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408.json"
+        },
+        "ebbc1f13-d24d-40df-9068-adcf735b4240.json": {
+          "sha256": "87ec92a1f1a247184cc2dc2e51c67e4f9829765d4499f0e29caefa8845031e29",
+          "source_path": "data/magentic_dataset/ebbc1f13-d24d-40df-9068-adcf735b4240.json"
+        },
+        "ed58682d-bc52-4baa-9eb0-4eb81e1edacc.json": {
+          "sha256": "459fb0eae09bcda7918db3e00a74220124e3694c9c1f6015b1afad8eba2c6c15",
+          "source_path": "data/magentic_dataset/ed58682d-bc52-4baa-9eb0-4eb81e1edacc.json"
+        },
+        "efc0f3a47e9ed2ecdbcc037c2093865fe6e39f4d413a5d1ccdc7357160a4606b.json": {
+          "sha256": "1d3e2199d12ad950a6d023415fe7508b599a2d74579a46d942410fc30f009147",
+          "source_path": "data/magentic_dataset/efc0f3a47e9ed2ecdbcc037c2093865fe6e39f4d413a5d1ccdc7357160a4606b.json"
+        },
+        "f88066d274e265edd6cd9d61cd80a41accb3a14baf2297652fdd05cdf716d455.json": {
+          "sha256": "ffc79ed787afb56063028af97dc59c9fde7ef675b22cb77e57c8793321fe05a0",
+          "source_path": "data/magentic_dataset/f88066d274e265edd6cd9d61cd80a41accb3a14baf2297652fdd05cdf716d455.json"
+        }
+      }
+    },
+    "annotations": {
+      "source_path": "data/ground_truth/magentic_one_ground_truth.json",
+      "path": "magentic_one/baseline/v1.0.0/magentic_one_ground_truth.json",
+      "sha256": "d10edefb004a2f1e59e8f487a0f0de5f4e6a60c1f2f713b49e6a422402019eae",
+      "records": 44,
+      "trajectory_ids": [
+        "5f982798-16b9-4051-ab57-cfc7ebdb2a91",
+        "c7afe00869f98cf363fd83677ac41757ed5e57f03eacc3d1304feb0a92084bd1",
+        "ebbc1f13-d24d-40df-9068-adcf735b4240",
+        "52f7224e9c79431e7926afe317782711a0028750693e7456cde22ef6f4bd8bd5",
+        "3af8028c2a59e28ca88baff0e6d91f2a9f170c5ef91003f1c8406755a2760ad4",
+        "e6bc98089608217e45b6956a46518fe3cce64a799b3ac43c6974c449ae14c408",
+        "a1e91b78-d3d8-4675-bb8d-62741b4b68a6",
+        "08cae58d-4084-4616-b6dd-dd6534e4825b",
+        "ccec2229ced20a4b0cb4897e3a99120a3017ea030903e01c9bda6b13d40b0b14",
+        "6b06d186921b8b390c65aebd0d16f09f60a47d2f1288ebe36953f734e84c0a3c",
+        "8b3379c0-0981-4f5b-8407-6444610cb212",
+        "840bfca7-4f7b-481a-8794-c560c340185d",
+        "8ad84bd6fe38481ba49e7ad1f6fbd43219a999074e5c6fc940003281f55ec65b",
+        "1f975693-876d-457b-a649-393859e79bf3",
+        "114d5fd0-e2ae-4b6d-a65a-870da2d19c08",
+        "2ddae3b7a208e3c25f14d82d7a1faaaa1832fbf950b4dac345e755c4c361f294",
+        "0ec4371851b96837b0a81b3dd3df401415061bb532fbafeb4609f3337c358508",
+        "5d0080cb-90d7-4712-bc33-848150e917d3",
+        "6e3be83d1949fa52cba03fb1ce4b5b3bf7e37a83fd7d67694b10b2e439d90cf8",
+        "797f7a5b65ca28b7e7156e7db1e9f117bd4a021de0cd512bfdbb0be897d89eab",
+        "624cbf11-6a41-4692-af9c-36b3e5ca3130",
+        "16d825ff-1623-4176-a5b5-42e0f5c2b0ac",
+        "55f4258484c5b398956133128a50462a767da211f8f72aa5ac5bbffb9bcbba1a",
+        "557e78eceec08ca8b0da5f9fdaca6e1c7ec6140a8ce600983ee716327dab005e",
+        "72c06643-a2fa-4186-aa5c-9ec33ae9b445",
+        "2dfc4c37-fec1-4518-84a7-10095d30ad75",
+        "a3fbeb63-0e8c-4a11-bff6-0e3b484c3e9c",
+        "929b45f34805280d77c61d1e093e3d4e551d77ddb6ecd73552b12b1af286388d",
+        "42576abe-0deb-4869-8c63-225c2d75a95a",
+        "14569e28-c88c-43e4-8c32-097d35b9a67d",
+        "2aa5dd83fbcd0dce9a3dd4592106e5b5edf738008d932e357d477bba80e59ccf",
+        "42d4198c-5895-4f0a-b0c0-424a66465d83",
+        "72e110e7-464c-453c-a309-90a95aed6538",
+        "748899d9d70c09beb3bd48ac8a3658bdcfd2f9114fe6dc4c4b8d2f9541ef4607",
+        "9baaa267c95f9d8b75741ee9169c50563d297cfa592c20deaffd30dbc5984c74",
+        "b36ef2d8f2643b80e74a44ce3403f674ecb2aed7fd36afeaa289061a59feef92",
+        "73c1b9fe-ee1d-4cf4-96ca-35c08f97b054",
+        "0a65cb96-cb6e-4a6a-8aae-c1084f613456",
+        "56137764-b4e0-45b8-9c52-1866420c3df5",
+        "9e31099fffa6a3891c94934fd4fc2f3f522d51c1904ff3561f3a10e4bf245821",
+        "b816bfce-3d80-4913-a07d-69b752ce6377",
+        "57d9dc6935e8a40b02e7f8ec81768fe70e68a0c05f6866927c9fda38db38a486",
+        "a9074997e698f912b9e751779ea19c1e92fa148404e90e0ae997acea3f9559b0",
+        "f88066d274e265edd6cd9d61cd80a41accb3a14baf2297652fdd05cdf716d455"
+      ]
+    }
+  },
+  "label_coverage": {
+    "annotated_trajectory_count": 44,
+    "trajectory_count": 58,
+    "unannotated_trajectory_ids": [
+      "0a3cd321-3e76-4622-911b-0fda2e5d6b1a",
+      "291b53e665b4dd4365cde995042db4a6f6fecef3fe3a6f4482f23d61bd673918",
+      "4dbedc5e1a0205e14b7ff3ba89bce3060dab15d0ada3b7e1351a6f2aa8287aec",
+      "6f224e7730ed027cbac73aebb1aea7f954053082041b02b19f4ff126a0a8a208",
+      "7619a514-5fa8-43ef-9143-83b66a43d7a4",
+      "7673d772-ef80-4f0f-a602-1bf4485c9b43",
+      "8d46b8d6-b38a-47ff-ac74-cda14cf2d19b",
+      "9bdca8677af1e25cb7b0c7992dc62670c3e58e4afcd5ae60bcaa2483556bba00",
+      "a0c07678-e491-4bbc-8f0b-07405144218f",
+      "cca4776df3c73e7f9430a2e624aafad056b14322a0b7ca6c0c22b7e7f3f0890a",
+      "db4fd70a-2d37-40ea-873f-9433dc5e301f",
+      "e2d69698-bc99-4e85-9880-67eaccd66e6c",
+      "ed58682d-bc52-4baa-9eb0-4eb81e1edacc",
+      "efc0f3a47e9ed2ecdbcc037c2093865fe6e39f4d413a5d1ccdc7357160a4606b"
+    ]
+  },
+  "scope": "All 58 trajectory JSON files in data/magentic_dataset plus the existing 44-row Magentic-One ground-truth file. Helper/index files are not trajectory records and are not included."
+}
