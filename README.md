@@ -23,7 +23,7 @@ You need Python 3.10 or newer, Git, and Node.js/npm for the GitHub Copilot CLI.
 ```bash
 git clone https://github.com/aparnashree11/agentRx.git
 cd agentRx
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -e .
