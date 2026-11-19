@@ -1,0 +1,226 @@
+{
+  "trajectory_id": "39",
+  "failure_step_index": 17,
+  "failure_event_index": 16,
+  "failure_category": "Intent Plan Misalignment",
+  "failure_summary": "At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+  "step_outcomes": [
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 4,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "failure"
+    },
+    {
+      "index": 6,
+      "outcome": "failure"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "neutral"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "neutral"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 16,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "failure"
+    },
+    {
+      "index": 18,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 24,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can definitely help you update your address! First, I need to authenticate your identity.",
+      "after_excerpt": "Happy to help you update your address! Before anything else, I have to verify your identity.",
+      "note": "Same offer and same authentication request, with email or name+zip as the options."
+    },
+    {
+      "event_index": 6,
+      "change_type": "wording",
+      "before_excerpt": "It seems I couldn't locate your account using the email address you provided.",
+      "after_excerpt": "I wasn't able to find an account under that email address.",
+      "note": "Same not-found outcome and the same request for name and zip."
+    },
+    {
+      "event_index": 12,
+      "change_type": "wording",
+      "before_excerpt": "Thanks, Fatima! I’ve located your account. Your current default address is:",
+      "after_excerpt": "Thank you, Fatima! Your account has been found. The default address currently on file is:",
+      "note": "Same facts and the same address."
+    },
+    {
+      "event_index": 12,
+      "change_type": "emphasis",
+      "before_excerpt": "922 Pine Lane, Suite 395, Jacksonville, FL, 32169, USA.",
+      "after_excerpt": "**922 Pine Lane, Suite 395, Jacksonville, FL, 32169, USA**",
+      "note": "Bold added to an existing address, with no change to its content."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "Got it! Could you please provide the full details of your new address, including:",
+      "after_excerpt": "Understood! I'll need the complete new address. Please send me:",
+      "note": "Same four requested fields and the same assumptions (Phoenix, AZ)."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "1. The first line of the address",
+      "after_excerpt": "1. **Address line 1**",
+      "note": "Bold labels added to the existing list items only."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, I can't fetch your new address from your order details since they only reflect the current default address.",
+      "after_excerpt": "Sadly, I'm not able to take your new address from your order details, because they only reflect the current default address.",
+      "note": "Same claim, with the same unjustified refusal and no order lookup. The failure is unchanged."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "The cheapest T-shirt we currently have is priced at **$46.66**.",
+      "after_excerpt": "Right now, the cheapest T-shirt in stock costs **$46.66**.",
+      "note": "Same price and the same item description (red, L, cotton, v-neck)."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, I can't place new orders for you directly. You'll need to visit our website to make the purchase.",
+      "after_excerpt": "Sadly, placing new orders for you isn't something I can do. You'll have to buy it on our website.",
+      "note": "Same statement; the price is kept in bold."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 17,
+    "failure_category": "policy/tool-use failure: wrongly refused a doable request without checking the order"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 20,
+      "step_number": 17,
+      "step_reason": "At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "The assistant wrongly reasons that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

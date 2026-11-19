@@ -1,0 +1,148 @@
+{
+  "trajectory_id": "82",
+  "failure_step_index": 20,
+  "failure_event_index": 22,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "At step 20, the user agent asked the assistant to the return the tablets from both the orders, however, it was supposed to ask to return all the items from a single order, hence, did not follow the task instruction",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "neutral"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "neutral"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 23,
+      "outcome": "failure"
+    },
+    {
+      "index": 25,
+      "outcome": "failure"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with that! First, I need to authenticate your identity.",
+      "after_excerpt": "Happy to help with that! Before anything else, I have to verify your identity.",
+      "note": "Same meaning; paraphrase of the authentication request."
+    },
+    {
+      "event_index": 8,
+      "change_type": "formatting",
+      "before_excerpt": "{\"user_id\":\"chen_silva_7485\"}",
+      "after_excerpt": "{\n  \"user_id\": \"chen_silva_7485\"\n}",
+      "note": "Whitespace-only change to the tool-call arguments; same key and value."
+    },
+    {
+      "event_index": 9,
+      "change_type": "wording",
+      "before_excerpt": "Thank you, Chen! I have successfully authenticated your account.",
+      "after_excerpt": "Thanks, Chen! Your account is now verified.",
+      "note": "Same meaning, paraphrase only."
+    },
+    {
+      "event_index": 19,
+      "change_type": "wording",
+      "before_excerpt": "I found two orders containing tablets:",
+      "after_excerpt": "Two of your orders contain tablets:",
+      "note": "Paraphrase; all facts, prices, and the agent's incorrect framing remain unchanged."
+    },
+    {
+      "event_index": 27,
+      "change_type": "wording",
+      "before_excerpt": "The return process for both tablets has been successfully initiated",
+      "after_excerpt": "Both tablet returns have been successfully initiated",
+      "note": "Paraphrase; the same claim of success."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 23,
+    "failure_category": "wrong_item_selection / incorrect action"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 33,
+      "step_number": 20,
+      "step_reason": "At step 20, the user agent asked the assistant to the return the tablets from both the orders, however, it was supposed to ask to return all the items from a single order, hence, did not follow the task instruction",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent's request did not align with the task instruction.",
+      "failed_agent": "User"
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "trajectory_id": "12",
+  "failure_step_index": 19,
+  "failure_event_index": 18,
+  "failure_category": "Instruction Adherence Failure",
+  "failure_summary": "At step 19, the assistant agent did not ask user for confirmation and payment method before initiating return.",
+  "step_outcomes": [
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "neutral"
+    },
+    {
+      "index": 10,
+      "outcome": "neutral"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 16,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 18,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "failure"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 22,
+      "outcome": "neutral"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 24,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "success"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi. I want to cancel or return some items, but I’m not happy, so please make this quick.",
+      "after_excerpt": "Hi. I'd like to cancel or return a few items, but I'm unhappy right now, so please be quick about it.",
+      "note": "Same meaning paraphrase."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with canceling or returning items. To get started, I need to authenticate your identity.",
+      "after_excerpt": "I can help with cancelling or returning items. First I need to verify your identity.",
+      "note": "Same meaning paraphrase."
+    },
+    {
+      "event_index": 3,
+      "change_type": "wording",
+      "before_excerpt": "Sure, my email is mia.garcia2723@example.com.",
+      "after_excerpt": "Okay, my email is mia.garcia2723@example.com.",
+      "note": "Filler word only; email unchanged."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "Thank you, Mia. I see you have two orders",
+      "after_excerpt": "Thanks, Mia. Your account has two orders",
+      "note": "Same facts, same order ids."
+    },
+    {
+      "event_index": 9,
+      "change_type": "wording",
+      "before_excerpt": "I don’t remember the order numbers. Can you just check everything not associated with gaming for me?",
+      "after_excerpt": "I can't remember the order numbers. Could you just go through everything that isn't related to gaming for me?",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 13,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W7387996\", \"user_id\": ... compact",
+      "after_excerpt": "indented JSON with status key moved after user_id",
+      "note": "Same keys and values; only layout and key order changed."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "From Order #W5490111:",
+      "after_excerpt": "**Order #W5490111:**",
+      "note": "Added bold to existing heading; no facts changed."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "From your orders, the items not associated with gaming are:",
+      "after_excerpt": "Here are the items in your orders that aren't related to gaming:",
+      "note": "Same meaning; same item list."
+    },
+    {
+      "event_index": 15,
+      "change_type": "wording",
+      "before_excerpt": "All of them. Cancel or return everything. And make it quick.",
+      "after_excerpt": "All of them. Cancel or return the whole lot, and please hurry.",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "The return request for all non-gaming items ... has been successfully processed.",
+      "after_excerpt": "Your return request for all of the non-gaming items ... has been successfully processed.",
+      "note": "Same facts: same order, same Visa ending 7285."
+    },
+    {
+      "event_index": 21,
+      "change_type": "wording",
+      "before_excerpt": "No, I don’t want it refunded to my Visa. Use PayPal.",
+      "after_excerpt": "No, I don't want the refund on my Visa. Use PayPal instead.",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Refunds for returned items must go to the original payment method",
+      "after_excerpt": "Refunds for returned items have to go to the original payment method",
+      "note": "Same meaning; the transfer offer is kept."
+    },
+    {
+      "event_index": 23,
+      "change_type": "wording",
+      "before_excerpt": "Yes, transfer me now! This is frustrating.",
+      "after_excerpt": "Yes, transfer me right now! This is so frustrating.",
+      "note": "Same meaning."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 19,
+    "failure_category": "policy violation: consequential return executed without listing details and obtaining explicit user confirmation (including refund payment method)"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 6,
+      "step_number": 19,
+      "step_reason": "At step 19, the assistant agent did not ask user for confirmation and payment method before initiating return.",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "The assistant failed to follow the domain policy for requiring explicit confirmation before a database write action.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

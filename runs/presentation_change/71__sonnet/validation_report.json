@@ -1,0 +1,9 @@
+{
+  "trajectory_id": "71",
+  "model": "sonnet",
+  "passed": false,
+  "violations": [
+    "[ID CHANGED] event 30 call 0: id 'call_RiyaeZASBtsTOCZykn4TSXs6' -> 'call_RiyaZASBtsTOCZykn4TSXs6'.",
+    "[ID CHANGED] event 31: tool_call_id 'call_RiyaeZASBtsTOCZykn4TSXs6' -> 'call_RiyaZASBtsTOCZykn4TSXs6'."
+  ]
+}

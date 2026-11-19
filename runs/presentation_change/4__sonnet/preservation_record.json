@@ -1,0 +1,230 @@
+{
+  "trajectory_id": "4",
+  "failure_step_index": 15,
+  "failure_event_index": 14,
+  "failure_category": "Misinterpretation of Tool Output",
+  "failure_summary": "At step 15, the assistant agent incorrectly counted the number of available t-shirts.",
+  "step_outcomes": [
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "neutral"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "failure"
+    },
+    {
+      "index": 16,
+      "outcome": "success"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "neutral"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "success"
+    },
+    {
+      "index": 28,
+      "outcome": "neutral"
+    },
+    {
+      "index": 40,
+      "outcome": "neutral"
+    },
+    {
+      "index": 42,
+      "outcome": "success"
+    },
+    {
+      "index": 44,
+      "outcome": "success"
+    },
+    {
+      "index": 46,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can help you with that. First, let me authenticate your identity. Could you please provide your email address?",
+      "after_excerpt": "Happy to help with that. Before anything else, I need to verify your identity. Could you share your email address, please?",
+      "note": "Same request for email authentication, paraphrased."
+    },
+    {
+      "event_index": 4,
+      "change_type": "wording",
+      "before_excerpt": "I need to authenticate your identity to assist you further...",
+      "after_excerpt": "I do need to verify your identity before I can go further...",
+      "note": "Same meaning: asks for first name, last name, zip instead of email."
+    },
+    {
+      "event_index": 6,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Yusuf\",\"last_name\":\"Rossi\",\"zip\":\"19122\"}",
+      "after_excerpt": "{\"zip\":\"19122\",\"last_name\":\"Rossi\",\"first_name\":\"Yusuf\"}",
+      "note": "Key order only; same keys and values."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "Currently, there are 11 available T-shirt options in our online store. Each option varies by color, size, material, and style.",
+      "after_excerpt": "Right now, our online store has **11** available T-shirt options. They differ in color, size, material, and style.",
+      "note": "Paraphrase with bold on the same (incorrect) count of 11; the claim is unchanged."
+    },
+    {
+      "event_index": 16,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W6247578\"}",
+      "after_excerpt": "{\"order_id\":\"#W6247578\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "You have one pending order (#W6247578) that includes a T-shirt...",
+      "after_excerpt": "You have one pending order, **#W6247578**, that contains a T-shirt...",
+      "note": "Paraphrase plus bold on order ids; same facts."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "You have two pending orders that include T-shirts:",
+      "after_excerpt": "Two of your pending orders contain T-shirts:",
+      "note": "Same order list and option details, paraphrased intro and closing."
+    },
+    {
+      "event_index": 40,
+      "change_type": "emphasis",
+      "before_excerpt": "$53.48. Here's the price difference for each order:",
+      "after_excerpt": "**$53.48**. The price difference for each order is:",
+      "note": "Bolded prices and reworded; same amounts and the same request for confirmation."
+    },
+    {
+      "event_index": 42,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W6247578\",\"item_ids\":[...],\"new_item_ids\":[...],\"payment_method_id\":\"...\"}",
+      "after_excerpt": "{\"payment_method_id\":\"...\",\"new_item_ids\":[...],\"item_ids\":[...],\"order_id\":\"#W6247578\"}",
+      "note": "Key order only; arguments unchanged."
+    },
+    {
+      "event_index": 44,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W4776164\",\"item_ids\":[...],...}",
+      "after_excerpt": "{\"payment_method_id\":\"...\",\"new_item_ids\":[...],\"item_ids\":[...],\"order_id\":\"#W4776164\"}",
+      "note": "Key order only; arguments unchanged."
+    },
+    {
+      "event_index": 46,
+      "change_type": "wording",
+      "before_excerpt": "Both orders have been successfully updated:",
+      "after_excerpt": "Both orders were updated successfully:",
+      "note": "Paraphrase; same charges and options reported."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 15,
+    "failure_category": "incorrect_information"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 5,
+      "step_number": 15,
+      "step_reason": "At step 15, the assistant agent incorrectly counted the number of available t-shirts.",
+      "failure_category": "Misinterpretation of Tool Output",
+      "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

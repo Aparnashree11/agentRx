@@ -1,0 +1,323 @@
+{
+  "trajectory_id": "3",
+  "failure_step_index": 3,
+  "failure_event_index": 6,
+  "failure_category": "Instruction Adherence Failure",
+  "failure_summary": "At step 3, The assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+  "step_outcomes": [
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "failure"
+    },
+    {
+      "index": 8,
+      "outcome": "neutral"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "neutral"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 16,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 18,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "failure"
+    },
+    {
+      "index": 26,
+      "outcome": "neutral"
+    },
+    {
+      "index": 27,
+      "outcome": "success"
+    },
+    {
+      "index": 28,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "success"
+    },
+    {
+      "index": 30,
+      "outcome": "neutral"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 32,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "success"
+    },
+    {
+      "index": 34,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "I'd like to know how many t-shirt options are available in your online store right now.",
+      "after_excerpt": "Could you tell me how many t-shirt options your online store has available at the moment?",
+      "note": "Same question, paraphrased."
+    },
+    {
+      "event_index": 7,
+      "change_type": "wording",
+      "before_excerpt": "Thanks. Can I make changes to an order I’ve already placed?",
+      "after_excerpt": "Thanks. Is it possible to change an order I’ve already placed?",
+      "note": "Same question, paraphrased."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "Could you provide your email or name and zip code so I can locate your account and check the status of your order?",
+      "after_excerpt": "To find your account and check the status of your order, could you give me your email, or your name and zip code?",
+      "note": "Same request for authentication details."
+    },
+    {
+      "event_index": 10,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Yusuf\",\"last_name\":\"Rossi\",\"zip\":\"19122\"}",
+      "after_excerpt": "{\"zip\":\"19122\",\"last_name\":\"Rossi\",\"first_name\":\"Yusuf\"}",
+      "note": "Key order inside the arguments object only; same keys and values."
+    },
+    {
+      "event_index": 13,
+      "change_type": "formatting",
+      "before_excerpt": "{\"name\": {...}, \"address\": {...}, ... } (single line)",
+      "after_excerpt": "Same JSON, one top-level key per line",
+      "note": "Layout only; all keys, values and key order are identical."
+    },
+    {
+      "event_index": 14,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W6247578\"}",
+      "after_excerpt": "{\"order_id\":\"#W6247578\"}",
+      "note": "Compact form; same key and value."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "You can modify the shipping address, payment method, or the item options for this order. Let me know what changes you'd like to make!",
+      "after_excerpt": "For this order, you can change the shipping address, the payment method, or the item options. Tell me what changes you'd like to make!",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 17,
+      "change_type": "wording",
+      "before_excerpt": "Could you check for those?",
+      "after_excerpt": "Could you look for those?",
+      "note": "Same request."
+    },
+    {
+      "event_index": 20,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W9711842\"}",
+      "after_excerpt": "{\"order_id\":\"#W9711842\"}",
+      "note": "Compact form; same key and value."
+    },
+    {
+      "event_index": 22,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W4776164\"}",
+      "after_excerpt": "{\"order_id\": \"#W4776164\"}",
+      "note": "Spacing only; same key and value."
+    },
+    {
+      "event_index": 24,
+      "change_type": "emphasis",
+      "before_excerpt": "includes a small-sized T-shirt",
+      "after_excerpt": "includes a **small-sized T-shirt**",
+      "note": "Bold added to existing text; no fact added or removed."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "Would you like to modify this T-shirt? If so, please let me know the changes you'd like to make",
+      "after_excerpt": "Do you want to modify this T-shirt? If so, tell me what you'd like to change",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "Would you like to proceed with modifying your order to this option? ... choose your existing payment method",
+      "after_excerpt": "Would you like to go ahead and modify your order to this option? ... use your existing payment method",
+      "note": "Same meaning; the $0.05 difference and the payment method are unchanged."
+    },
+    {
+      "event_index": 29,
+      "change_type": "wording",
+      "before_excerpt": "Yes, please proceed with the modification",
+      "after_excerpt": "Yes, please go ahead with the modification",
+      "note": "Same confirmation."
+    },
+    {
+      "event_index": 30,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W4776164\",\"item_ids\":[...],\"new_item_ids\":[...],\"payment_method_id\":\"credit_card_9513926\"}",
+      "after_excerpt": "{\"payment_method_id\":\"credit_card_9513926\",\"order_id\":\"#W4776164\",\"item_ids\":[...],\"new_item_ids\":[...]}",
+      "note": "Key order only; the argument values are identical."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "The price difference of $0.05 has been charged to your Mastercard ending in 2478.",
+      "after_excerpt": "The $0.05 price difference was charged to your Mastercard ending in 2478.",
+      "note": "Same meaning."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 7,
+    "failure_category": "incorrect information / incomplete task (miscounted available options; did not check all orders)"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 3,
+      "step_number": 3,
+      "step_reason": "At step 3, The assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "The assistant agent did not follow the expected policy of authenticating user information before providing product details.",
+      "failed_agent": "Assistant"
+    },
+    {
+      "failure_id": 4,
+      "step_number": 7,
+      "step_reason": "At step 7, the agent did not correctly count the number of available t-shirts from the tool call result.",
+      "failure_category": "Misinterpretation of Tool Output",
+      "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}
