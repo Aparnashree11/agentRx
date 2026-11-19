@@ -1,291 +1,197 @@
-# AgentRx 🩺
+# AgentRx: Step-Decoy Trajectories
 
-**Diagnosing AI Agent Failures from Execution Trajectories**
+This branch (`step-decoy`) adds a benchmark variant for [AgentRx](https://arxiv.org/abs/2602.02475): failed agent trajectories with **step decoys** inserted. Decoys are a few extra steps that look like trouble or add noise but are not the cause of the failure. They test whether AgentRx's judge still finds the annotated root-cause step when something more eye-catching sits nearby.
 
-[[Paper]](https://arxiv.org/abs/2602.02475) [[Dataset]](https://huggingface.co/datasets/microsoft/AgentRx)
+The decoys were generated for the 29 Tau Retail baseline trajectories by three Claude models (Haiku 5.5, Sonnet 5.5 and Opus 5.5), reviewed, and released as versioned datasets ready to run through AgentRx.
 
-AI agents often fail in ways that are difficult to localize — executions are probabilistic, long-horizon, multi-agent, and mediated by noisy tool outputs. **AgentRx** is an automated, domain-agnostic diagnostic framework that pinpoints the *critical failure step* in a failed agent trajectory. It synthesizes constraints (invariants), evaluates them step-by-step, and produces an auditable validation log of constraint violations with associated evidence. An LLM-based judge uses this log to localize the critical step and classify the failure into a grounded 10-category taxonomy.
-
-AgentRx improves step localization and failure attribution over existing baselines across three domains: structured API workflows (Tau-bench), incident management (Flash), and open-ended web/file tasks (Magentic-One).
-
-```
-Raw logs ──▶ Trajectory IR ──▶ Invariants ──▶ Checker ──▶ Judge ──▶ Reports
-```
+For the full AgentRx pipeline documentation, see the README on the `main` branch.
 
 ---
 
-## Setup and Run a One-Trajectory Demo
+## What a step decoy is
 
-### 1. Set up a new system
+The generating model chooses up to three decoys of each kind per trajectory, all placed before the annotated failure:
 
-You need Python 3.10 or newer, Git, and Node.js/npm for the GitHub Copilot CLI.
+- **Noise** replays an earlier read-only exchange, unchanged, at a later point.
+- **Red herring** inserts a failed attempt just before a real lookup. It is a copy of the lookup with one value slipped and the response replaced by the system's own error. The original lookup then reads as the corrected retry.
+
+Example from Tau task 4, where the agent miscounts available T-shirts at step 15:
+
+```
+13  assistant  get_product_details {"product_id":"9523456837"}   ← red herring (transposed digits)
+14  tool       Error: product not found                           ← red herring
+15  assistant  get_product_details {"product_id":"9523456873"}   ← original step 13 (the retry)
+16  tool       {"name": "T-Shirt", "variants": {...}}             ← original step 14
+17  assistant  list_all_product_types {}                          ← noise (replay of step 11)
+18  tool       {"Action Camera": ..., "T-Shirt": ...}             ← noise
+19  assistant  "Currently, there are 11 available T-shirt options" ← root failure (was step 15)
+```
+
+The root cause is unchanged. The ground truth is renumbered to the new positions, and each label keeps its `original_step_number`.
+
+The generator is domain-general. `--domain` selects the policy and tool descriptions as in `run.py`, the input can be any trajectory layout AgentRx reads, and the model decides which steps are safe to replay or fail. It does not use AgentRx's IR converter.
+
+---
+
+## What was generated
+
+All three runs used medium effort, one Claude Code call per trajectory, and the same prompt and generator code.
+
+| Generator | Release | Trajectories | Left out | Decoys (red herring / noise) | Avg. events added | Generation cost |
+|---|---|---|---|---|---|---|
+| Haiku 5.5 | [`haiku/v0.1.0`](data/benchmark_versions/tau_retail/step_decoy/haiku/v0.1.0/manifest.json) | 28 | 28 (stale replay) | 31 / 31 | 4.3 | $0.19 |
+| Sonnet 5.5 | [`sonnet/v0.1.0`](data/benchmark_versions/tau_retail/step_decoy/sonnet/v0.1.0/manifest.json) | 28 | 31 (decoy after the failure) | 37 / 36 | 5.2 | $2.30 |
+| Opus 5.5 | [`opus/v0.1.0`](data/benchmark_versions/tau_retail/step_decoy/opus/v0.1.0/manifest.json) | 27 | 31 (stale replay), 47 (no actual slip) | 57 / 46 | 7.4 | $4.79 |
+
+The [findings report](agentrx/rewordings/reports/step_decoy/tau/findings.md) compares the three generators: where they agreed, how they differed, the errors each made, and cost.
+
+---
+
+## Where everything is stored
+
+```
+agentrx/rewordings/
+├── step_decoy.py                    # generator CLI: generate, release, compare
+├── step_decoy_prompt.txt            # domain-general prompt with <<PLACEHOLDER>> slots
+└── reports/step_decoy/tau/
+    ├── README.md
+    ├── findings.md                  # cross-model analysis
+    ├── review_sheets/<model>-medium.md   # per-trajectory review notes
+    └── reviews/<model>-medium.json       # signed review decisions used for release
+
+data/benchmark_versions/
+├── README.md                        # versioning rules and the full step-decoy workflow
+└── tau_retail/
+    ├── baseline/v1.0.0/             # parent: 29 original trajectories + labels
+    └── step_decoy/<haiku|sonnet|opus>/v0.1.0/
+        ├── trajectories/tau_dataset_failed.json   # accepted trajectories, same layout as the baseline
+        ├── ground_truth.json        # labels renumbered to the new step positions
+        ├── audit.json               # proposals, reviews, step maps, inserted steps, skipped cases
+        └── manifest.json            # parent checksums, generator settings, cost, artifact checksums
+
+tests/test_step_decoy.py             # layouts, generation, release, compare, Magentic-One
+
+runs/decoy/tau/<model>-medium/       # generation work folders (git-ignored, local only)
+```
+
+Releases are immutable. A change produces a new version (`v0.2.0`, …) and never overwrites an existing one.
+
+---
+
+## Setup
+
+You need Python 3.10 or newer and Node.js/npm for the GitHub Copilot CLI, which AgentRx uses by default.
 
 ```bash
 git clone https://github.com/aparnashree11/agentRx.git
 cd agentRx
+git switch step-decoy
 python3.12 -m venv .venv
 source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
 pip install -e .
 npm install -g @github/copilot
 copilot login
 cp .env.example .env
 ```
 
-`copilot login` opens a browser or provides a device-code flow to sign in with your GitHub account. The Copilot CLI uses that sign-in; AgentRx does not need a GitHub API key.
-
-### 2. Configure Copilot in `.env`
-
-Set the endpoint to Copilot and select one model option in `.env`:
+In `.env`, set the endpoint AgentRx's judge will use:
 
 ```env
 AGENT_VERIFY_ENDPOINT_TYPE=copilot
 AGENT_VERIFY_COPILOT_MODEL=auto
 ```
 
-Use `auto` for Copilot to choose an available model, `fusion` for Copilot Fusion, or replace `auto` with a model ID available to your account. To see available choices, start `copilot` and enter `/model`.
-
-### 3. Run one Tau retail trajectory through the full pipeline
-
-This command runs all stages—IR conversion, static and dynamic invariant generation, checking, judging, and reporting—on one example trajectory:
-
-```bash
-python run.py trajectories/tau-retail/agentrx_walkthrough.json \
-  --domain tau \
-  --run-name tau_walkthrough
-```
-
-The walkthrough is a small synthetic trace intended for learning. Outputs are saved under `runs/tau_walkthrough/`, including `trajectory_ir.json`, `static_invariants.json`, `dynamic_invariants/`, `checker_results/`, `judge_output/`, and `plots/`.
-
-For a real Tau retail example, replace the input path with a file such as `trajectories/tau-retail/instruction_adherence_failure.json`.
-
-You can also install directly from GitHub without cloning:
-```bash
-pip install git+https://github.com/aparnashree11/agentRx.git
-```
+Running the released trajectories needs only this setup. Generating new decoys also needs [Claude Code](#regenerate-or-extend).
 
 ---
 
-## Benchmark Dataset Versions
+## Run AgentRx on the step-decoy trajectories
 
-Tau Retail and Magentic-One have independent baseline releases under `data/benchmark_versions/`. These contain byte-for-byte frozen copies of the trajectory and ground-truth files selected for the project baseline. The manifests retain the original source paths as provenance; the versioned release files are self-contained.
-
-- [Tau Retail baseline v1.0.0](data/benchmark_versions/tau_retail/baseline/v1.0.0/manifest.json)
-- [Magentic-One baseline v1.0.0](data/benchmark_versions/magentic_one/baseline/v1.0.0/manifest.json)
-
-The Tau Retail baseline has 29 failed trajectories and 29 labels. The Magentic-One baseline has 58 trajectories and 44 labels. Each manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
-
-For the step-decoy experiment, follow the [generation, review and comparison workflow](data/benchmark_versions/README.md#generate-step-decoys).
-
-### Run the full Tau Retail baseline
-
-This input file contains all 29 Tau baseline trajectories. The command runs the full pipeline on them and supplies the matching labels for evaluation:
+Each release is a drop-in replacement for the baseline input. Run one generator's release:
 
 ```bash
-python run.py \
-  data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_dataset_failed.json \
+release_dir=data/benchmark_versions/tau_retail/step_decoy/sonnet/v0.1.0
+python run.py "$release_dir/trajectories/tau_dataset_failed.json" \
+  --domain tau \
+  --ground-truth "$release_dir/ground_truth.json" \
+  --run-name tau_decoy_sonnet
+```
+
+Run all three:
+
+```bash
+for m in haiku sonnet opus; do
+  release_dir=data/benchmark_versions/tau_retail/step_decoy/$m/v0.1.0
+  python run.py "$release_dir/trajectories/tau_dataset_failed.json" --domain tau \
+    --ground-truth "$release_dir/ground_truth.json" --run-name "tau_decoy_$m"
+done
+```
+
+Outputs go to `runs/tau_decoy_<model>/`, the same as any AgentRx run (`trajectory_ir.json`, invariants, `checker_results/`, `judge_output/`, `plots/`).
+
+### Measure whether the decoys moved the judge
+
+You need a clean run on the original trajectories with **the same judge configuration**:
+
+```bash
+python run.py data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_dataset_failed.json \
   --domain tau \
   --ground-truth data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_ground_truth.json \
   --run-name tau_baseline_v1
 ```
 
-Outputs are written to `runs/tau_baseline_v1/`. Use a distinct `--run-name` for each judge model so each model's results are kept separately.
-
----
-
-## Step-by-Step Usage
-
-You can run each stage individually and inspect the results between stages:
+Then compare the two judge reports:
 
 ```bash
-# 1. Normalize raw logs into Trajectory IR
-python run.py trajectory.json --stage ir --run-name my_run
-
-# 2. Generate static invariants
-python run.py trajectory.json --stage static --run-dir runs/my_run
-
-# 3. Generate dynamic (per-step) invariants
-python run.py trajectory.json --stage dynamic --run-dir runs/my_run
-
-# 4. Check all invariants against the trajectory
-python run.py trajectory.json --stage check --run-dir runs/my_run
-
-# 5. Run LLM judge for root-cause classification
-python run.py trajectory.json --stage judge --run-dir runs/my_run
-
-# 6. Generate report plots
-python run.py trajectory.json --stage report --run-dir runs/my_run
+python -m agentrx.rewordings.step_decoy compare \
+  --audit data/benchmark_versions/tau_retail/step_decoy/sonnet/v0.1.0/audit.json \
+  --clean runs/tau_baseline_v1/judge_output/runs/run1.json \
+  --variant runs/tau_decoy_sonnet/judge_output/runs/run1.json
 ```
 
----
+The output classifies every trajectory the clean run localized correctly:
 
-## Pipeline Stages
+- `same_original_event`: the judge still found the root cause.
+- `inserted_decoy`: the judge picked a decoy step. `attracted_by_kind` splits these into noise and red herrings.
+- `other_original_event`: the judge picked another original step.
 
-| # | Stage | Output |
-|---|-------|--------|
-| 1 | **IR** — Normalize raw logs into canonical Trajectory IR | `trajectory_ir.json` |
-| 2 | **Static** — Generate policy/tool/structure invariants | `static_invariants.json` |
-| 3 | **Dynamic** — Generate per-step context-aware invariants | `dynamic_invariants/` |
-| 4 | **Check** — Evaluate invariants, record violations | `checker_results/` |
-| 5 | **Judge** — LLM classifies root-cause failure (10-category taxonomy) | `judge_output/` |
-| 6 | **Report** — Failure frequency plots | `plots/` |
+The **decoy attraction rate** is the share of those trajectories whose prediction moved onto a decoy.
 
 ---
 
-## Directory Structure
+## Regenerate or extend
 
-```
-AgentRx/
-├── run.py                       # CLI entry point (backward-compatible)
-├── pyproject.toml               # Package configuration (pip install -e .)
-├── requirements.txt             # Python dependencies
-├── agentrx/                     # Main package
-│   ├── cli.py                   # Console script entry point
-│   ├── ir/                      # Trajectory IR normalization
-│   ├── invariants/              # Invariant generation & checking
-│   ├── judge/                   # LLM-as-a-Judge evaluation
-│   ├── llm_clients/             # Azure OpenAI & TRAPI clients
-│   ├── pipeline/                # Config (globals.py), utilities
-│   └── reports/                 # Analysis & visualization
-├── data/
-│   ├── benchmark_versions/      # Frozen benchmark inputs, labels, and manifests
-│   ├── policies/                # Domain policies
-│   └── tool_schemas/            # Domain tool schemas
-├── trajectories/                # Sample trajectories (tau, magentic, test)
-└── runs/                        # Pipeline outputs (one folder per run)
-```
-
----
-
-## Supported Domains
-
-| Domain | Flag | Description |
-|--------|------|-------------|
-| **tau** | `--domain tau` | Tau-bench retail customer service |
-| **magentic** | `--domain magentic` | Magentic-One multi-agent |
-| **flash** | `--domain flash` | Flash/orchestrator incident traces |
-| *(auto)* | *(default)* | Auto-detected; unknown formats use LLM-based IR fallback |
-
----
-
-## Other LLM Endpoints (Optional)
-
-Copilot CLI is the default endpoint. To use Azure OpenAI instead, set `AGENT_VERIFY_ENDPOINT_TYPE=azure` or pass `--endpoint azure`, then configure `AGENT_VERIFY_ENDPOINT`, `AGENT_VERIFY_DEPLOYMENT`, and `AGENT_VERIFY_MODEL_NAME` in `.env`. Azure authentication uses Azure identity credentials, for example `az login` for local development.
-
-TRAPI is a Microsoft Research internal endpoint. To use it, set `AGENT_VERIFY_ENDPOINT_TYPE=trapi` or pass `--endpoint trapi`, then configure `AGENT_VERIFY_TRAPI_INSTANCE`, `AGENT_VERIFY_TRAPI_DEPLOYMENT_NAME`, and `SCOPE`. TRAPI uses Azure AD authentication.
-
----
-
-## Failure Taxonomy
-
-| # | Category | Description |
-|---|----------|-------------|
-| 1 | **Instruction/Plan Adherence Failure** | Skips steps or adds unnecessary actions |
-| 2 | **Invention of New Information** | Fabricates or omits ungrounded facts |
-| 3 | **Invalid Invocation** | Malformed tool call (wrong args/types/schema) |
-| 4 | **Misinterpretation of Tool Output** | Incorrect reasoning about tool results |
-| 5 | **Intent-Plan Misalignment** | Pursues wrong objective |
-| 6 | **Underspecified User Intent** | Missing information to proceed |
-| 7 | **Intent Not Supported** | Action can't be performed with available tools |
-| 8 | **Guardrails Triggered** | Blocked by safety/RAI/access policies |
-| 9 | **System Failure** | Infra errors (timeouts, unreachable endpoints) |
-| 10 | **Inconclusive** | Insufficient evidence to classify |
-
----
-
-## Running Individual Modules
-
-Each module can also be run standalone:
-
-**Static Invariant Generator** — generate policy/tool invariants:
-```bash
-python agentrx/invariants/static_invariant_generator.py --input-path trajectory.json --domain tau
-```
-
-**Dynamic Invariant Generator** — generate per-step context-aware invariants:
-```bash
-python agentrx/invariants/dynamic_invariant_generator.py --input-path trajectory.json --domain tau --mode stepbystep
-```
-
-**Checker** — evaluate invariants against a trajectory:
-```bash
-python agentrx/invariants/checker.py --input-path trajectory.json --static-invariants static_inv.json --dynamic-invariants-dir dyn_inv/
-```
-
-**Judge** — run LLM-as-a-Judge classification:
-```bash
-python agentrx/judge/judge.py --domain tau --log_file trajectory.json --mode combined
-```
-
----
-
-## Third-Party Code
-
-This project uses the following third-party open source packages (installed via `requirements.txt`):
-
-- **openai** — OpenAI Python client (MIT License)
-- **azure-identity** / **azure-core** — Azure SDK authentication (MIT License)
-- **matplotlib** — Plotting and visualization (PSF-based License)
-- **tiktoken** — Token counting (MIT License)
-- **httpx** — HTTP client (BSD License)
-
-See [requirements.txt](requirements.txt) for the full list of dependencies.
-
----
-
-## Troubleshooting
-
-### `DefaultAzureCredential` timeout on local machines
-
-The Azure SDK's `DefaultAzureCredential` tries `ManagedIdentityCredential` before `AzureCliCredential`. On a local dev machine this probes the IMDS endpoint which doesn't exist locally, causing a ~5-10s timeout before falling back. This is expected behavior — the probe is how `DefaultAzureCredential` detects the hosting environment.
-
-**Fix:** Set the `AZURE_TOKEN_CREDENTIALS` environment variable to `dev` to exclude deployed-service credentials (e.g. `ManagedIdentityCredential`, `WorkloadIdentityCredential`) from the chain, so `DefaultAzureCredential` skips straight to developer-tool credentials like `AzureCliCredential`:
+Generating decoys needs [Claude Code](https://claude.com/claude-code), signed in. If `claude` is not on your PATH, set `CLAUDE_BIN` to its executable.
 
 ```bash
-# PowerShell
-$env:AZURE_TOKEN_CREDENTIALS = "dev"
+base=data/benchmark_versions/tau_retail/baseline/v1.0.0
+python -m agentrx.rewordings.step_decoy generate --domain tau \
+  --trajectories "$base/tau_dataset_failed.json" --ground-truth "$base/tau_ground_truth.json" \
+  --model sonnet --effort medium --work runs/decoy/tau/sonnet-medium
 
-# Bash / Linux / macOS
-export AZURE_TOKEN_CREDENTIALS=dev
+# review each case, write reviews.json, then:
+python -m agentrx.rewordings.step_decoy release --work runs/decoy/tau/sonnet-medium \
+  --reviews runs/decoy/tau/sonnet-medium/reviews.json --version v0.2.0
 ```
 
-Or add `AZURE_TOKEN_CREDENTIALS=dev` to your `.env` file.
+Generation sends the policy and trajectories to Anthropic. For Magentic-One, use `--domain magentic` with the `magentic_one/baseline/v1.0.0/trajectories` folder and its ground truth. The review checklist, the generator's rules and every output file are described in [the dataset versioning notes](data/benchmark_versions/README.md#generate-step-decoys).
 
-> Requires `azure-identity >= 1.23.0`. See [Exclude a credential type category](https://learn.microsoft.com/azure/developer/python/sdk/authentication/credential-chains?tabs=dac#exclude-a-credential-type-category) for details.
-
----
-
-## Contributing
-
-This project welcomes contributions and suggestions. Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+Run the tests with `python -m pytest tests/test_step_decoy.py`.
 
 ---
 
-## Trademarks
+## Caveats
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
-
----
-
-## License
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Licensed under the [MIT](LICENSE.txt) license.
+- **Tasks 2, 3 and 4 are related.** They share a user and an opening question, and the agent makes the same miscount in each, so their decoyed versions are similar. Treat them as one group when computing rates. The baseline labels for tasks 2 and 3 choose the miscount at step 7 as the root, although an earlier identity-verification lapse at step 3 is also labeled.
+- **Slips are formulaic.** 91 of 125 red herrings swap the last two characters of an ID, a pattern a detector could learn.
+- **One sample per model.** Each trajectory was generated once per model, without seed control.
+- **How the reviews were done.** Reviews adopt the suggestions in the review sheets. Those come from automated checks, plus a manual check of every flagged replay.
 
 ---
 
-## Citation
+## Upstream AgentRx, license and citation
 
-If you use AgentRx, please cite:
+AgentRx is by Microsoft Research ([paper](https://arxiv.org/abs/2602.02475), [dataset](https://huggingface.co/datasets/microsoft/AgentRx)) and is licensed under the [MIT](LICENSE.txt) license. Copyright (c) Microsoft Corporation. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ```bibtex
 @article{barke2026agentrx,
@@ -295,4 +201,3 @@ If you use AgentRx, please cite:
   year={2026}
 }
 ```
-
