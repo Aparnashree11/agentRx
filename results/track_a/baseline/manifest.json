@@ -1,0 +1,72 @@
+{
+  "name": "Track-A tau-bench baseline (AgentRx reproduction)",
+  "dataset": "tau-bench retail \u2014 failed agent trajectories (n=29)",
+  "source": "microsoft/AgentRx (https://huggingface.co/datasets/microsoft/AgentRx); paper arXiv:2602.02475",
+  "license": "AgentRx code MIT (LICENSE.txt); tau-bench data under its upstream license",
+  "retrieval_date": "2026-10-27",
+  "generated_by": "baselines/gen_manifest.py",
+  "generated_at": "2026-11-09",
+  "git_commit": "d6d41c6b32a7129ca6f6f554733d4b7bc8ab793f",
+  "pipeline_config": {
+    "producer": "run.py (ir -> static -> dynamic -> check -> judge -> report)",
+    "producer_script": "scripts/run_tau_sol.sh",
+    "command": "python run.py data/tau_retail/tau_dataset_failed.json --domain tau --endpoint copilot --ground-truth data/ground_truth/tau_ground_truth.json --dynamic-mode oneshot --run-name tau_sol_rN",
+    "model": "gpt-6.1-sol (env AGENT_VERIFY_COPILOT_MODEL; telemetry logs the endpoint as 'copilot-cli')",
+    "constraint_generation": "one-shot",
+    "judge_mode": "all-at-once (single call predicts step + category)",
+    "num_judges": 1,
+    "runs": 3,
+    "note": "The run artifacts are the versioned LLM output. Reproducing the NUMBER needs only the scorer + these artifacts (stdlib, no credentials). Re-running the pipeline that produced them needs credentials and is LLM-nondeterministic by design."
+  },
+  "metric": {
+    "scorer": "baselines/score_runs.py",
+    "step_accuracy": "fraction where predicted critical-step index == ground-truth root-cause step",
+    "category_accuracy": "fraction where predicted failure category == ground-truth root-cause category (10-cat taxonomy)",
+    "interval": "Wilson 95%"
+  },
+  "expected_results": {
+    "step_accuracy": {
+      "r1": 0.4138,
+      "r2": 0.4138,
+      "r3": 0.4138,
+      "note": "41.4% stable across all 3 runs"
+    },
+    "category_accuracy": {
+      "r1": 0.3448,
+      "r2": 0.2759,
+      "r3": 0.3103,
+      "note": "27.6-34.5%; varies run-to-run (LLM judge)"
+    },
+    "paper_comparison": {
+      "step": "41.4 vs paper one-shot +Vio 41.0 +/- 2.1 (Table 4) \u2014 within variance",
+      "category": "~31 vs paper one-shot +Vio 41.9 +/- 2.4 \u2014 gap is a model/annotator boundary disagreement (cat 6 Underspecified -> cat 1 Instruction Adherence)"
+    }
+  },
+  "files": {
+    "data/tau_retail/tau_dataset_failed.json": {
+      "role": "input_trajectories",
+      "sha256": "17f8b3356d1124274cc7ed0215b5ff696970073dbed57394c60e775d5f85d717",
+      "bytes": 900014
+    },
+    "data/ground_truth/tau_ground_truth.json": {
+      "role": "ground_truth",
+      "sha256": "58067689b2ec42f9cbfec2a84ec08d39cea4d8270617b55d0185862753642d16",
+      "bytes": 33335
+    },
+    "results/track_a/baseline/artifacts/tau_sol_r1.json": {
+      "role": "run_artifact_r1",
+      "sha256": "83c7eee97015df2ad919cacf24adfb49502d5faa8115dd3d95e1ec0c922494f6",
+      "bytes": 75920
+    },
+    "results/track_a/baseline/artifacts/tau_sol_r2.json": {
+      "role": "run_artifact_r2",
+      "sha256": "73b586d18910f024e7454c43937c1ba16a9056712035b5b59da2e43f31af439e",
+      "bytes": 74929
+    },
+    "results/track_a/baseline/artifacts/tau_sol_r3.json": {
+      "role": "run_artifact_r3",
+      "sha256": "e739c140800660633a698229d2db9a76ea87ee093e9fb2ee7d47f8299111181a",
+      "bytes": 76105
+    }
+  }
+}
