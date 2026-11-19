@@ -75,6 +75,8 @@ Tau Retail and Magentic-One have independent baseline releases under `data/bench
 
 The Tau Retail baseline has 29 failed trajectories and 29 labels. The Magentic-One baseline has 58 trajectories and 44 labels. Each manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
 
+For the step-decoy experiment, follow the [generation, review and comparison workflow](data/benchmark_versions/README.md#generate-step-decoys).
+
 ### Run the full Tau Retail baseline
 
 This input file contains all 29 Tau baseline trajectories. The command runs the full pipeline on them and supplies the matching labels for evaluation:

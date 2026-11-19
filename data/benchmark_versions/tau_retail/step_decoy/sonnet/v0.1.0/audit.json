@@ -1,0 +1,4104 @@
+{
+  "2": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 5,
+          "source_end": 6,
+          "find": "9523456873",
+          "replace_with": "9523456837",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 3,
+          "source_end": 4,
+          "insert_after_step": 6
+        }
+      ],
+      "rationale": "A mistyped product ID lookup that errors before the successful retry adds a visible error just before the failure. A replayed product-type listing between the product details and the agent's count adds extra output after the evidence and before the miscount.",
+      "distinguishing_evidence": "Step 6 lists 12 T-shirt variants, 2 of them unavailable, so 10 are available. At step 7 the agent says 11, which is the real miscount. The inserted error and replay don't change that data."
+    },
+    "generation": {
+      "session_id": "ade473b3-eac9-48c1-bff2-6659c4a87fd1",
+      "num_turns": 2,
+      "duration_ms": 6456,
+      "total_cost_usd": 0.07954220000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17222,
+          "outputTokens": 20,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0017322000000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 685,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 17739,
+          "webSearchRequests": 0,
+          "costUSD": 0.07781,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 331,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17739,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 7,
+      "6": 8,
+      "7": 11,
+      "8": 12,
+      "9": 13,
+      "10": 14,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 4,
+        "steps": [
+          5,
+          6
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 6,
+        "steps": [
+          9,
+          10
+        ]
+      }
+    ],
+    "inserted_steps": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "original_root": 7
+  },
+  "3": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 5,
+          "source_end": 6,
+          "find": "9523456873",
+          "replace_with": "9523456837",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 5,
+          "source_end": 6,
+          "insert_after_step": 6
+        }
+      ],
+      "rationale": "A failed product lookup with a transposed ID, then a retry, adds an apparent error just before the failure. A replay of the same product-details read puts more output between the data and the miscount. This diverts attention from the miscount in step 7.",
+      "distinguishing_evidence": "Step 6 lists 12 variants, and step 7 says 11 are available. Two of the 12 are unavailable, so the agent was wrong to report 11 as available. The decoys change none of this."
+    },
+    "generation": {
+      "session_id": "6661a3bd-7b64-435b-978d-29324f508b7b",
+      "num_turns": 2,
+      "duration_ms": 12119,
+      "total_cost_usd": 0.0792726,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17406,
+          "outputTokens": 191,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0018361000000000002,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 173,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 865,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 17177,
+          "webSearchRequests": 0,
+          "costUSD": 0.0774365,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 513,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17177,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 7,
+      "6": 8,
+      "7": 11,
+      "8": 12,
+      "9": 13,
+      "10": 14,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 4,
+        "steps": [
+          5,
+          6
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 6,
+        "steps": [
+          9,
+          10
+        ]
+      }
+    ],
+    "inserted_steps": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "original_root": 7
+  },
+  "4": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 12
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "9523456873",
+          "replace_with": "9523456837",
+          "response": "Error: product not found"
+        }
+      ],
+      "rationale": "A profile re-read and a failed product lookup with a mistyped ID appear just before the T-shirt listing is read. This puts extra output and an error right before the miscount at step 15. The error looks like trouble, but the retry succeeds and the result is unchanged.",
+      "distinguishing_evidence": "The original step 14 lists 12 variants, and 2 of them are unavailable. Step 15 then says 11 are available, which is the miscount. The correct figure is 9 available out of 12 variants."
+    },
+    "generation": {
+      "session_id": "cdd6ae2a-8a32-4fe2-a981-c7561d6404e3",
+      "num_turns": 2,
+      "duration_ms": 6437,
+      "total_cost_usd": 0.0902774,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20569,
+          "outputTokens": 220,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0021669,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 202,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 666,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20343,
+          "webSearchRequests": 0,
+          "costUSD": 0.0881105,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 302,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20343,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52
+    },
+    "insertions": [
+      {
+        "kind": "noise",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          15,
+          16
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "original_root": 15
+  },
+  "12": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W5490111",
+          "replace_with": "#W5490119",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "A failed order lookup early on adds a visible error unrelated to the later return. A replayed read-only order lookup right before the return call adds extra output between the evidence and the premature write action.",
+      "distinguishing_evidence": "Step 19 calls return_delivered_order_items right after the user's step 16 message. The assistant never listed the action details, never asked for a refund payment method, and never got an explicit yes. Neither decoy changes that."
+    },
+    "generation": {
+      "session_id": "1928406e-3861-4c5c-97be-dff6cbc37298",
+      "num_turns": 2,
+      "duration_ms": 12104,
+      "total_cost_usd": 0.060653599999999995,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13186,
+          "outputTokens": 229,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0014331,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 209,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 733,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 12953,
+          "webSearchRequests": 0,
+          "costUSD": 0.059220499999999995,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 388,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 12953,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      21,
+      22
+    ],
+    "original_root": 19
+  },
+  "20": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 7,
+          "source_end": 8,
+          "find": "Garcia",
+          "replace_with": "Garcai",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "A failed authentication lookup early adds a visible error that is harmlessly self-corrected. A replayed profile read sits between the order status evidence and the assistant's misreading, adding output in between.",
+      "distinguishing_evidence": "Steps 14 and 18 show orders #W4967593 and #W5733668 with status 'processed'. At step 21 the assistant calls them delivered. The later exchange errors at steps 50 and 62 confirm that."
+    },
+    "generation": {
+      "session_id": "01e478d1-d136-40ff-b544-99231bef8a16",
+      "num_turns": 2,
+      "duration_ms": 8862,
+      "total_cost_usd": 0.13511430000000002,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 31098,
+          "outputTokens": 24,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0031218,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 845,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 30866,
+          "webSearchRequests": 0,
+          "costUSD": 0.1319925,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 495,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 30866,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 9,
+      "8": 10,
+      "9": 11,
+      "10": 12,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52,
+      "49": 53,
+      "50": 54,
+      "51": 55,
+      "52": 56,
+      "53": 57,
+      "54": 58,
+      "55": 59,
+      "56": 60,
+      "57": 61,
+      "58": 62,
+      "59": 63,
+      "60": 64,
+      "61": 65,
+      "62": 66
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 6,
+        "steps": [
+          7,
+          8
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      7,
+      8,
+      21,
+      22
+    ],
+    "original_root": 21
+  },
+  "21": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W9911714",
+          "replace_with": "#W9911741",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 16
+        },
+        {
+          "kind": "noise",
+          "source_start": 23,
+          "source_end": 24,
+          "insert_after_step": 26
+        }
+      ],
+      "rationale": "A failed order lookup with a transposed ID sits just before the pending-order discovery. Re-reading the order and the shoe product just before the assistant refuses the exchange adds read-only output near the failure. Both draw attention to the order status without changing it.",
+      "distinguishing_evidence": "Step 14 shows the order is pending. Step 17 says exchanges need delivered orders. Step 26 shows the user still insisting on the exchange. Step 27 shows the assistant refusing. Step 28 is where the annotated failure occurs."
+    },
+    "generation": {
+      "session_id": "70e588cc-c9a6-41e2-9363-9dd436c5bfd8",
+      "num_turns": 2,
+      "duration_ms": 10877,
+      "total_cost_usd": 0.0883003,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19763,
+          "outputTokens": 23,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0019877999999999996,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 809,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19536,
+          "webSearchRequests": 0,
+          "costUSD": 0.0863125,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 398,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19536,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46,
+      "41": 47,
+      "42": 48,
+      "43": 49,
+      "44": 50,
+      "45": 51,
+      "46": 52,
+      "47": 53,
+      "48": 54
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 26,
+        "steps": [
+          31,
+          32
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      19,
+      20,
+      31,
+      32
+    ],
+    "original_root": 28
+  },
+  "28": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W2575533",
+          "replace_with": "#W2575553",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 17,
+          "source_end": 18,
+          "insert_after_step": 32
+        }
+      ],
+      "rationale": "A failed order lookup with a mistyped ID appears early and is retried successfully, adding a visible error. A re-read of the pending order right before the cancel call puts extra output between the evidence and the failing call. Neither changes the agent's later wrong assumption that a partial cancel is possible.",
+      "distinguishing_evidence": "At step 31 the assistant says the garden hose can be cancelled alone. At step 33 it calls cancel_pending_order on the whole order #W2575533, which cancels every item. The policy allows only whole-order cancellation, and the tool result at step 34 shows the full $1619.34 refund."
+    },
+    "generation": {
+      "session_id": "5b5c418d-2d35-499a-86d2-5cfb67274da9",
+      "num_turns": 2,
+      "duration_ms": 10195,
+      "total_cost_usd": 0.08402069999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 18702,
+          "outputTokens": 204,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0019722,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 186,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 807,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 18475,
+          "webSearchRequests": 0,
+          "costUSD": 0.0820485,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 401,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 18475,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 32,
+        "steps": [
+          35,
+          36
+        ]
+      }
+    ],
+    "inserted_steps": [
+      17,
+      18,
+      35,
+      36
+    ],
+    "original_root": 33
+  },
+  "31": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 27,
+          "source_end": 28,
+          "find": "#W5481803",
+          "replace_with": "#W5481308",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 28
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 35,
+          "source_end": 36,
+          "find": "#W7449508",
+          "replace_with": "#W7449580",
+          "response": "Error: order not found"
+        }
+      ],
+      "rationale": "An order-not-found error just before the boot order lookup, and an unrelated tablet order re-read between the order details and the cancel call, add clutter around the failure. The later mistyped lookup adds another visible error nearby.",
+      "distinguishing_evidence": "Step 28 shows order #W5481803 contains both the kettle and the boots. Step 31 then cancels the whole order, and step 32 shows it fully cancelled with a refund of 397.26. That cancellation is the root failure, and none of the decoys change it."
+    },
+    "generation": {
+      "session_id": "1b18d210-220a-4138-81bc-7de6bc979bdb",
+      "num_turns": 2,
+      "duration_ms": 8235,
+      "total_cost_usd": 0.0765099,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16714,
+          "outputTokens": 24,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016834,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 882,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16482,
+          "webSearchRequests": 0,
+          "costUSD": 0.0748265,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 452,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16482,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "invalid": "A red herring copies a request and its response, both before the root failure"
+  },
+  "32": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 9,
+          "source_end": 10,
+          "find": "#W7449508",
+          "replace_with": "#W7449580",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 10
+        }
+      ],
+      "rationale": "A mistyped order ID lookup that returns an error just before the real lookup adds a visible error near the failure. A replayed profile read between the order output and the wrong answer adds extra output between the evidence and the mistake.",
+      "distinguishing_evidence": "Step 10's order output lists only an Espresso Machine and Sneakers, with no tablet. Step 11 still gives that order's tracking number as the tablet's. Step 20 shows the tablet is in order #W2692684 with tracking 746342064230."
+    },
+    "generation": {
+      "session_id": "28b1ac78-6314-43b1-ad1b-2f4a257f0023",
+      "num_turns": 2,
+      "duration_ms": 7217,
+      "total_cost_usd": 0.07363779999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16413,
+          "outputTokens": 24,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016533000000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 715,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16189,
+          "webSearchRequests": 0,
+          "costUSD": 0.07198449999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 345,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16189,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 11,
+      "10": 12,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 8,
+        "steps": [
+          9,
+          10
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 10,
+        "steps": [
+          13,
+          14
+        ]
+      }
+    ],
+    "inserted_steps": [
+      9,
+      10,
+      13,
+      14
+    ],
+    "original_root": 11
+  },
+  "34": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 9,
+          "source_end": 10,
+          "find": "noah_patel_6952",
+          "replace_with": "noah_patel_6925",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "A failed profile lookup early on adds a visible error unrelated to the later failure. A replayed order read right before the modify call adds extra output between the user's confirmation and the faulty tool call.",
+      "distinguishing_evidence": "Step 17 still calls modify_pending_order_items with empty new_item_ids and a wrong argument schema. Step 18 returns the mismatch error, which comes directly from that call, not from the lookup slip or the order re-read."
+    },
+    "generation": {
+      "session_id": "314b7022-6cc8-43c7-bf4c-4c12fa2fea72",
+      "num_turns": 2,
+      "duration_ms": 10282,
+      "total_cost_usd": 0.0692421,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15276,
+          "outputTokens": 20,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0015376,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 743,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15049,
+          "webSearchRequests": 0,
+          "costUSD": 0.0677045,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 384,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15049,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 11,
+      "10": 12,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 8,
+        "steps": [
+          9,
+          10
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      }
+    ],
+    "inserted_steps": [
+      9,
+      10,
+      19,
+      20
+    ],
+    "original_root": 17
+  },
+  "38": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 27,
+          "source_end": 28,
+          "find": "9743693396",
+          "replace_with": "9743639396",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 34
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 32
+        }
+      ],
+      "rationale": "A failed umbrella product lookup with a transposed digit appears just before the umbrella data, so it looks like trouble with the umbrella. The replayed order and profile reads put extra output between the product data and the faulty price calculation. Both are harmless read-only calls.",
+      "distinguishing_evidence": "Step 28 shows the umbrella variant 3111466194 (285.66) is available:false. Step 37's calculate still uses 285.66, so the agent picked an unavailable item as the cheapest. That is the root error, and the decoys change nothing about it."
+    },
+    "generation": {
+      "session_id": "0f4e1bb9-fd9a-4e28-acb8-591a20a55c07",
+      "num_turns": 2,
+      "duration_ms": 8301,
+      "total_cost_usd": 0.0911653,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20388,
+          "outputTokens": 204,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0021408,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 183,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 829,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20164,
+          "webSearchRequests": 0,
+          "costUSD": 0.0890245,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 413,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20164,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 37,
+      "34": 38,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46,
+      "41": 47,
+      "42": 48,
+      "43": 49,
+      "44": 50,
+      "45": 51,
+      "46": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 26,
+        "steps": [
+          27,
+          28
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 32,
+        "steps": [
+          35,
+          36
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 34,
+        "steps": [
+          39,
+          40
+        ]
+      }
+    ],
+    "inserted_steps": [
+      27,
+      28,
+      35,
+      36,
+      39,
+      40
+    ],
+    "original_root": 37
+  },
+  "39": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 9,
+          "source_end": 10,
+          "find": "Fatima",
+          "replace_with": "Fatmia",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "fatima_taylor_3452",
+          "replace_with": "fatima_taylor_3542",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "Two harmless failed lookups (typo'd name, transposed user id) add visible errors during authentication, and a replayed profile read right before the failure puts extra output between the user's request and the agent's mistaken claim.",
+      "distinguishing_evidence": "Step 16 is where the user asks the agent to pull the address from order details, and step 17 is the agent's incorrect refusal. It never called get_order_details, though the order #W5285031 is listed in the profile at step 12. The inserted errors are all earlier and are retried successfully."
+    },
+    "generation": {
+      "session_id": "8a98fed5-aaff-4dec-9fc9-93aa98ace91f",
+      "num_turns": 2,
+      "duration_ms": 7697,
+      "total_cost_usd": 0.0659265,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13845,
+          "outputTokens": 283,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.001526,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 260,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 985,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13618,
+          "webSearchRequests": 0,
+          "costUSD": 0.0644005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 542,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13618,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 11,
+      "10": 12,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 23,
+      "18": 24,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 8,
+        "steps": [
+          9,
+          10
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      9,
+      10,
+      13,
+      14,
+      21,
+      22
+    ],
+    "original_root": 17
+  },
+  "41": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 5,
+          "source_end": 6,
+          "find": "Patel",
+          "replace_with": "Patell",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 16
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "A failed authentication lookup adds an early, harmless error. Re-reading the pending order and the jigsaw product details right before the modify call adds extra output between the user's request and the mistaken tool call. The real error is still the order of operations, which none of these changes.",
+      "distinguishing_evidence": "Step 17 calls modify_pending_order_items before the address change. Step 18 shows the status becoming 'pending (item modified)'. Step 20 shows the address update failing with 'non-pending order cannot be modified'. The user had already asked for both changes in step 16."
+    },
+    "generation": {
+      "session_id": "fa313f03-5b70-4d9f-a8ed-b401bd74781b",
+      "num_turns": 2,
+      "duration_ms": 7390,
+      "total_cost_usd": 0.0719671,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15621,
+          "outputTokens": 209,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016666,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 190,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 865,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15393,
+          "webSearchRequests": 0,
+          "costUSD": 0.0703005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 450,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15393,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 7,
+      "6": 8,
+      "7": 9,
+      "8": 10,
+      "9": 11,
+      "10": 12,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 23,
+      "18": 24,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 4,
+        "steps": [
+          5,
+          6
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      5,
+      6,
+      19,
+      20,
+      21,
+      22
+    ],
+    "original_root": 17
+  },
+  "47": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W9502127",
+          "replace_with": "#W9502172",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "A failed order lookup with a transposed digit adds a visible error early in the trajectory. A re-read of the order details right before the transfer adds extra output between the evidence and the failing step. Neither one changes what the agent does at step 19.",
+      "distinguishing_evidence": "At step 14 the order is delivered and the items are valid. At step 16 the user explicitly confirms the return. At step 19 the agent transfers to a human instead of calling return_delivered_order_items. That premature transfer is the root cause."
+    },
+    "generation": {
+      "session_id": "35213a73-f799-49c7-8718-e95da3641622",
+      "num_turns": 2,
+      "duration_ms": 7392,
+      "total_cost_usd": 0.058568800000000004,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 12568,
+          "outputTokens": 319,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0014163,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 300,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 773,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 12336,
+          "webSearchRequests": 0,
+          "costUSD": 0.0571525,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 404,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 12336,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      21,
+      22
+    ],
+    "original_root": 19
+  },
+  "55": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W4597054",
+          "replace_with": "#W4597045",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 17,
+          "source_end": 18,
+          "insert_after_step": 30
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 24
+        }
+      ],
+      "rationale": "A failed lookup of the order that contains the four items, plus re-reads of the profile and of that order close to the return request, add error-like and bulky output near the point where the user lists items. This pulls attention to the lookups and the assistant's handling, away from the user's incomplete item list.",
+      "distinguishing_evidence": "Step 18 shows order #W4597054 has four items, including the Water Bottle. The task says to return all possible orders. Step 32 omits the Water Bottle from the user's return list, and that omission is the root cause."
+    },
+    "generation": {
+      "session_id": "ee11fe15-148a-4166-b346-3e26a7814186",
+      "num_turns": 2,
+      "duration_ms": 7553,
+      "total_cost_usd": 0.08793980000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19658,
+          "outputTokens": 27,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0019793,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 817,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19428,
+          "webSearchRequests": 0,
+          "costUSD": 0.08596050000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 410,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19428,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 24,
+        "steps": [
+          27,
+          28
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          35,
+          36
+        ]
+      }
+    ],
+    "inserted_steps": [
+      17,
+      18,
+      27,
+      28,
+      35,
+      36
+    ],
+    "original_root": 32
+  },
+  "59": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 9,
+          "source_end": 10,
+          "find": "#W8268610",
+          "replace_with": "#W8268601",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 10
+        }
+      ],
+      "rationale": "A failed order lookup followed by a successful retry adds apparent trouble early on. A replayed read of order #W2702727 puts extra output between the order data and the user's later decision. Neither changes the user's unsupported assumption at step 14.",
+      "distinguishing_evidence": "At step 13 the assistant says it has no fulfillment timeline information. Neither order detail shows a placement date. At step 14 the user nonetheless treats #W2702727 as the older order and cancels it. The retry and the replayed read change none of this."
+    },
+    "generation": {
+      "session_id": "eb50f00e-4622-44e1-a94a-e273d2da87de",
+      "num_turns": 2,
+      "duration_ms": 9971,
+      "total_cost_usd": 0.06224339999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13304,
+          "outputTokens": 225,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0014429,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 207,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 841,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13078,
+          "webSearchRequests": 0,
+          "costUSD": 0.06080049999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 466,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13078,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 11,
+      "10": 12,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 8,
+        "steps": [
+          9,
+          10
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 10,
+        "steps": [
+          13,
+          14
+        ]
+      }
+    ],
+    "inserted_steps": [
+      9,
+      10,
+      13,
+      14
+    ],
+    "original_root": 14
+  },
+  "63": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W5061109",
+          "replace_with": "#W5061190",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "4768869376",
+          "replace_with": "4768869367",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 15,
+          "source_end": 16,
+          "insert_after_step": 24
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 30
+        }
+      ],
+      "rationale": "Early failed lookups with typos and replayed order and product reads add visible errors and extra output before the user's step 32 reply, pulling attention toward lookup problems and the assistant's reads.",
+      "distinguishing_evidence": "Step 31 shows the assistant proposing a replacement of the speaker. Step 32 shows the user changing this to 'just add' it, which the underspecified task instruction left open. The decoys are harmless reads and self-corrected lookups that change nothing after them."
+    },
+    "generation": {
+      "session_id": "5f4c17dd-1707-4810-8cae-cd71cf04f38c",
+      "num_turns": 2,
+      "duration_ms": 8342,
+      "total_cost_usd": 0.0694183,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 14918,
+          "outputTokens": 284,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016338000000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 266,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 893,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 14694,
+          "webSearchRequests": 0,
+          "costUSD": 0.0677845,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 443,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 14694,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36,
+      "31": 39,
+      "32": 40,
+      "33": 41,
+      "34": 42,
+      "35": 43,
+      "36": 44
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 24,
+        "steps": [
+          29,
+          30
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          37,
+          38
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      17,
+      18,
+      29,
+      30,
+      37,
+      38
+    ],
+    "original_root": 32
+  },
+  "71": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "#W5270061",
+          "replace_with": "#W5270016",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 19,
+          "source_end": 20,
+          "find": "6817146515",
+          "replace_with": "6817146551",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 22
+        }
+      ],
+      "rationale": "Two harmless lookup errors (mistyped order ID and product ID) that are immediately retried add visible errors before the failure. A re-read of the user profile puts extra output between the lamp options and the user's choice. None of these change state or excuse the underspecified user choice.",
+      "distinguishing_evidence": "Step 20 lists several available black lamp variants. Step 23 asks the user to choose one. At step 24 the user picks a specific variant that the task instruction never specified. That underspecified user choice is the root cause."
+    },
+    "generation": {
+      "session_id": "2d54b920-f48e-4f41-a81b-b285e4abe433",
+      "num_turns": 2,
+      "duration_ms": 10901,
+      "total_cost_usd": 0.07788279999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17233,
+          "outputTokens": 22,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0017342999999999998,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 805,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 17005,
+          "webSearchRequests": 0,
+          "costUSD": 0.0761485,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 378,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17005,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          15,
+          16
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 22,
+        "steps": [
+          27,
+          28
+        ]
+      }
+    ],
+    "inserted_steps": [
+      15,
+      16,
+      21,
+      22,
+      27,
+      28
+    ],
+    "original_root": 24
+  },
+  "72": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W5270061",
+          "replace_with": "#W5270016",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "2524789262",
+          "replace_with": "2524789226",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "Two harmless failed lookups (a mistyped order ID and a mistyped product ID) that are retried successfully add visible errors early on. A replayed profile read just before the plan and the modify call puts extra output between the evidence and the failure. None of these change the later flawed ordering of the modify-items call before the address change.",
+      "distinguishing_evidence": "Step 21 calls modify_pending_order_items before the address is changed. Step 22 shows the status becoming 'pending (item modified)' with the address still in Washington DC. Step 23 confirms the address can no longer be modified. The policy says the items modification locks the order."
+    },
+    "generation": {
+      "session_id": "f8349f65-c503-4a6c-91b4-83e9e8799114",
+      "num_turns": 2,
+      "duration_ms": 8893,
+      "total_cost_usd": 0.0729209,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15819,
+          "outputTokens": 273,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0017184000000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 253,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 876,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15591,
+          "webSearchRequests": 0,
+          "costUSD": 0.0712025,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 415,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15591,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      17,
+      18,
+      23,
+      24
+    ],
+    "original_root": 21
+  },
+  "74": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W5166363",
+          "replace_with": "#W5166336",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 14
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "A failed order lookup with a transposed digit adds an early visible error. Two replays of the read-only profile lookup put extra output between the order evidence and the faulty exchange call, so attention is pulled away from step 21.",
+      "distinguishing_evidence": "Step 12 shows the order status is \"pending\". At step 21 the agent still called the exchange tool on that order, and step 22 returned \"Error: non-delivered order cannot be exchanged\". The decoys change none of this."
+    },
+    "generation": {
+      "session_id": "37779028-01b7-49b0-815f-c40fac12e6ee",
+      "num_turns": 2,
+      "duration_ms": 7400,
+      "total_cost_usd": 0.0702566,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15226,
+          "outputTokens": 251,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016481,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 230,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 855,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 14995,
+          "webSearchRequests": 0,
+          "costUSD": 0.0686085,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 465,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 14995,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 14,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      17,
+      18,
+      23,
+      24
+    ],
+    "original_root": 21
+  },
+  "79": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W9284598",
+          "replace_with": "#W9284589",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "8310926033",
+          "replace_with": "8310926330",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 17,
+          "source_end": 18,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "Two harmless failed lookups with typos, each followed by the successful original, add visible errors before the user's choice. A replayed product-details read adds extra output between the variant list and the user's pick of the black bottle.",
+      "distinguishing_evidence": "Step 19 offers both the black and red 1000ml stainless steel options. Step 20 is the user choosing black even though the task never specified a color. That is the underspecified-intent failure, and none of the decoys changes it."
+    },
+    "generation": {
+      "session_id": "031b2c88-8621-41b1-a3bb-160881153921",
+      "num_turns": 2,
+      "duration_ms": 9015,
+      "total_cost_usd": 0.0741785,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15790,
+          "outputTokens": 26,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0015919999999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 1028,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15557,
+          "webSearchRequests": 0,
+          "costUSD": 0.0725865,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 618,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15557,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      19,
+      20,
+      23,
+      24
+    ],
+    "original_root": 20
+  },
+  "80": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "amelia_gonzalez_4098",
+          "replace_with": "amelia_gonzalez_4089",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "9523456873",
+          "replace_with": "9523456837",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 24
+        }
+      ],
+      "rationale": "Two failed lookups with slipped IDs, each retried correctly, add visible errors early. A re-read of the order details just before the final turn adds extra output between the evidence and the failure at step 26.",
+      "distinguishing_evidence": "Step 26 is the user's final message ending in ###STOP###. The trajectory ends there without the assistant executing the exchange. The root cause is that premature termination. The inserted errors are harmless, self-corrected lookups, and the replayed read changes no state."
+    },
+    "generation": {
+      "session_id": "a9ecc8d5-2cf2-49a3-a4e6-dd4892b9f261",
+      "num_turns": 2,
+      "duration_ms": 7574,
+      "total_cost_usd": 0.0640469,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13699,
+          "outputTokens": 237,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0014884,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 216,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 858,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13475,
+          "webSearchRequests": 0,
+          "costUSD": 0.0625585,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 425,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13475,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 31,
+      "26": 32
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 24,
+        "steps": [
+          29,
+          30
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      17,
+      18,
+      29,
+      30
+    ],
+    "original_root": 26
+  },
+  "82": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W3069600",
+          "replace_with": "#W3096600",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W9571698",
+          "replace_with": "#W9571689",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "Two harmless order-ID typo lookups that fail with \"order not found\" and are retried, plus a re-read of the user profile just before the assistant's summary. These put visible errors and extra output near the tablet and refund-method evidence. They draw attention toward assistant lookup slips, away from the user's step-20 request to return both tablets.",
+      "distinguishing_evidence": "The task says to return only the pricier tablet, and to return everything on one order if a credit card refund is refused. At step 20 the user instead asks to return both tablets from both orders, and the assistant simply carries that out in steps 21-26. The inserted lookups change nothing about that request."
+    },
+    "generation": {
+      "session_id": "04925766-9f3a-45b6-9f57-bb1e345b9b8d",
+      "num_turns": 2,
+      "duration_ms": 11968,
+      "total_cost_usd": 0.0714869,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15554,
+          "outputTokens": 262,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016864000000000002,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 241,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 841,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15328,
+          "webSearchRequests": 0,
+          "costUSD": 0.0698005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 370,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15328,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      19,
+      20,
+      23,
+      24
+    ],
+    "original_root": 20
+  },
+  "87": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 27,
+          "source_end": 28,
+          "find": "#W1994898",
+          "replace_with": "#W1994889",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 28
+        }
+      ],
+      "rationale": "A failed order lookup with a transposed ID, then a successful retry, adds visible trouble just before the address is found. A replayed profile read puts extra output between the order evidence and the update calls. Neither one touches the missing third order update.",
+      "distinguishing_evidence": "Step 24 shows #W6832752 is pending. Steps 31-36 update only #W2166301, #W2466703 and the default address. Step 37 then claims all updates are done, so the pending order #W6832752 was never updated."
+    },
+    "generation": {
+      "session_id": "7014c145-4cbc-4000-87fb-ba9c130be4df",
+      "num_turns": 2,
+      "duration_ms": 10152,
+      "total_cost_usd": 0.0746183,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16288,
+          "outputTokens": 242,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0017498000000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 221,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 855,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16060,
+          "webSearchRequests": 0,
+          "costUSD": 0.0728685,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 489,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16060,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 29,
+      "28": 30,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 26,
+        "steps": [
+          27,
+          28
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 28,
+        "steps": [
+          31,
+          32
+        ]
+      }
+    ],
+    "inserted_steps": [
+      27,
+      28,
+      31,
+      32
+    ],
+    "original_root": 37
+  },
+  "91": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W3239882",
+          "replace_with": "#W3239822",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "3801771308",
+          "replace_with": "3801771380",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 32
+        }
+      ],
+      "rationale": "Two harmless failed lookups (mistyped order and product IDs) that are retried successfully add visible errors early in the trajectory. A re-read of the user profile just before the user's unrequested tablet request adds extra output between the evidence and the failure step.",
+      "distinguishing_evidence": "Step 34 is where the user asks to return the tablet from #W3239882, which the task instruction never mentions. Steps 30-33 show the assistant only listing items without recommending any. The decoy errors are self-corrected lookups that change nothing afterwards."
+    },
+    "generation": {
+      "session_id": "f56fea99-5232-47b4-aca9-8fad39bdf208",
+      "num_turns": 2,
+      "duration_ms": 7194,
+      "total_cost_usd": 0.0874346,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19311,
+          "outputTokens": 26,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0019440999999999998,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 908,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19083,
+          "webSearchRequests": 0,
+          "costUSD": 0.0854905,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 471,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19083,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 32,
+        "steps": [
+          37,
+          38
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      19,
+      20,
+      37,
+      38
+    ],
+    "original_root": 34
+  },
+  "98": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 19,
+          "source_end": 20,
+          "find": "#W3407479",
+          "replace_with": "#W3407749",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 20
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 20
+        }
+      ],
+      "rationale": "A failed order lookup with a typo'd ID right before the failure adds a visible error. The replayed profile and product reads then sit between the evidence (the NYC order was fetched at step 20) and the faulty modify_pending_order_items call. Together they pull attention to lookups instead of the ordering mistake.",
+      "distinguishing_evidence": "Step 21 calls modify_pending_order_items before the address change, which locks the order. Step 22 shows the status becoming 'pending (item modified)'. Steps 24 and 32 then fail because of that lock. The decoys change none of these."
+    },
+    "generation": {
+      "session_id": "0440deb8-8b32-404d-9aab-cbf257026be8",
+      "num_turns": 2,
+      "duration_ms": 12565,
+      "total_cost_usd": 0.07371090000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16069,
+          "outputTokens": 19,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0016164,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 868,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15834,
+          "webSearchRequests": 0,
+          "costUSD": 0.0720945,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 441,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15834,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): checked: the only write in between (step 15 exchange) failed, so nothing changed"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 21,
+      "20": 22,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 18,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 20,
+        "steps": [
+          23,
+          24
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 20,
+        "steps": [
+          25,
+          26
+        ]
+      }
+    ],
+    "inserted_steps": [
+      19,
+      20,
+      23,
+      24,
+      25,
+      26
+    ],
+    "original_root": 21
+  },
+  "99": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 31,
+          "source_end": 32,
+          "find": "8940227892",
+          "replace_with": "8940227829",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W4689314",
+          "replace_with": "#W4689341",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 34
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 32
+        }
+      ],
+      "rationale": "Failed lookups with typos in the product ID and order ID add visible errors before the camera exchange. Re-reading the order and the profile just before the exchange call puts extra output between the user's request and the faulty payment_method_id. That could make an evaluator blame lookup slips or stale data rather than the payment choice.",
+      "distinguishing_evidence": "At step 34 the user asks for the refund to go to \"the other card on file\", which is Mastercard 8484 (credit_card_8105988), as earlier steps 26-27 also discussed. The step 35 call passes payment_method_id credit_card_8105988 for order #W4689314, and the step 36 result shows exchange_payment_method_id credit_card_8105988. That is the original card on that order and the wrong one. The assistant never confirmed it with the user."
+    },
+    "generation": {
+      "session_id": "2ad99cdf-c4c3-479e-ad55-07c882aa4bd3",
+      "num_turns": 2,
+      "duration_ms": 10805,
+      "total_cost_usd": 0.1070268,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 23518,
+          "outputTokens": 265,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0024843,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 243,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 1128,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 23296,
+          "webSearchRequests": 0,
+          "costUSD": 0.10454250000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 575,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 23296,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): checked: step 29 exchange charged a credit card; the profile has no balance field, so the replay is current"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 35,
+      "32": 36,
+      "33": 39,
+      "34": 40,
+      "35": 43,
+      "36": 44,
+      "37": 45,
+      "38": 46,
+      "39": 47,
+      "40": 48,
+      "41": 49,
+      "42": 50,
+      "43": 51,
+      "44": 52,
+      "45": 53,
+      "46": 54
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 30,
+        "steps": [
+          33,
+          34
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 32,
+        "steps": [
+          37,
+          38
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 34,
+        "steps": [
+          41,
+          42
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      33,
+      34,
+      37,
+      38,
+      41,
+      42
+    ],
+    "original_root": 35
+  },
+  "104": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "#W1154986",
+          "replace_with": "#W1154968",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 56
+        }
+      ],
+      "rationale": "A failed lookup of the same cancelled order that the final failure concerns draws attention to an error about that order. A profile re-read right before the faulty answer adds extra output between the evidence and the mistake.",
+      "distinguishing_evidence": "Step 16 output shows the fulfillments tracking_id 286422338955 for cancelled order #W1154986. Step 57 wrongly says the order has no tracking number. The decoys don't change that output or the misreading."
+    },
+    "generation": {
+      "session_id": "7b36a2e9-03bb-40ce-b718-02fde5f1ddf4",
+      "num_turns": 2,
+      "duration_ms": 7473,
+      "total_cost_usd": 0.0934382,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 21062,
+          "outputTokens": 23,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0021177,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 789,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20838,
+          "webSearchRequests": 0,
+          "costUSD": 0.0913205,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 436,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20838,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): checked: returns and an item change on a credit card, and step 43 changes an order's address, not the profile; the profile has no balance field, so the replay is current"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 37,
+      "36": 38,
+      "37": 39,
+      "38": 40,
+      "39": 41,
+      "40": 42,
+      "41": 43,
+      "42": 44,
+      "43": 45,
+      "44": 46,
+      "45": 47,
+      "46": 48,
+      "47": 49,
+      "48": 50,
+      "49": 51,
+      "50": 52,
+      "51": 53,
+      "52": 54,
+      "53": 55,
+      "54": 56,
+      "55": 57,
+      "56": 58,
+      "57": 61,
+      "58": 62
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          15,
+          16
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 56,
+        "steps": [
+          59,
+          60
+        ]
+      }
+    ],
+    "inserted_steps": [
+      15,
+      16,
+      59,
+      60
+    ],
+    "original_root": 57
+  },
+  "105": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 42
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 25,
+          "source_end": 26,
+          "find": "#W9218746",
+          "replace_with": "#W9218764",
+          "response": "Error: order not found"
+        }
+      ],
+      "rationale": "A visible order-not-found error appears in the earlier backpack lookup, and a profile re-read sits between the user's address request and the failing address call. Both add unrelated output and look like trouble, but neither changes the order state or the assistant's decision at step 43.",
+      "distinguishing_evidence": "Step 39 modified the items on #W4860251 (status became 'pending (item modified)' at step 40). At step 43 the assistant then tried to change the address, and step 44 returned the non-pending error. The decoys do not touch this sequence."
+    },
+    "generation": {
+      "session_id": "0e5244d3-fa3b-4a44-9eab-21b25b7f0d8c",
+      "num_turns": 2,
+      "duration_ms": 11051,
+      "total_cost_usd": 0.09209830000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20708,
+          "outputTokens": 18,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0,
+          "webSearchRequests": 0,
+          "costUSD": 0.0020798,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 0,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 0,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        },
+        "claude-sonnet-5-5": {
+          "inputTokens": 2,
+          "outputTokens": 800,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20485,
+          "webSearchRequests": 0,
+          "costUSD": 0.0900185,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 422,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20485,
+          "canonicalModel": "claude-sonnet-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/sonnet-medium/review_sheet.md): checked: returns and an item change on a credit card; the profile has no balance field, so the replay is current"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 37,
+      "36": 38,
+      "37": 39,
+      "38": 40,
+      "39": 41,
+      "40": 42,
+      "41": 43,
+      "42": 44,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 24,
+        "steps": [
+          25,
+          26
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 42,
+        "steps": [
+          45,
+          46
+        ]
+      }
+    ],
+    "inserted_steps": [
+      25,
+      26,
+      45,
+      46
+    ],
+    "original_root": 43
+  }
+}
