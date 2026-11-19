@@ -22,6 +22,8 @@ WHAT THIS SCRIPT DOES (the big picture):
         - tool names and tool results are left untouched.
 
 HOW THE SCRIPT IS ORGANIZED (one function per job, built in order):
+    0. extract_trajectory(task_id)      <-- pull a real labeled trace out of
+                                            the dataset (used by --from-dataset)
     1. load_trajectory(path)            <-- this file, done
     2. load_ground_truth(trajectory_id) <-- this file, done
     3. load_policy_and_tools(domain)    <-- this file, done
@@ -88,6 +90,141 @@ DEFAULT_GROUND_TRUTH_PATH = os.path.join(
 MODEL_ENV_VAR = "PRESENTATION_CHANGE_MODEL"   # env var name users can set
 DEFAULT_MODEL = "sonnet"                       # fallback if nothing is set
 CLAUDE_CLI_TIMEOUT = 600                        # seconds to wait for a response
+
+# Default location of the FROZEN failed-trajectory dataset (the real labeled
+# traces). Same versioned baseline folder as the ground truth above, so the
+# trace and its label always come from the same release.
+DEFAULT_DATASET_PATH = os.path.join(
+    PROJECT_ROOT,
+    "data", "benchmark_versions", "tau_retail", "baseline", "v1.0.0",
+    "tau_dataset_failed.json",
+)
+
+# Where extract_trajectory() saves the events-format files it produces.
+DEFAULT_EXTRACT_DIR = os.path.join(
+    PROJECT_ROOT, "trajectories", "tau-retail", "from_dataset",
+)
+
+
+# ============================================================================
+# HELPER -- extract_trajectory  (dataset record -> our events format)
+# ============================================================================
+def extract_trajectory(task_id, dataset_path=DEFAULT_DATASET_PATH,
+                       save_dir=DEFAULT_EXTRACT_DIR):
+    """
+    Pull ONE real trace out of the failed-trajectory dataset by task_id and
+    convert it to our events format, so the pipeline can run on it.
+
+    The dataset file (tau_dataset_failed.json) is a LIST of records like:
+
+        {
+          "task_id": 2,
+          "reward": 0.0,
+          "info": { "task": { "instruction": "You are Yusuf Rossi ...", ... },
+                    ... },
+          "traj": [
+            { "role": "system",    "content": "# Retail agent policy ...",
+              "index": 1 },
+            { "role": "user",      "content": "Hey! ...", "index": 2 },
+            { "role": "assistant", "content": null, "tool_calls": [...],
+              "refusal": null, "annotations": [], "index": 3 },
+            { "role": "tool", "tool_call_id": "...", "name": "...",
+              "content": "{...json string...}", "index": 4 },
+            ...
+          ],
+          ...
+        }
+
+    We turn that into the shape load_trajectory() expects:
+
+        {
+          "trajectory_id": "2",                     <- str(task_id)
+          "instruction":   info.task.instruction,   <- verbatim
+          "events":        traj                     <- copied VERBATIM
+        }
+
+    Why the events are copied verbatim (nothing dropped or renamed):
+        - The SYSTEM message (the policy) is kept as event 0. AgentRx numbers
+          steps as (event position + 1), so keeping it is what makes the
+          ground-truth step numbers line up: for task 2, ground-truth step 3
+          is events[2] (the first assistant tool call), whose "index" is 3.
+          Dropping the system message would silently shift every step by one.
+        - Extra keys ("index", "refusal", "annotations") are harmless to our
+          pipeline (parse_and_validate only checks role / name / ids / values)
+          and keep the trace byte-for-byte faithful to what AgentRx judged.
+
+    Parameters
+    ----------
+    task_id : str or int
+        The dataset's task_id (e.g. 2). Compared as a STRING, same as
+        load_ground_truth(), so "2" and 2 both work.
+    dataset_path : str
+        Path to the failed-trajectory dataset JSON.
+    save_dir : str or None
+        Folder to save the extracted file in (as task_<id>.json). Pass None
+        to skip saving and just return the dict.
+
+    Returns
+    -------
+    tuple (trajectory, saved_path)
+        trajectory : dict      -- the events-format trajectory.
+        saved_path : str|None  -- where it was written (None if not saved).
+    """
+    if not os.path.exists(dataset_path):
+        raise FileNotFoundError(f"Dataset file not found: {dataset_path}")
+
+    with open(dataset_path, "r", encoding="utf-8") as f:
+        records = json.load(f)
+
+    # Find the record whose task_id matches (string comparison, see above).
+    wanted = str(task_id)
+    record = None
+    for r in records:
+        if str(r.get("task_id")) == wanted:
+            record = r
+            break
+
+    if record is None:
+        # Fail loudly and list what IS available, so a typo is easy to spot.
+        available = ", ".join(str(r.get("task_id")) for r in records)
+        raise ValueError(
+            f"task_id={task_id!r} not found in {dataset_path}. "
+            f"Available task_ids: {available}"
+        )
+
+    # The conversation lives under "traj"; it must be a list of messages.
+    events = record.get("traj")
+    if not isinstance(events, list) or not events:
+        raise ValueError(
+            f"Record task_id={task_id!r} has no usable 'traj' list of events."
+        )
+
+    # The task instruction (what the simulated user was told to do) lives at
+    # info.task.instruction. This is the same value AgentRx's own loader
+    # finds, because it searches the record for the first "instruction" key.
+    instruction = (
+        record.get("info", {}).get("task", {}).get("instruction")
+    )
+    if not isinstance(instruction, str):
+        raise ValueError(
+            f"Record task_id={task_id!r} has no info.task.instruction string."
+        )
+
+    trajectory = {
+        "trajectory_id": wanted,   # str, so ground truth + folder names match
+        "instruction": instruction,
+        "events": events,          # verbatim -- see docstring for why
+    }
+
+    # Optionally save it so it can be inspected or re-run with --trajectory.
+    saved_path = None
+    if save_dir is not None:
+        os.makedirs(save_dir, exist_ok=True)
+        saved_path = os.path.join(save_dir, f"task_{_safe_name(wanted)}.json")
+        with open(saved_path, "w", encoding="utf-8") as f:
+            json.dump(trajectory, f, indent=2, ensure_ascii=False)
+
+    return trajectory, saved_path
 
 
 # ============================================================================
@@ -914,6 +1051,32 @@ def parse_and_validate(response, original_trajectory, ground_truth):
 
             role = orig.get("role")
 
+            # (a2) SYSTEM / POLICY events must be byte-for-byte identical.
+            #      This backs the "we didn't touch the rulebook" guarantee:
+            #      the policy is the standard the agent is judged against, so
+            #      even a meaning-preserving paraphrase is forbidden here.
+            #      We key on role == "system" (not "position 0") because only
+            #      real traces start with a system message -- demo traces like
+            #      the walkthrough start with a user message, which IS allowed
+            #      to be reworded. A system event whose role was flipped to
+            #      something else is already caught by the ROLE CHANGED check.
+            #      We compare the WHOLE event dict (content + every other key),
+            #      not just the parsed values, because layout changes count too.
+            if role == "system":
+                if orig != new:
+                    # Name exactly which keys differ, to make the report useful.
+                    changed_keys = sorted(
+                        k for k in set(orig) | set(new)
+                        if orig.get(k) != new.get(k)
+                    )
+                    violations.append(
+                        f"[POLICY CHANGED] event {i}: the system/policy message "
+                        f"was modified (keys differing: {changed_keys}). The "
+                        f"rulebook must stay byte-for-byte identical."
+                    )
+                # Nothing else to check on a system event.
+                continue
+
             # (b) Tool RESULT events: name, tool_call_id, and VALUES frozen.
             if role == "tool":
                 if orig.get("name") != new.get("name"):
@@ -1150,15 +1313,30 @@ def main():
 
         # real run with a specific model
         python presentation_change.py --trajectory <path> --model haiku
+
+        # run straight from the labeled dataset (no manual extraction)
+        python presentation_change.py --from-dataset 2 --dry-run
     """
     # ---- Define the command-line options --------------------------------
     parser = argparse.ArgumentParser(
         description="Produce a presentation-only rewording of a failed agent "
                     "trajectory and check that the true failure is preserved."
     )
-    parser.add_argument(
-        "--trajectory", required=True,
+    # The input comes from EXACTLY ONE of two places: a trajectory file you
+    # already have, or a task_id pulled out of the labeled dataset.
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument(
+        "--trajectory",
         help="Path to the input trajectory JSON (events format).",
+    )
+    source.add_argument(
+        "--from-dataset", metavar="TASK_ID",
+        help="Extract this task_id from the failed-trajectory dataset "
+             "(see --dataset) and run on it directly.",
+    )
+    parser.add_argument(
+        "--dataset", default=DEFAULT_DATASET_PATH,
+        help="Path to the failed-trajectory dataset used by --from-dataset.",
     )
     parser.add_argument(
         "--model", default=None,
@@ -1189,13 +1367,28 @@ def main():
 
     print("=" * 70)
     print("PRESENTATION-CHANGE PIPELINE")
-    print(f"  trajectory : {args.trajectory}")
+    if args.from_dataset is not None:
+        print(f"  source     : dataset task_id={args.from_dataset} "
+              f"({args.dataset})")
+    else:
+        print(f"  trajectory : {args.trajectory}")
     print(f"  model      : {resolved_model}")
     print(f"  dry-run    : {args.dry_run}")
     print("=" * 70)
 
+    # ---- Step 0 (only with --from-dataset): extract the trace -----------
+    # Pull the trace out of the dataset and save it in events format, then
+    # point the normal loader at the saved file -- so the dataset path goes
+    # through the exact same validation as a hand-supplied --trajectory.
+    trajectory_path = args.trajectory
+    if args.from_dataset is not None:
+        _, trajectory_path = extract_trajectory(args.from_dataset,
+                                                args.dataset)
+        print(f"[0] Extracted dataset task_id={args.from_dataset} "
+              f"-> {trajectory_path}")
+
     # ---- Step 1: load the trajectory ------------------------------------
-    trajectory = load_trajectory(args.trajectory)
+    trajectory = load_trajectory(trajectory_path)
     trajectory_id = trajectory["trajectory_id"]
     print(f"[1] Loaded trajectory id={trajectory_id!r} "
           f"with {len(trajectory['events'])} events.")
