@@ -1,0 +1,190 @@
+{
+  "trajectory_id": "71",
+  "failure_step_index": 24,
+  "failure_event_index": 26,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions.",
+  "step_outcomes": [
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "failure"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi there! I hope you're doing well. I made a small mistake...",
+      "after_excerpt": "Hello! I hope you're well. I made a small mistake...",
+      "note": "Same request, paraphrased."
+    },
+    {
+      "event_index": 2,
+      "change_type": "emphasis",
+      "before_excerpt": "Could you please provide me with the email address...",
+      "after_excerpt": "Could you share the **email address** ... **first name, last name, and zip code**",
+      "note": "Paraphrase plus bold on existing terms; no new facts."
+    },
+    {
+      "event_index": 6,
+      "change_type": "wording",
+      "before_excerpt": "I've successfully located your account.",
+      "after_excerpt": "Your account has been located.",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "I need to check the status of your order to ensure it's still pending...",
+      "after_excerpt": "I need to verify that the order is still pending...",
+      "note": "Same meaning; bold added on order ID."
+    },
+    {
+      "event_index": 12,
+      "change_type": "wording",
+      "before_excerpt": "I’ve found your orders!",
+      "after_excerpt": "I found your orders!",
+      "note": "Paraphrase; same IDs listed."
+    },
+    {
+      "event_index": 16,
+      "change_type": "formatting",
+      "before_excerpt": "Order ID, address, items, status, payment",
+      "after_excerpt": "Order ID, status, payment, address, items",
+      "note": "Reordered bullets within one message; all facts retained."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Could you let me know which one you'd like to switch to?",
+      "after_excerpt": "Which one would you like?",
+      "note": "Same meaning; the agent still says it will proceed after confirmation."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "Both modifications have been successfully completed!",
+      "after_excerpt": "Both changes went through!",
+      "note": "Same outcome and facts."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "Would you like me to proceed with this modification?",
+      "after_excerpt": "Shall I go ahead with this modification?",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 34,
+      "change_type": "emphasis",
+      "before_excerpt": "can only be used once per pending order",
+      "after_excerpt": "can be used only **once** per pending order",
+      "note": "Paraphrase and bold on an existing fact; the agent still declines and offers the same alternatives."
+    },
+    {
+      "event_index": 31,
+      "change_type": "wording",
+      "before_excerpt": "tool_call_id/id call_RiyaeZASBtsTOCZykn4TSXs6",
+      "after_excerpt": "(see note)",
+      "note": "NOTE: identifier left as in input intent; see verification below."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 27,
+    "failure_category": "premature one-shot tool call / policy violation (modify items called before collecting all items)"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 26,
+      "step_number": 24,
+      "step_reason": "At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The task instruction is underspecified regarding the type of black lamp to be added to the cart.",
+      "failed_agent": "User"
+    },
+    {
+      "failure_id": 27,
+      "step_number": 27,
+      "step_reason": "Assistant prematurely called modify items tool on a pending order which locked the order and the user later on wasn't able to change the backpack that he wanted.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "Here, the plan generated by the assistant is incorrect, it should not have prematurely called modify items tool on a pending order before finalizing all the items to be modified in the user's order.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

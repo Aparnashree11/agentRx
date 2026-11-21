@@ -1,0 +1,247 @@
+{
+  "trajectory_id": "59",
+  "failure_step_index": 14,
+  "failure_event_index": 10,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "The user agent incorrectly assumed that one order was older than the other even when the assistant specifically mentioned that it did not have the chronological information regarding the orders' placement date. It led to the incorrect order being cancelled compared to ground truth actions.",
+  "step_outcomes": [
+    {
+      "index": 0,
+      "outcome": "neutral"
+    },
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "failure"
+    },
+    {
+      "index": 11,
+      "outcome": "neutral"
+    },
+    {
+      "index": 12,
+      "outcome": "neutral"
+    },
+    {
+      "index": 13,
+      "outcome": "neutral"
+    },
+    {
+      "index": 14,
+      "outcome": "neutral"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 16,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "neutral"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 24,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "Before I can assist you with your orders, I need to authenticate your identity.",
+      "after_excerpt": "Before I can help with your orders, I first have to verify your identity.",
+      "note": "Same request for email or name+zip; paraphrase only."
+    },
+    {
+      "event_index": 4,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Yusuf\",\"last_name\":\"Taylor\",\"zip\":\"95154\"}",
+      "after_excerpt": "{\"zip\":\"95154\",\"first_name\":\"Yusuf\",\"last_name\":\"Taylor\"}",
+      "note": "Key order only; same keys and values."
+    },
+    {
+      "event_index": 6,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W2702727\"}",
+      "after_excerpt": "{\"order_id\":\"#W2702727\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 8,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W8268610\"}",
+      "after_excerpt": "{\"order_id\": \"#W8268610\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "Both of your orders, #W2702727 and #W8268610, are currently in the \"pending\" status. However, the difference in their processing times could be due to various factors",
+      "after_excerpt": "Orders #W2702727 and #W8268610 are both currently in \"pending\" status. The gap in their processing times might be explained by a few possible factors",
+      "note": "Paraphrase; the same three speculative factors are retained, so the failure is unchanged."
+    },
+    {
+      "event_index": 12,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, I cannot confirm whether order #W2702727 will be processed within the next 5 days",
+      "after_excerpt": "I'm sorry, but I can't confirm whether order #W2702727 will be processed within the next 5 days",
+      "note": "Same facts: no timeline access, $625.60 refund, 5–7 business days."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "To proceed with canceling order #W2702727, I need to confirm the reason for cancellation.",
+      "after_excerpt": "Before I can cancel order #W2702727, I need you to confirm the cancellation reason.",
+      "note": "Same two options offered; paraphrase only."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "The system requires the reason for cancellation to be one of the predefined options.",
+      "after_excerpt": "The cancellation reason has to be one of the predefined options in the system.",
+      "note": "Same meaning and same proposed reason."
+    },
+    {
+      "event_index": 18,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W2702727\",\"reason\":\"no longer needed\"}",
+      "after_excerpt": "{\"reason\":\"no longer needed\",\"order_id\":\"#W2702727\"}",
+      "note": "Key order only."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "Order #W2702727 has been successfully canceled with the reason \"No longer needed.\"",
+      "after_excerpt": "Order #W2702727 is now canceled, with \"No longer needed\" recorded as the reason.",
+      "note": "Same facts."
+    },
+    {
+      "event_index": 22,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W8268610\",\"address1\":\"1234 Elm St\",...,\"zip\":\"62701\"}",
+      "after_excerpt": "{\"order_id\":\"#W8268610\",\"zip\":\"62701\",\"state\":\"IL\",...}",
+      "note": "Key order only; same values."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "The shipping address for order #W8268610 has been successfully updated to:",
+      "after_excerpt": "Order #W8268610 now ships to the updated address:",
+      "note": "Same address and $164.28 total; bold emphasis retained."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 10,
+    "failure_category": "policy violation: made-up information / speculation"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 24,
+      "step_number": 14,
+      "step_reason": "The user agent incorrectly assumed that one order was older than the other even when the assistant specifically mentioned that it did not have the chronological information regarding the orders' placement date. It led to the incorrect order being cancelled compared to ground truth actions.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent made an assumption that was not supported by the information provided by the assistant which led to incorrect outcome.",
+      "failed_agent": "User"
+    }
+  ]
+}

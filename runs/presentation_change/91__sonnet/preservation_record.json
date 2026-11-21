@@ -1,0 +1,275 @@
+{
+  "trajectory_id": "91",
+  "failure_step_index": 34,
+  "failure_event_index": 30,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction.",
+  "step_outcomes": [
+    {
+      "index": 0,
+      "outcome": "neutral"
+    },
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "success"
+    },
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "neutral"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 16,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "neutral"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    },
+    {
+      "index": 28,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "neutral"
+    },
+    {
+      "index": 30,
+      "outcome": "failure"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 32,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "neutral"
+    },
+    {
+      "index": 34,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 36,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 38,
+      "outcome": "success"
+    },
+    {
+      "index": 39,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with returning the skateboards and processing a refund to your credit card. To get started, I need to authenticate your identity.",
+      "after_excerpt": "I can help you return the skateboards and refund the money to your credit card. First, I need to verify your identity.",
+      "note": "Same meaning: the agent offers help and asks for an email or name plus zip code."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "I see that your order #W7553978 includes two skateboards, and the order status is \"delivered.\"",
+      "after_excerpt": "Order #W7553978 contains two skateboards, and its status is \"delivered.\"",
+      "note": "Same facts, prices, total and confirmation question. Only the phrasing changed."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "Your recent order #W3239882 is also marked as \"delivered.\" Could you let me know which item...",
+      "after_excerpt": "Order #W3239882 is also marked as \"delivered.\" Which item from this order would you like to return?",
+      "note": "Same items and prices are listed. The wording is a paraphrase."
+    },
+    {
+      "event_index": 18,
+      "change_type": "wording",
+      "before_excerpt": "The E-Reader ... that you wish to return is currently available online. Would you like me to proceed with adding this item...",
+      "after_excerpt": "The E-Reader you want to return ... is currently available online. Shall I add it to the return process...",
+      "note": "Same availability claim and the same question."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "I can initiate the exchange process for you.",
+      "after_excerpt": "I can start the exchange process for you.",
+      "note": "Synonym swap only."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Yes, I see that you purchased a Smart Watch ... in order #W7553978 for $339.85. Would you like to return this smartwatch as well?",
+      "after_excerpt": "Yes, order #W7553978 includes a Smart Watch ... priced at $339.85. Do you want to return this smartwatch too?",
+      "note": "Same facts and the same question."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 30,
+    "failure_category": "policy_violation"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 35,
+      "step_number": 34,
+      "step_reason": "The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent's request did not align with the task instruction.",
+      "failed_agent": "User"
+    }
+  ]
+}

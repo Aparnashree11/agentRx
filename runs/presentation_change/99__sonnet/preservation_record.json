@@ -1,0 +1,265 @@
+{
+  "trajectory_id": "99",
+  "failure_step_index": 35,
+  "failure_event_index": 24,
+  "failure_category": "Instruction Adherence Failure",
+  "failure_summary": "The assistant while exchanging the delivered order items used the incorrect credit card. The task instruction and consequently the user mentions to use the other credit card on file, but it uses the same credit card. This could have been avoided if the assistant had confirmed the payment method with the user before proceeding with the exchange.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "failure"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    },
+    {
+      "index": 29,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "neutral"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 39,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "neutral"
+    },
+    {
+      "index": 43,
+      "outcome": "success"
+    },
+    {
+      "index": 45,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi there! I need some help with a few exchanges and a cancellation from a recent order, please.",
+      "after_excerpt": "Hello! I could use a hand with a few exchanges and a cancellation tied to a recent order, please.",
+      "note": "Same request, paraphrased."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with that! First, I need to authenticate your identity.",
+      "after_excerpt": "Happy to help with that! To begin, I have to verify your identity.",
+      "note": "Same authentication request, paraphrased."
+    },
+    {
+      "event_index": 4,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Sofia\",\"last_name\":\"Li\",\"zip\":\"78260\"}",
+      "after_excerpt": "{\"last_name\":\"Li\",\"first_name\":\"Sofia\",\"zip\":\"78260\"}",
+      "note": "Keys reordered; identical keys and values."
+    },
+    {
+      "event_index": 6,
+      "change_type": "wording",
+      "before_excerpt": "Thank you, Sofia! I have successfully authenticated your identity.",
+      "after_excerpt": "Thanks, Sofia! Your identity has been successfully verified.",
+      "note": "Same meaning, paraphrased."
+    },
+    {
+      "event_index": 12,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W4689314\"}",
+      "after_excerpt": "{\"order_id\":\"#W4689314\"}",
+      "note": "Whitespace-only change in the arguments JSON string."
+    },
+    {
+      "event_index": 14,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W3916020\"}",
+      "after_excerpt": "{\"order_id\": \"#W3916020\"}",
+      "note": "Whitespace-only change in the arguments JSON string."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Please let me know which options you'd like to proceed with for each exchange.",
+      "after_excerpt": "Tell me which option you'd like for each exchange.",
+      "note": "The closing request is paraphrased; the option list is untouched."
+    },
+    {
+      "event_index": 24,
+      "change_type": "emphasis",
+      "before_excerpt": "Refund will be processed to your Visa card ending in 6791.",
+      "after_excerpt": "Refund will be processed to your **Visa card ending in 6791**.",
+      "note": "Bold added to the existing claim; content unchanged, so the flawed statement stays equally visible."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "Would you like me to proceed with these exchanges?",
+      "after_excerpt": "Shall I go ahead with these exchanges?",
+      "note": "Same confirmation question."
+    },
+    {
+      "event_index": 26,
+      "change_type": "wording",
+      "before_excerpt": "I will process the refund to your Mastercard ending in 8484 instead of the Visa card.",
+      "after_excerpt": "I'll send the refund to your Mastercard ending in 8484 rather than the Visa card.",
+      "note": "Same meaning, paraphrased."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "Please let me know which option you'd like to proceed with and confirm the payment method for any price adjustments.",
+      "after_excerpt": "Let me know which option you'd like to proceed with, and confirm the payment method for any price adjustments.",
+      "note": "Minor paraphrase."
+    },
+    {
+      "event_index": 36,
+      "change_type": "wording",
+      "before_excerpt": "The exchanges have been successfully processed:",
+      "after_excerpt": "Your exchanges have been successfully processed:",
+      "note": "Same meaning; the refund figures and cards are unchanged."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "The order containing the skateboard is still in \"pending\" status, which means it can be cancelled.",
+      "after_excerpt": "The order that contains the skateboard is in \"pending\" status, so it is eligible for cancellation.",
+      "note": "Same facts, paraphrased."
+    },
+    {
+      "event_index": 44,
+      "change_type": "wording",
+      "before_excerpt": "The order (#W8855135) has been successfully cancelled.",
+      "after_excerpt": "Order #W8855135 has been successfully cancelled.",
+      "note": "Same facts, paraphrased; the refund to the Visa ending in 6791 is retained."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 25,
+    "failure_category": "incorrect_information_or_wrong_payment_method"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 37,
+      "step_number": 35,
+      "step_reason": "The assistant while exchanging the delivered order items used the incorrect credit card. The task instruction and consequently the user mentions to use the other credit card on file, but it uses the same credit card. This could have been avoided if the assistant had confirmed the payment method with the user before proceeding with the exchange.",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "The assistant's did not follow the domain policy which requires it confirm the exact payment method before proceeding with the exchange of a delivered order.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

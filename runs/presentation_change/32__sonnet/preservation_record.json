@@ -1,0 +1,225 @@
+{
+  "trajectory_id": "32",
+  "failure_step_index": 11,
+  "failure_event_index": 10,
+  "failure_category": "Misinterpretation of Tool Output",
+  "failure_summary": "At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "failure"
+    },
+    {
+      "index": 13,
+      "outcome": "neutral"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "success"
+    },
+    {
+      "index": 39,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "success"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with that. To begin, I need to authenticate your identity.",
+      "after_excerpt": "Happy to help with that. First I have to verify who you are.",
+      "note": "Same authentication request with the same two options; paraphrase only."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "The tracking number for the tablet you received is **194496721133**.",
+      "after_excerpt": "Your tablet's tracking number is **194496721133**.",
+      "note": "Same incorrect claim and the same number; failure unchanged."
+    },
+    {
+      "event_index": 12,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, we cannot process a refund or reorder for a lost item.",
+      "after_excerpt": "I'm sorry, but a refund or a reorder isn't possible for a lost item.",
+      "note": "Same statement and the same stated rationale; paraphrase only."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "It seems that the charger is not part of your recent orders.",
+      "after_excerpt": "The charger doesn't appear in your recent orders.",
+      "note": "Same meaning; same request for the order ID or more details."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "I found the order for the portable charger. It is currently in a pending status",
+      "after_excerpt": "I found the portable charger order. Its status is pending",
+      "note": "Same facts and same confirmation request; the bold fields are kept."
+    },
+    {
+      "event_index": 26,
+      "change_type": "wording",
+      "before_excerpt": "has been successfully canceled. The total amount of **$109.27** has been refunded",
+      "after_excerpt": "is now canceled. The full **$109.27** went back to your gift card balance right away.",
+      "note": "Same cancellation result and refund amount; paraphrase only."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "The boots and kettle are part of order **#W5481803**, which is currently in a pending status.",
+      "after_excerpt": "The boots and the kettle belong to order **#W5481803**, which has a pending status",
+      "note": "Same facts and the same confirmation request."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "have been successfully canceled. The total amount of **$397.26** has been refunded",
+      "after_excerpt": "has been canceled. **$397.26** was refunded to your gift card balance immediately.",
+      "note": "Same result and amount."
+    },
+    {
+      "event_index": 36,
+      "change_type": "wording",
+      "before_excerpt": "are eligible for return since the order status is \"delivered.\"",
+      "after_excerpt": "Since order **#W7449508** has a \"delivered\" status, the sneakers qualify for a return.",
+      "note": "Same eligibility reasoning and the same confirmation details."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "has been successfully initiated. You will receive an email shortly",
+      "after_excerpt": "has been started. An email with return instructions will reach you shortly.",
+      "note": "Same outcome and the same $186.45 refund claim."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 11,
+    "failure_category": "wrong information / wrong order used"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 15,
+      "step_number": 11,
+      "step_reason": "At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet.",
+      "failure_category": "Misinterpretation of Tool Output",
+      "category_reason": "The items in the output of get_order_details were misinterpreted believing that tablet was one of them, leading it to providing incorrect tracking number.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

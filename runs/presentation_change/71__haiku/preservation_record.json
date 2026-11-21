@@ -1,0 +1,173 @@
+{
+  "trajectory_id": "71",
+  "failure_step_index": 24,
+  "failure_event_index": 26,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions.",
+  "step_outcomes": [
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "failure"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "neutral"
+    },
+    {
+      "index": 35,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "changes_applied": [
+    {
+      "event_index": 6,
+      "change_type": "wording",
+      "before_excerpt": "Thank you, Ivan! I've successfully located your account. How can I assist you with your order adjustments today?",
+      "after_excerpt": "Thank you, Ivan. Your account has been located. What would you like to adjust in your order today?",
+      "note": "Same meaning: authentication succeeded and the agent asks what to adjust; no tool result or fact changed."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "Got it! To proceed, I need to check the status of your order to ensure it's still pending and eligible for modification. Could you please provide...",
+      "after_excerpt": "Understood. Before I can make any changes, I need to confirm that the order is still pending. Could you please share the order ID...",
+      "note": "Same request for the order ID and the same stated reason (pending status check); wording only."
+    },
+    {
+      "event_index": 8,
+      "change_type": "emphasis",
+      "before_excerpt": "still pending",
+      "after_excerpt": "still **pending**",
+      "note": "Bold on an existing term to highlight the status requirement; no fact added or removed."
+    },
+    {
+      "event_index": 11,
+      "change_type": "formatting",
+      "before_excerpt": "{\"name\": {\"first_name\": \"Ivan\", \"last_name\": \"Khan\"}, \"address\": {\"address1\": \"159 Hickory Lane\", ...",
+      "after_excerpt": "{\n  \"name\": {\n    \"first_name\": \"Ivan\",\n    \"last_name\": \"Khan\"\n  },\n  \"address\": {\n    \"address1\": \"159 Hickory Lane\", ...",
+      "note": "Tool result JSON re-indented; identical keys, values, order, and ids."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "The desk lamp is available in several black variants with different brightness and power source options... Could you let me know which one you'd like to switch to? Once confirmed, I’ll proceed with both the address update and the item modification.",
+      "after_excerpt": "The desk lamp is available in several black variants, which differ in brightness and power source... Which one would you like to switch to? After you confirm, I will carry out both the address change and the item change.",
+      "note": "Same four listed options and same plan to apply both changes after confirmation; only sentence wording differs."
+    },
+    {
+      "event_index": 26,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W5270061\",\"item_ids\":[\"7453605304\"],\"new_item_ids\":[\"5320792178\"],\"payment_method_id\":\"gift_card_1711656\"}",
+      "after_excerpt": "{\"order_id\": \"#W5270061\", \"item_ids\": [\"7453605304\"], \"new_item_ids\": [\"5320792178\"], \"payment_method_id\": \"gift_card_1711656\"}",
+      "note": "Tool-call arguments respaced for readability; same keys, values, and order; no argument changed."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "Both modifications have been successfully completed!",
+      "after_excerpt": "Both changes are complete!",
+      "note": "Same claim that both the address and item changes were completed; wording only."
+    },
+    {
+      "event_index": 34,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, I can no longer modify items in this order as the modification tool can only be used once per pending order. However, I can assist you in canceling this order and placing a new one... or you can modify the backpack after delivery. Let me know how you'd like to proceed!",
+      "after_excerpt": "I'm sorry, but I can no longer modify items in this order, because the item-modification tool can only be used once per pending order. Your options are to cancel this order and place a new one... or to modify the backpack after delivery. How would you like to proceed?",
+      "note": "Same refusal reason and same two options offered; restated without adding or removing facts."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 27,
+    "failure_category": "policy violation: one-time item modification executed before all items were collected and confirmed"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 26,
+      "step_number": 24,
+      "step_reason": "At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The task instruction is underspecified regarding the type of black lamp to be added to the cart.",
+      "failed_agent": "User"
+    },
+    {
+      "failure_id": 27,
+      "step_number": 27,
+      "step_reason": "Assistant prematurely called modify items tool on a pending order which locked the order and the user later on wasn't able to change the backpack that he wanted.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "Here, the plan generated by the assistant is incorrect, it should not have prematurely called modify items tool on a pending order before finalizing all the items to be modified in the user's order.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

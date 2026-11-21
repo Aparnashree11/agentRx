@@ -1,0 +1,181 @@
+{
+  "trajectory_id": "28",
+  "failure_step_index": 33,
+  "failure_event_index": 30,
+  "failure_category": "Intent Plan Misalignment",
+  "failure_summary": "At step 33,  the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the garden hose.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "failure"
+    },
+    {
+      "index": 33,
+      "outcome": "failure"
+    },
+    {
+      "index": 35,
+      "outcome": "failure"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 39,
+      "outcome": "neutral"
+    },
+    {
+      "index": 41,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To assist you with returning items, I first need to authenticate your identity.",
+      "after_excerpt": "Before I can help with your return, I have to verify who you are.",
+      "note": "Same request for email or name+zip; paraphrase only."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "You have been authenticated successfully, Isabella. I see that you have the following orders:",
+      "after_excerpt": "Thank you, Isabella, you're verified. Your account has these orders:",
+      "note": "Same order list and question; paraphrase only."
+    },
+    {
+      "event_index": 10,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W3792453\"}",
+      "after_excerpt": "{\"order_id\":\"#W3792453\"}",
+      "note": "Whitespace-only change in tool-call arguments; same key and value."
+    },
+    {
+      "event_index": 12,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W7181492\"}",
+      "after_excerpt": "{\"order_id\": \"#W7181492\"}",
+      "note": "Whitespace-only change in tool-call arguments; same key and value."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "The return requests for the following items have been successfully processed:",
+      "after_excerpt": "Your return requests were submitted successfully for these items:",
+      "note": "Same items, same outcome; paraphrase only."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "The total refund amount for everything you returned and canceled is **$2537.77**.",
+      "after_excerpt": "In total, your returns and the cancellation come to a refund of **$2537.77**.",
+      "note": "Same amount and meaning; paraphrase only."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 31,
+    "failure_category": "policy violation / misleading statement about cancellation scope"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 13,
+      "step_number": 33,
+      "step_reason": "At step 33,  the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the garden hose.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "The assistant came up with an incorrect plan based on a wrong assumption that a subset of an order can be cancelled which violates the domain policy.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

@@ -1,0 +1,411 @@
+{
+  "trajectory_id": "32",
+  "failure_step_index": 11,
+  "failure_event_index": 10,
+  "failure_category": "Misinterpretation of Tool Output",
+  "failure_summary": "At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet.",
+  "step_outcomes": [
+    {
+      "index": 0,
+      "outcome": "neutral"
+    },
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "success"
+    },
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "neutral"
+    },
+    {
+      "index": 9,
+      "outcome": "neutral"
+    },
+    {
+      "index": 10,
+      "outcome": "failure"
+    },
+    {
+      "index": 11,
+      "outcome": "neutral"
+    },
+    {
+      "index": 12,
+      "outcome": "failure"
+    },
+    {
+      "index": 13,
+      "outcome": "neutral"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 16,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    },
+    {
+      "index": 28,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "neutral"
+    },
+    {
+      "index": 30,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 32,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "neutral"
+    },
+    {
+      "index": 34,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 36,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 38,
+      "outcome": "success"
+    },
+    {
+      "index": 39,
+      "outcome": "success"
+    },
+    {
+      "index": 40,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi, I need help finding the tracking number for a tablet I just received but lost.",
+      "after_excerpt": "Hi there, I could use some help locating the tracking number for a tablet I just got but have since lost.",
+      "note": "Same request in different words."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To begin, I need to authenticate your identity. Could you please provide your email address?",
+      "after_excerpt": "First, I'll need to verify your identity. Could you share your email address?",
+      "note": "Same authentication request and the same two options (email, or name + zip)."
+    },
+    {
+      "event_index": 3,
+      "change_type": "wording",
+      "before_excerpt": "My name is Olivia Lopez, and the zip code is 76171.",
+      "after_excerpt": "I'm Olivia Lopez, and my zip code is 76171.",
+      "note": "Same name and zip."
+    },
+    {
+      "event_index": 4,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Olivia\",\"last_name\":\"Lopez\",\"zip\":\"76171\"}",
+      "after_excerpt": "{\"zip\": \"76171\", \"first_name\": \"Olivia\", \"last_name\": \"Lopez\"}",
+      "note": "Arguments JSON keys reordered and spacing changed. Keys and values are identical."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "The tracking number for the tablet you received is **194496721133**. Let me know if you need further assistance!",
+      "after_excerpt": "Your tablet's tracking number is **194496721133**. Feel free to reach out if you need anything else!",
+      "note": "Paraphrase only. It still wrongly gives 194496721133 as the tablet's tracking number, so the failure is preserved."
+    },
+    {
+      "event_index": 11,
+      "change_type": "wording",
+      "before_excerpt": "Is there a way to reorder the tablet or maybe get a refund since I lost it?",
+      "after_excerpt": "Is it possible to reorder the tablet, or perhaps get a refund since I lost it?",
+      "note": "Same question."
+    },
+    {
+      "event_index": 12,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, we cannot process a refund or reorder for a lost item. Refunds or exchanges are only possible for items that are defective, damaged, or incorrect.",
+      "after_excerpt": "I'm sorry, but we're unable to issue a refund or reorder for an item that has been lost. Refunds or exchanges are only available for items that are defective, damaged, or incorrect.",
+      "note": "Paraphrase. The invented 'defective, damaged, or incorrect' rule and the refusal are kept unchanged."
+    },
+    {
+      "event_index": 13,
+      "change_type": "wording",
+      "before_excerpt": "Alright, then can you cancel the charger I just bought? It goes with the tablet, so I don't need it anymore.",
+      "after_excerpt": "Okay, in that case, could you cancel the charger I recently bought? It's meant for the tablet, so I no longer need it.",
+      "note": "Same request and reason."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "It seems that the charger is not part of your recent orders.",
+      "after_excerpt": "It looks like the charger isn't among your recent orders.",
+      "note": "Same claim and the same follow-up request."
+    },
+    {
+      "event_index": 17,
+      "change_type": "wording",
+      "before_excerpt": "I don’t remember the order ID, but it was purchased very recently. Can you check again?",
+      "after_excerpt": "I can't recall the order ID, but I bought it very recently. Could you take another look?",
+      "note": "Same meaning."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "I found the order for the portable charger. It is currently in a pending status, so it can be canceled.",
+      "after_excerpt": "I located the order containing the portable charger. Its status is currently pending, so it is eligible for cancellation.",
+      "note": "Same order details and the same request for confirmation. Bold labels kept."
+    },
+    {
+      "event_index": 23,
+      "change_type": "wording",
+      "before_excerpt": "Yes, please cancel it. The reason is no longer needed.",
+      "after_excerpt": "Yes, go ahead and cancel it. The reason is no longer needed.",
+      "note": "Same explicit confirmation and reason."
+    },
+    {
+      "event_index": 24,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W9373487\",\"reason\":\"no longer needed\"}",
+      "after_excerpt": "{\"reason\": \"no longer needed\", \"order_id\": \"#W9373487\"}",
+      "note": "Arguments JSON keys reordered and spacing changed. Values are identical."
+    },
+    {
+      "event_index": 26,
+      "change_type": "wording",
+      "before_excerpt": "The portable charger from order **#W9373487** has been successfully canceled. The total amount of **$109.27**",
+      "after_excerpt": "Order **#W9373487** containing the portable charger has been canceled successfully. The full amount of **$109.27**",
+      "note": "Same outcome, amount and refund timing."
+    },
+    {
+      "event_index": 27,
+      "change_type": "wording",
+      "before_excerpt": "Can you also cancel the boot and kettle I recently ordered?",
+      "after_excerpt": "Could you also cancel the boot and kettle I ordered recently?",
+      "note": "Same request."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "The boots and kettle are part of order **#W5481803**, which is currently in a pending status. I can proceed with canceling this order as well.",
+      "after_excerpt": "The boots and kettle belong to order **#W5481803**, which is currently pending. I can go ahead and cancel this order too.",
+      "note": "Same order, status and confirmation details."
+    },
+    {
+      "event_index": 29,
+      "change_type": "wording",
+      "before_excerpt": "Yes, go ahead and cancel both the boots and the kettle. The reason is the same—no longer needed.",
+      "after_excerpt": "Yes, please cancel both the boots and the kettle. Same reason—no longer needed.",
+      "note": "Same confirmation and reason."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "The boots and kettle from order **#W5481803** have been successfully canceled. The total amount of **$397.26**",
+      "after_excerpt": "Order **#W5481803** containing the boots and kettle has been canceled successfully. The full amount of **$397.26**",
+      "note": "Same outcome, amount and refund timing."
+    },
+    {
+      "event_index": 33,
+      "change_type": "wording",
+      "before_excerpt": "Lastly, I need to return a sneaker I purchased. Can you help me start the return?",
+      "after_excerpt": "One last thing: I need to return a sneaker I bought. Could you help me get the return started?",
+      "note": "Same request."
+    },
+    {
+      "event_index": 36,
+      "change_type": "wording",
+      "before_excerpt": "The sneakers from order **#W7449508** are eligible for return since the order status is \"delivered.\"",
+      "after_excerpt": "Since order **#W7449508** has a status of \"delivered,\" the sneakers in it are eligible for return.",
+      "note": "Clauses reordered. The bulleted details (order, item, refund method) are identical."
+    },
+    {
+      "event_index": 37,
+      "change_type": "wording",
+      "before_excerpt": "Yes, please start the return for the sneaker. The refund method is fine.",
+      "after_excerpt": "Yes, go ahead and start the return for the sneaker. That refund method works.",
+      "note": "Same explicit confirmation."
+    },
+    {
+      "event_index": 38,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W7449508\",\"item_ids\":[\"6477915553\"],\"payment_method_id\":\"gift_card_7711863\"}",
+      "after_excerpt": "{\"order_id\": \"#W7449508\", \"payment_method_id\": \"gift_card_7711863\", \"item_ids\": [\"6477915553\"]}",
+      "note": "Arguments JSON keys reordered and spacing changed. The same keys and values; none added or removed."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "The return process for the sneakers from order **#W7449508** has been successfully initiated. You will receive an email shortly",
+      "after_excerpt": "The return for the sneakers from order **#W7449508** has been initiated successfully. You'll shortly receive an email",
+      "note": "Same outcome, the same $186.45 refund to the gift card, and the same email notice."
+    },
+    {
+      "event_index": 41,
+      "change_type": "wording",
+      "before_excerpt": "That’s all for now. Thanks for your help. ###STOP###",
+      "after_excerpt": "That's everything for now. Thank you for your help. ###STOP###",
+      "note": "Same closing. The ###STOP### marker is kept exactly."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 11,
+    "failure_category": "wrong_information_from_tool_output"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 15,
+      "step_number": 11,
+      "step_reason": "At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet.",
+      "failure_category": "Misinterpretation of Tool Output",
+      "category_reason": "The items in the output of get_order_details were misinterpreted believing that tablet was one of them, leading it to providing incorrect tracking number.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

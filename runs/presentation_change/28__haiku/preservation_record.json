@@ -1,0 +1,246 @@
+{
+  "trajectory_id": "28",
+  "failure_step_index": 33,
+  "failure_event_index": 32,
+  "failure_category": "Intent Plan Misalignment",
+  "failure_summary": "At step 33,  the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the garden hose.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "failure"
+    },
+    {
+      "index": 33,
+      "outcome": "failure"
+    },
+    {
+      "index": 35,
+      "outcome": "failure"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 39,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "failure"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To assist you with returning items, I first need to authenticate your identity. Could you please provide your email address?",
+      "after_excerpt": "Before I can help with your return, I need to verify your identity. Please share your email address, or else your first name, last name, and zip code.",
+      "note": "Same request for authentication details; only the phrasing changed."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "You have been authenticated successfully, Isabella.",
+      "after_excerpt": "Your identity is verified, Isabella.",
+      "note": "Same authentication outcome stated in different words."
+    },
+    {
+      "event_index": 18,
+      "change_type": "emphasis",
+      "before_excerpt": "Here are the details of your delivered orders:",
+      "after_excerpt": "### Delivered orders (heading added above the same sentence)",
+      "note": "Adds a heading only; no order or item content changed."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "You'd like to return the following items:",
+      "after_excerpt": "Here is the list of items you asked to return:",
+      "note": "Same list of return items restated; no item or order changed."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "The return requests for the following items have been successfully processed:",
+      "after_excerpt": "The return requests below were submitted successfully:",
+      "note": "Same success status for the same three return requests."
+    },
+    {
+      "event_index": 29,
+      "change_type": "wording",
+      "before_excerpt": "I also want to cancel the garden hose I just ordered, is that possible?",
+      "after_excerpt": "Can I also cancel the garden hose I ordered recently?",
+      "note": "Same user question about cancelling the hose; wording only."
+    },
+    {
+      "event_index": 30,
+      "change_type": "wording",
+      "before_excerpt": "is part of Order #W2575533, which is currently in a \"pending\" status ... Could you confirm that you'd like to cancel the garden hose from this order?",
+      "after_excerpt": "belongs to **Order #W2575533**, which is still \"pending.\" ... Do you want me to cancel the garden hose from this order?",
+      "note": "Same confirmation request and same (unchanged) claim about the order; only phrasing changed."
+    },
+    {
+      "event_index": 32,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W2575533\",\"reason\":\"no longer needed\"}",
+      "after_excerpt": "{\"order_id\": \"#W2575533\", \"reason\": \"no longer needed\"}",
+      "note": "Whitespace-only change to the JSON arguments; same keys and values."
+    },
+    {
+      "event_index": 34,
+      "change_type": "wording",
+      "before_excerpt": "The garden hose from Order #W2575533 has been successfully cancelled ... The total amount of $1619.34 for the entire order has been refunded",
+      "after_excerpt": "Order #W2575533 (including the garden hose) has been cancelled ... A refund of $1619.34 for the entire order has been sent",
+      "note": "Same statement of the cancellation and refund amount, paraphrased."
+    },
+    {
+      "event_index": 34,
+      "change_type": "emphasis",
+      "before_excerpt": "$1619.34",
+      "after_excerpt": "**$1619.34**",
+      "note": "Bold on an existing figure only; no value changed."
+    },
+    {
+      "event_index": 35,
+      "change_type": "wording",
+      "before_excerpt": "I only wanted to cancel the hose, not the entire order. Can the rest still go through?",
+      "after_excerpt": "I only meant to cancel the hose, not the whole order. Can the rest of the order still go through?",
+      "note": "Same user request, paraphrased."
+    },
+    {
+      "event_index": 36,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, when cancelling a pending order, the entire order gets cancelled, not individual items.",
+      "after_excerpt": "I'm sorry, but a pending order can only be cancelled as a whole, not item by item.",
+      "note": "Same statement about whole-order cancellation, paraphrased."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "The total refund amount for everything you returned and canceled is **$2537.77**.",
+      "after_excerpt": "Adding up the returned items and the cancelled order, the total refund comes to **$2537.77**.",
+      "note": "Same total value and same basis, reworded."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 33,
+    "failure_category": "wrong-scope consequential action (whole-order cancellation instead of the requested single item)"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 13,
+      "step_number": 33,
+      "step_reason": "At step 33,  the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the garden hose.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "The assistant came up with an incorrect plan based on a wrong assumption that a subset of an order can be cancelled which violates the domain policy.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

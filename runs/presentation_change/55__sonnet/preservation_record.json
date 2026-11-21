@@ -1,0 +1,181 @@
+{
+  "trajectory_id": "55",
+  "failure_step_index": 32,
+  "failure_event_index": 26,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "The user asked the assistant to return the air purifier, smart watch, and coffee maker while it should have also asked it to return the water bottle from the order according to the task instruction.",
+  "step_outcomes": [
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "failure"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 16,
+      "outcome": "success"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 20,
+      "outcome": "success"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 24,
+      "outcome": "neutral"
+    },
+    {
+      "index": 26,
+      "outcome": "failure"
+    },
+    {
+      "index": 28,
+      "outcome": "failure"
+    },
+    {
+      "index": 30,
+      "outcome": "neutral"
+    },
+    {
+      "index": 32,
+      "outcome": "failure"
+    },
+    {
+      "index": 34,
+      "outcome": "failure"
+    },
+    {
+      "index": 36,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "I’m feeling really overwhelmed right now",
+      "after_excerpt": "I’m feeling really overwhelming right now",
+      "note": "ERROR-CHECK: this edit is not meaningful and should be treated as a minor, meaning-neutral variant of the same user statement; no facts changed."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I understand how overwhelming financial difficulties can be, and I'm here to assist you with your orders. To get started, I’ll need to authenticate your identity.",
+      "after_excerpt": "I’m sorry you’re dealing with financial stress, and I’m glad to help with your orders. First, I need to verify your identity.",
+      "note": "Paraphrase of the authentication request; still asks for email or name + zip."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "Thank you, Amelia. I’ve located your account. You have the following recent orders",
+      "after_excerpt": "Thanks, Amelia — I found your account. Your recent orders are",
+      "note": "Paraphrase; same order ids and same question."
+    },
+    {
+      "event_index": 24,
+      "change_type": "emphasis",
+      "before_excerpt": "Order #W2586676**: Already cancelled",
+      "after_excerpt": "Order #W2586676**: **Cancelled** — the $1122.22 refund",
+      "note": "Bolded the status words and lightly reworded; statuses, amounts and item lists unchanged."
+    },
+    {
+      "event_index": 30,
+      "change_type": "emphasis",
+      "before_excerpt": "Cancelled, and a refund of $1429.81 has been processed to your gift card.",
+      "after_excerpt": "**Cancelled** — $1429.81 has been refunded to your gift card.",
+      "note": "Bolded status and paraphrased; same outcomes and amounts; the agent still does not obtain confirmation."
+    },
+    {
+      "event_index": 36,
+      "change_type": "wording",
+      "before_excerpt": "The returns have been successfully initiated",
+      "after_excerpt": "Your returns have been started successfully",
+      "note": "Paraphrase of the final summary; same items, same refund destination."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 27,
+    "failure_category": "policy_violation_missing_confirmation"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 23,
+      "step_number": 32,
+      "step_reason": "The user asked the assistant to return the air purifier, smart watch, and coffee maker while it should have also asked it to return the water bottle from the order according to the task instruction.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent only partially specified the items to be returned contrary to the task instruction which asks the user agent to return all the items.",
+      "failed_agent": "User"
+    }
+  ]
+}

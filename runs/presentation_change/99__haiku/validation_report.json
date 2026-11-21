@@ -1,0 +1,8 @@
+{
+  "trajectory_id": "99",
+  "model": "haiku",
+  "passed": false,
+  "violations": [
+    "[POLICY CHANGED] event 0: the system/policy message was modified (keys differing: ['index']). The rulebook must stay byte-for-byte identical."
+  ]
+}
