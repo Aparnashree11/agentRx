@@ -1,0 +1,152 @@
+{
+  "trajectory_id": "47",
+  "failure_step_index": 19,
+  "failure_event_index": 16,
+  "failure_category": "Intent Not Supported",
+  "failure_summary": "At step 19, the assistant prematurely called transfer to human tool whereas it should have first called the return order tool",
+  "step_outcomes": [
+    {
+      "index": 2,
+      "outcome": "success"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 16,
+      "outcome": "failure"
+    },
+    {
+      "index": 18,
+      "outcome": "failure"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To assist you with returning the air purifier and vacuum cleaner, I first need to authenticate your identity. Could you please provide your email address? Alternatively, you can share...",
+      "after_excerpt": "Before I can help with returning the air purifier and vacuum cleaner, I need to verify your identity. Please provide the email address on your account, or your first name...",
+      "note": "Same request for email or name + zip code; only phrasing changed."
+    },
+    {
+      "event_index": 12,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W9502127\"}",
+      "after_excerpt": "{\"order_id\": \"#W9502127\"}",
+      "note": "Spacing inside the arguments JSON string normalized to match other calls; same key and value."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "The air purifier and vacuum cleaner are part of your delivered order #W9502127. Here are the details of the items: ... The refund will be processed to your PayPal account (original payment method). Please confirm if you would like to proceed...",
+      "after_excerpt": "Both items are part of your delivered order #W9502127. Details for each item: ... Your refund will go to your PayPal account, the original payment method. Please confirm whether you want to proceed...",
+      "note": "Same items, prices, payment method, and request for confirmation; reworded only."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "delivered order #W9502127",
+      "after_excerpt": "**delivered** order **#W9502127**; Type: **Canister**",
+      "note": "Bold added to existing facts (order status, order number, vacuum type already stated); no new information."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "The total refund amount for the air purifier ($473.43) and the vacuum cleaner ($622.12) is $1,095.55. However, refunds to PayPal (your original payment method) typically take 5-7 business days to process. Unfortunately, I cannot expedite the refund to be issued within 3 days. Would you like me to proceed with the return request?",
+      "after_excerpt": "The total refund for the air purifier ($473.43) and the vacuum cleaner ($622.12) is $1,095.55. However, refunds to PayPal, your original payment method, usually take 5-7 business days. I cannot speed that up to within 3 days. Shall I go ahead with the return request?",
+      "note": "Same amounts, timing, refusal to expedite, and question; phrasing only. The return is still not executed and the agent still asks for confirmation again."
+    },
+    {
+      "event_index": 16,
+      "change_type": "emphasis",
+      "before_excerpt": "is **$1,095.55**.",
+      "after_excerpt": "is **$1,095.55**. (unchanged bold, no added emphasis)",
+      "note": "Existing bold retained as-is; no emphasis added or removed on this event beyond the original."
+    },
+    {
+      "event_index": 15,
+      "change_type": "wording",
+      "before_excerpt": "Yes, please proceed with the return. I’d also like the refund to be issued within 3 days.",
+      "after_excerpt": "Yes, go ahead with the return. I'd also like the refund issued within 3 days.",
+      "note": "Same explicit 'yes' confirmation and 3-day request; reworded only."
+    },
+    {
+      "event_index": 18,
+      "change_type": "wording",
+      "before_excerpt": "I understand, but I really need the refund sooner. Can you escalate this or find a way to make the refund happen within 3 days?",
+      "after_excerpt": "I get it, but I really need the refund sooner. Can you escalate this, or find a way to get the refund within 3 days?",
+      "note": "Same request for escalation and a faster refund; reworded only."
+    },
+    {
+      "event_index": 19,
+      "change_type": "formatting",
+      "before_excerpt": "{\"summary\":\"User wants to return...",
+      "after_excerpt": "{\"summary\": \"User wants to return...",
+      "note": "Spacing in the arguments JSON normalized; summary string value is byte-identical to the original."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 16,
+    "failure_category": "failed_to_execute_confirmed_action"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 22,
+      "step_number": 19,
+      "step_reason": "At step 19, the assistant prematurely called transfer to human tool whereas it should have first called the return order tool",
+      "failure_category": "Intent Not Supported",
+      "category_reason": "The agent cannot support the process to expedite the refund process quicker, that is within the 3 days requested by the user. Hence, the assistant transferred to the human agent.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

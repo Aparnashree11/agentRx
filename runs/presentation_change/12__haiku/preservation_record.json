@@ -1,0 +1,240 @@
+{
+  "trajectory_id": "12",
+  "failure_step_index": 19,
+  "failure_event_index": 18,
+  "failure_category": "Instruction Adherence Failure",
+  "failure_summary": "At step 19, the assistant agent did not ask user for confirmation and payment method before initiating return.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "failure"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi. I want to cancel or return some items, but I’m not happy, so please make this quick.",
+      "after_excerpt": "Hello. I'd like to cancel or return a few items. I'm unhappy about this, so please keep it brief.",
+      "note": "Same request and same emotional state; only phrasing changed. No facts added or removed."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with canceling or returning items. To get started, I need to authenticate your identity. Could you please provide your email address? Alternatively, you can provide your first name, last name, and zip code.",
+      "after_excerpt": "I can help you cancel or return items. First, I need to verify your identity. Could you please provide your email address? Alternatively, you can give me your first name, last name, and zip code.",
+      "note": "Paraphrase of the authentication prompt; same request for email or name plus zip."
+    },
+    {
+      "event_index": 2,
+      "change_type": "emphasis",
+      "before_excerpt": "Could you please provide your email address?",
+      "after_excerpt": "**Could you please provide your email address?**",
+      "note": "Bolding the existing question makes it stand out; the text itself is unchanged."
+    },
+    {
+      "event_index": 8,
+      "change_type": "wording",
+      "before_excerpt": "I see you have two orders: #W5490111 and #W7387996. Could you let me know which order you'd like to cancel or return items from?",
+      "after_excerpt": "I see two orders on your account: #W5490111 and #W7387996. Which order would you like to cancel or return items from?",
+      "note": "Same two order IDs and same question; sentence rephrased."
+    },
+    {
+      "event_index": 8,
+      "change_type": "emphasis",
+      "before_excerpt": "#W5490111 and #W7387996",
+      "after_excerpt": "**#W5490111** and **#W7387996**",
+      "note": "Bold on existing order IDs only; no change in content."
+    },
+    {
+      "event_index": 9,
+      "change_type": "wording",
+      "before_excerpt": "I don’t remember the order numbers. Can you just check everything not associated with gaming for me?",
+      "after_excerpt": "I don't remember the order numbers. Could you just check everything that isn't related to gaming?",
+      "note": "Same request to check non-gaming items; rephrased only."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "From your orders, the items not associated with gaming are:",
+      "after_excerpt": "From your orders, the items not associated with gaming are: (under a 'Non-gaming items' heading)",
+      "note": "Heading added as emphasis only. Same three items, same attributes, same order, same closing question."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "From Order #W5490111:",
+      "after_excerpt": "**From Order #W5490111:**",
+      "note": "Bold on the existing order label; list contents unchanged."
+    },
+    {
+      "event_index": 15,
+      "change_type": "wording",
+      "before_excerpt": "All of them. Cancel or return everything. And make it quick.",
+      "after_excerpt": "All of them. Cancel or return everything, and please be quick.",
+      "note": "Same confirmation that the user wants every listed item handled; rephrased only."
+    },
+    {
+      "event_index": 16,
+      "change_type": "formatting",
+      "before_excerpt": "{\"thought\":\"Order #W5490111 is delivered, ...\"}",
+      "after_excerpt": "{\"thought\": \"Order #W5490111 is delivered, ...\"}",
+      "note": "Only spacing after the colon changed. Thought text and key are identical."
+    },
+    {
+      "event_index": 18,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W5490111\",\"item_ids\":[...],\"payment_method_id\":\"credit_card_3124723\"}",
+      "after_excerpt": "{\"order_id\": \"#W5490111\", \"item_ids\": [...], \"payment_method_id\": \"credit_card_3124723\"}",
+      "note": "Spacing change only. Same keys, order of arguments, IDs, and values, so the failing call is unchanged."
+    },
+    {
+      "event_index": 19,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W5490111\", \"user_id\": ..., \"status\": \"return requested\", ... \"return_payment_method_id\": ...}",
+      "after_excerpt": "{\"status\": \"return requested\", \"return_items\": [...], \"return_payment_method_id\": ..., \"order_id\": \"#W5490111\", ...}",
+      "note": "Keys reordered so the status and return fields appear first. Every key, value, ID, and status is identical; the returned status is still 'return requested'."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "The return request for all non-gaming items in Order #W5490111 has been successfully processed. You will receive an email shortly... The refund will be processed to your Visa card ending in 7285 once the return is completed.",
+      "after_excerpt": "Your return request for all non-gaming items in Order #W5490111 has been processed. You will receive an email soon... The refund will go to your Visa card ending in 7285 once the return is complete.",
+      "note": "Same claims: return processed, email to follow, refund to the Visa card ending 7285 after return. 'successfully' removed as wording only; the result is still a processed return."
+    },
+    {
+      "event_index": 20,
+      "change_type": "emphasis",
+      "before_excerpt": "Order #W5490111 ... Visa card ending in 7285",
+      "after_excerpt": "**Order #W5490111** ... **Visa card ending in 7285**",
+      "note": "Bold on the order and refund-card references only; content unchanged."
+    },
+    {
+      "event_index": 21,
+      "change_type": "wording",
+      "before_excerpt": "No, I don’t want it refunded to my Visa. Use PayPal. If that’s not possible, I want to speak to a human.",
+      "after_excerpt": "No, I don't want it refunded to my Visa. Please use PayPal instead. If that isn't possible, I'd like to speak with a human.",
+      "note": "Same two requests: PayPal first, human agent if PayPal is not possible."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Refunds for returned items must go to the original payment method, which in this case is your Visa card. Unfortunately, I cannot change the refund destination to PayPal.",
+      "after_excerpt": "Refunds for returned items must go to the original payment method, which for this order is your Visa card. I cannot switch the refund to PayPal.",
+      "note": "Same policy statement and same refusal, rephrased."
+    },
+    {
+      "event_index": 22,
+      "change_type": "emphasis",
+      "before_excerpt": "Refunds for returned items must go to the original payment method",
+      "after_excerpt": "**Refunds for returned items must go to the original payment method**",
+      "note": "Bold on an existing policy statement; wording and meaning unchanged."
+    },
+    {
+      "event_index": 23,
+      "change_type": "wording",
+      "before_excerpt": "Yes, transfer me now! This is frustrating.",
+      "after_excerpt": "Yes, please transfer me now. This is really frustrating.",
+      "note": "Same consent to the transfer and same frustration; rephrased only."
+    },
+    {
+      "event_index": 24,
+      "change_type": "formatting",
+      "before_excerpt": "{\"summary\":\"User Mia Garcia requested ...\"}",
+      "after_excerpt": "{\"summary\": \"User Mia Garcia requested ...\"}",
+      "note": "Only spacing after the colon changed. Summary text is identical to the original."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 19,
+    "failure_category": "policy_violation: missing explicit confirmation before consequential action"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 6,
+      "step_number": 19,
+      "step_reason": "At step 19, the assistant agent did not ask user for confirmation and payment method before initiating return.",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "The assistant failed to follow the domain policy for requiring explicit confirmation before a database write action.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "trajectory_id": "91",
+  "failure_step_index": 34,
+  "failure_event_index": 26,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction.",
+  "step_outcomes": [
+    {
+      "index": 0,
+      "outcome": "neutral"
+    },
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "success"
+    },
+    {
+      "index": 3,
+      "outcome": "neutral"
+    },
+    {
+      "index": 4,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "neutral"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 16,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 18,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "neutral"
+    },
+    {
+      "index": 20,
+      "outcome": "neutral"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 22,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 26,
+      "outcome": "failure"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    },
+    {
+      "index": 28,
+      "outcome": "neutral"
+    },
+    {
+      "index": 29,
+      "outcome": "neutral"
+    },
+    {
+      "index": 30,
+      "outcome": "neutral"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 32,
+      "outcome": "neutral"
+    },
+    {
+      "index": 33,
+      "outcome": "neutral"
+    },
+    {
+      "index": 34,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 36,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 38,
+      "outcome": "neutral"
+    },
+    {
+      "index": 39,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "I'm actually pretty frustrated right now... their quality was disappointing",
+      "after_excerpt": "I'm feeling quite frustrated at the moment... the quality let me down",
+      "note": "Paraphrase. Same complaint and the same request for a credit-card refund."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To get started, I need to authenticate your identity.",
+      "after_excerpt": "Before we begin, I'll need to verify your identity.",
+      "note": "Paraphrase. Same request for email, or name plus zip code."
+    },
+    {
+      "event_index": 3,
+      "change_type": "wording",
+      "before_excerpt": "My name is Mei Ahmed, and my zip code is 78705.",
+      "after_excerpt": "I'm Mei Ahmed, and my zip code is 78705.",
+      "note": "Same name and zip code."
+    },
+    {
+      "event_index": 4,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Mei\",\"last_name\":\"Ahmed\",\"zip\":\"78705\"}",
+      "after_excerpt": "{\"zip\": \"78705\", \"first_name\": \"Mei\", \"last_name\": \"Ahmed\"}",
+      "note": "Arguments reordered and spaced out. Keys and values unchanged."
+    },
+    {
+      "event_index": 6,
+      "change_type": "formatting",
+      "before_excerpt": "{\"user_id\":\"mei_ahmed_4909\"}",
+      "after_excerpt": "{\"user_id\": \"mei_ahmed_4909\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 7,
+      "change_type": "formatting",
+      "before_excerpt": "{\"name\": {...}, \"address\": {...}, \"email\": ...; card {\"source\",\"brand\",\"last_four\",\"id\"}",
+      "after_excerpt": "{\"email\": ..., \"name\": {...}, \"address\": {...}; card {\"id\",\"source\",\"brand\",\"last_four\"}",
+      "note": "Top-level keys and card keys reordered. Every key and value is identical."
+    },
+    {
+      "event_index": 8,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W7553978\"}",
+      "after_excerpt": "{\"order_id\":\"#W7553978\"}",
+      "note": "Switched to compact form. Same key and value."
+    },
+    {
+      "event_index": 10,
+      "change_type": "wording",
+      "before_excerpt": "I see that your order #W7553978 includes two skateboards",
+      "after_excerpt": "Your order #W7553978 contains two skateboards",
+      "note": "Paraphrase. Same order, status, card and items."
+    },
+    {
+      "event_index": 10,
+      "change_type": "emphasis",
+      "before_excerpt": "Here are the details of the skateboards to be returned: / The total refund amount will be $388.19.",
+      "after_excerpt": "**Skateboards to be returned:** / **Total refund amount:** $388.19",
+      "note": "Bold labels added. Prices and total are the same."
+    },
+    {
+      "event_index": 11,
+      "change_type": "wording",
+      "before_excerpt": "Hmm, not just yet. I also need to return another item",
+      "after_excerpt": "Hmm, hold off for now. There's another item ... I need to return too",
+      "note": "Paraphrase. Still does not confirm."
+    },
+    {
+      "event_index": 12,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W3239882\"}",
+      "after_excerpt": "{\"order_id\": \"#W3239882\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "Your recent order #W3239882 is also marked as \"delivered.\"",
+      "after_excerpt": "Order #W3239882 also shows a status of \"delivered.\"",
+      "note": "Paraphrase. The item list is unchanged."
+    },
+    {
+      "event_index": 15,
+      "change_type": "wording",
+      "before_excerpt": "I'd like to return the e-reader, please. Could you check if it's currently available online?",
+      "after_excerpt": "The e-reader is the one I'd like to return, please. Can you see whether it's available online right now?",
+      "note": "Paraphrase. Same request."
+    },
+    {
+      "event_index": 16,
+      "change_type": "formatting",
+      "before_excerpt": "{\"product_id\":\"3801771308\"}",
+      "after_excerpt": "{\"product_id\": \"3801771308\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 18,
+      "change_type": "emphasis",
+      "before_excerpt": "is currently available online",
+      "after_excerpt": "is **currently available online**",
+      "note": "Bold added to an existing fact. Rest paraphrased with the same meaning."
+    },
+    {
+      "event_index": 19,
+      "change_type": "wording",
+      "before_excerpt": "I'd prefer an exchange for the same e-reader instead of a return",
+      "after_excerpt": "I'd rather exchange it for the same e-reader than return it",
+      "note": "Paraphrase. Same preference."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "The exchange request will be submitted, and you'll receive an email... Once the return is processed, a replacement E-Reader will be sent",
+      "after_excerpt": "Once the exchange request is submitted, you'll get an email... After the return has been processed, a replacement E-Reader will be shipped",
+      "note": "Paraphrase. The same two-step description, including the agent's claim about the replacement, is kept."
+    },
+    {
+      "event_index": 21,
+      "change_type": "wording",
+      "before_excerpt": "Not yet—there's one more item I need to return.",
+      "after_excerpt": "Not quite yet—I have one more item to return.",
+      "note": "Paraphrase. Still does not confirm."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "Yes, I see that you purchased a Smart Watch",
+      "after_excerpt": "Yes, it looks like you bought a Smart Watch",
+      "note": "Paraphrase. Same item, order and price, and still no tool call."
+    },
+    {
+      "event_index": 23,
+      "change_type": "wording",
+      "before_excerpt": "Yes, I'd like to return the smartwatch as well. Could you confirm if it's available online",
+      "after_excerpt": "Yes, please return the smartwatch too. Can you check whether it's available online",
+      "note": "Paraphrase. Same request."
+    },
+    {
+      "event_index": 24,
+      "change_type": "formatting",
+      "before_excerpt": "{\"product_id\":\"6945232052\"}",
+      "after_excerpt": "{\"product_id\": \"6945232052\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 26,
+      "change_type": "emphasis",
+      "before_excerpt": "is currently unavailable online for an exchange",
+      "after_excerpt": "is **not currently available** online for an exchange",
+      "note": "Same meaning, with bold added. The variant list, including the misreported 'Black, leather band, AMOLED display - $382.41', is kept exactly."
+    },
+    {
+      "event_index": 27,
+      "change_type": "wording",
+      "before_excerpt": "I'd prefer to return it and get a refund to my credit card",
+      "after_excerpt": "I'd rather return it and have the refund go to my credit card",
+      "note": "Paraphrase. Same preference."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "Got it! Here's the updated plan ... for the same model",
+      "after_excerpt": "Understood! Here's the revised plan ... for the identical model",
+      "note": "Paraphrase. Same returns, exchange and refund card."
+    },
+    {
+      "event_index": 29,
+      "change_type": "wording",
+      "before_excerpt": "This looks almost right, but could we add one more item",
+      "after_excerpt": "That's nearly right, but can we add one more item",
+      "note": "Paraphrase. Same request."
+    },
+    {
+      "event_index": 30,
+      "change_type": "wording",
+      "before_excerpt": "Sure! Let me review your recent orders again... Let me check the details of this order for you.",
+      "after_excerpt": "Of course! I'll go through your recent orders again... I'll pull up the details of this order for you.",
+      "note": "Paraphrase. Item lists unchanged. Text and tool call are still sent together."
+    },
+    {
+      "event_index": 30,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W2598324\"}",
+      "after_excerpt": "{\"order_id\": \"#W2598324\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "From your recent orders, here are the additional items that haven't been addressed yet",
+      "after_excerpt": "Here are the items from your recent orders that we haven't dealt with yet",
+      "note": "Paraphrase. Lists unchanged."
+    },
+    {
+      "event_index": 33,
+      "change_type": "wording",
+      "before_excerpt": "Ah, it's the tablet from order #W3239882 that I'd like to return. Could you check",
+      "after_excerpt": "Oh, it's the tablet from order #W3239882 that I want to return. Can you check",
+      "note": "Paraphrase. Same request."
+    },
+    {
+      "event_index": 34,
+      "change_type": "formatting",
+      "before_excerpt": "{\"product_id\":\"8024098596\"}",
+      "after_excerpt": "{\"product_id\": \"8024098596\"}",
+      "note": "Whitespace only."
+    },
+    {
+      "event_index": 36,
+      "change_type": "emphasis",
+      "before_excerpt": "is currently available online for an exchange. Additionally, there are other variants",
+      "after_excerpt": "is **currently available** online for an exchange. Other tablet variants are also available",
+      "note": "Bold added and wording paraphrased. Variant list unchanged."
+    },
+    {
+      "event_index": 37,
+      "change_type": "wording",
+      "before_excerpt": "Since the same model is available ... Can we include that with the rest of the process?",
+      "after_excerpt": "Because the same model is available ... Can we add that to everything else?",
+      "note": "Paraphrase. Same request."
+    },
+    {
+      "event_index": 38,
+      "change_type": "wording",
+      "before_excerpt": "Here's the updated plan ... The exchanges for the E-Reader and Tablet will also be initiated.",
+      "after_excerpt": "Here's the revised plan ... the E-Reader and Tablet exchanges will be started as well.",
+      "note": "Paraphrase. Same returns, exchanges and refund card."
+    },
+    {
+      "event_index": 39,
+      "change_type": "wording",
+      "before_excerpt": "This plan is perfect! Please go ahead and proceed. Thank you for handling everything so thoroughly.",
+      "after_excerpt": "This plan is exactly right! Please go ahead with it. Thanks for taking care of everything so carefully.",
+      "note": "Paraphrase. Same confirmation, and the ###STOP### marker is kept word for word."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 27,
+    "failure_category": "misrepresented_tool_output"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 35,
+      "step_number": 34,
+      "step_reason": "The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent's request did not align with the task instruction.",
+      "failed_agent": "User"
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "trajectory_id": "31",
+  "failure_step_index": 31,
+  "failure_event_index": 30,
+  "failure_category": "Intent Plan Misalignment",
+  "failure_summary": "At step 31, the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the hiking boots.",
+  "step_outcomes": [
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 29,
+      "outcome": "failure"
+    },
+    {
+      "index": 31,
+      "outcome": "failure"
+    },
+    {
+      "index": 33,
+      "outcome": "failure"
+    },
+    {
+      "index": 37,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "success"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "Hi, I’m having a bit of a day... I lost the tablet I just got, and I want to see if you can give me the tracking number for the order.",
+      "after_excerpt": "Hi, I'm having a rough day. I lost the tablet I just received, and I'd like the tracking number for that order.",
+      "note": "Same request (tracking number for the lost tablet order) and same tone; only phrasing changed."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "Could you please provide your email address? If you don't remember your email, I can also authenticate you using your first name, last name, and zip code.",
+      "after_excerpt": "Could you give me your email address? If you don't have it handy, I can verify you with your first name, last name, and zip code instead.",
+      "note": "Same authentication request and same alternative; reworded only."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "The tracking number for your tablet order (#W2692684) is **746342064230**.",
+      "after_excerpt": "The tracking number for your tablet order (#W2692684) is **746342064230**.",
+      "note": "Bold on the tracking number was already present; the closing offer was reworded with no change in the facts stated."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "Since the tablet order (#W2692684) has already been marked as \"delivered,\" we cannot directly refund or reorder it. However, you can initiate a return or exchange process for the tablet...",
+      "after_excerpt": "Because the tablet order (#W2692684) is already marked as \"delivered,\" I can't refund or reorder it directly. I can start a return or exchange for the tablet instead...",
+      "note": "Same statement that refund/reorder is not possible directly and that return/exchange is the alternative; reworded only."
+    },
+    {
+      "event_index": 20,
+      "change_type": "emphasis",
+      "before_excerpt": "Your order for the portable charger (#W9373487) is still in \"pending\" status",
+      "after_excerpt": "Your order for the portable charger (#W9373487) is still in **\"pending\"** status",
+      "note": "Bolded the status value to draw attention; the status and its meaning are unchanged."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "has been successfully canceled. The total amount of $109.27 has been refunded to your gift card immediately.",
+      "after_excerpt": "has been canceled. The total of $109.27 has been refunded to your gift card immediately.",
+      "note": "Dropped the word 'successfully' only; the cancellation and refund amount reported are identical."
+    },
+    {
+      "event_index": 28,
+      "change_type": "emphasis",
+      "before_excerpt": "Your order for the hiking boots (#W5481803) is still in \"pending\" status",
+      "after_excerpt": "Your order for the hiking boots (#W5481803) is still in **\"pending\"** status",
+      "note": "Bolded the status value; the status and its meaning are unchanged. Order scope and amount statement left as in the original."
+    },
+    {
+      "event_index": 32,
+      "change_type": "wording",
+      "before_excerpt": "has been successfully canceled. The total amount of $253.54 has been refunded to your gift card immediately.",
+      "after_excerpt": "has been canceled. The total of $253.54 has been refunded to your gift card immediately.",
+      "note": "Dropped the word 'successfully' only; the amount and the order referenced are unchanged, so the statement still reads as it did originally."
+    },
+    {
+      "event_index": 36,
+      "change_type": "emphasis",
+      "before_excerpt": "Your order for the sneakers (#W7449508) is in \"delivered\" status",
+      "after_excerpt": "Your order for the sneakers (#W7449508) is in **\"delivered\"** status",
+      "note": "Bolded the status value; status and eligibility statement unchanged."
+    },
+    {
+      "event_index": 40,
+      "change_type": "wording",
+      "before_excerpt": "The return process for the sneakers (#W7449508) has been successfully initiated.",
+      "after_excerpt": "The return for the sneakers (#W7449508) has been initiated.",
+      "note": "Dropped the word 'successfully' and shortened the sentence; same return, same refund amount, same email statement."
+    },
+    {
+      "event_index": 41,
+      "change_type": "wording",
+      "before_excerpt": "No, that’s all for now. Thanks. ###STOP###",
+      "after_excerpt": "No, that's all for now. Thanks. ###STOP###",
+      "note": "Typographic apostrophe normalized; the user's meaning and the stop marker are unchanged."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 31,
+    "failure_category": "wrong_action_scope"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 14,
+      "step_number": 31,
+      "step_reason": "At step 31, the assistant mistakenly believes that it can cancel a subset of a pending order which is not allowed as per domain policy, as a result the entire order got cancelled instead of just the hiking boots.",
+      "failure_category": "Intent Plan Misalignment",
+      "category_reason": "The assistant came up with an incorrect plan based on a wrong assumption that a subset of an order can be cancelled which violates the domain policy.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

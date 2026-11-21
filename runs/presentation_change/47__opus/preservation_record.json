@@ -1,0 +1,252 @@
+{
+  "trajectory_id": "47",
+  "failure_step_index": 19,
+  "failure_event_index": 18,
+  "failure_category": "Intent Not Supported",
+  "failure_summary": "At step 19, the assistant prematurely called transfer to human tool whereas it should have first called the return order tool",
+  "step_outcomes": [
+    {
+      "index": 1,
+      "outcome": "neutral"
+    },
+    {
+      "index": 2,
+      "outcome": "neutral"
+    },
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 4,
+      "outcome": "neutral"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 6,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 8,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 10,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 12,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 14,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 16,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 18,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "failure"
+    },
+    {
+      "index": 20,
+      "outcome": "failure"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "changes_applied": [
+    {
+      "event_index": 1,
+      "change_type": "wording",
+      "before_excerpt": "I want to return an air purifier and a vacuum cleaner from my recent order.",
+      "after_excerpt": "I'd like to send back an air purifier and a vacuum cleaner that were part of my latest order.",
+      "note": "Paraphrase with the same request and the same items."
+    },
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "To assist you with returning ... I first need to authenticate your identity.",
+      "after_excerpt": "I can help you return ... but first I need to verify who you are.",
+      "note": "Same authentication request and the same two options (email, or name + zip)."
+    },
+    {
+      "event_index": 3,
+      "change_type": "wording",
+      "before_excerpt": "Sure, my name is Daiki Johnson, and my zip code is 80273.",
+      "after_excerpt": "Of course. I'm Daiki Johnson, and my zip code is 80273.",
+      "note": "Same name and zip."
+    },
+    {
+      "event_index": 4,
+      "change_type": "formatting",
+      "before_excerpt": "{\"first_name\":\"Daiki\",\"last_name\":\"Johnson\",\"zip\":\"80273\"}",
+      "after_excerpt": "{\"first_name\": \"Daiki\", \"last_name\": \"Johnson\", \"zip\": \"80273\"}",
+      "note": "Added whitespace only; keys and values are the same."
+    },
+    {
+      "event_index": 6,
+      "change_type": "formatting",
+      "before_excerpt": "{\"user_id\":\"daiki_johnson_9523\"}",
+      "after_excerpt": "{\"user_id\": \"daiki_johnson_9523\"}",
+      "note": "Added whitespace only."
+    },
+    {
+      "event_index": 7,
+      "change_type": "formatting",
+      "before_excerpt": "{\"name\": {...}, \"address\": {...}, \"email\": \"daiki.johnson2279@example.com\", ...}",
+      "after_excerpt": "{\"email\":\"daiki.johnson2279@example.com\",\"name\":{...},\"address\":{...},...}",
+      "note": "Moved email to the front and used compact layout; all keys and values are the same."
+    },
+    {
+      "event_index": 8,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W1436802\"}",
+      "after_excerpt": "{\"order_id\":\"#W1436802\"}",
+      "note": "Compact layout; same value."
+    },
+    {
+      "event_index": 9,
+      "change_type": "formatting",
+      "before_excerpt": "\"address\": {...}, \"items\": [...], \"fulfillments\": [], \"status\": \"pending\"",
+      "after_excerpt": "\"status\": \"pending\", \"user_id\": ..., \"items\": [...], \"address\": {...}",
+      "note": "Reordered top-level keys only; every value is the same."
+    },
+    {
+      "event_index": 10,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W5282037\"}",
+      "after_excerpt": "{\"order_id\":\"#W5282037\"}",
+      "note": "Compact layout; same value."
+    },
+    {
+      "event_index": 11,
+      "change_type": "formatting",
+      "before_excerpt": "\"address\": {...}, \"items\": [...], \"fulfillments\": [], \"status\": \"pending\"",
+      "after_excerpt": "\"status\": \"pending\", \"user_id\": ..., \"items\": [...], \"address\": {...}",
+      "note": "Reordered top-level keys only; every value is the same."
+    },
+    {
+      "event_index": 12,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W9502127\"}",
+      "after_excerpt": "{\"order_id\": \"#W9502127\"}",
+      "note": "Added whitespace only."
+    },
+    {
+      "event_index": 13,
+      "change_type": "formatting",
+      "before_excerpt": "\"address\": {...}, \"items\": [...], \"fulfillments\": [...], \"status\": \"delivered\"",
+      "after_excerpt": "\"status\": \"delivered\", \"user_id\": ..., \"items\": [...], \"address\": {...}, \"fulfillments\": [...]",
+      "note": "Reordered top-level keys only; item order and all values (both vacuum cleaners included) are the same."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "The air purifier and vacuum cleaner are part of your delivered order #W9502127. ... Please confirm if you would like to proceed",
+      "after_excerpt": "I found the air purifier and vacuum cleaner in your delivered order #W9502127. ... Could you confirm whether you'd like me to go ahead",
+      "note": "Same order, items, attributes, prices, refund destination, and confirmation request. It still assumes the canister vacuum without asking."
+    },
+    {
+      "event_index": 15,
+      "change_type": "wording",
+      "before_excerpt": "Yes, please proceed with the return. I’d also like the refund to be issued within 3 days.",
+      "after_excerpt": "Yes, go ahead with the return. I also want the refund sent to me within 3 days.",
+      "note": "Same explicit confirmation, 3-day request, and question about the total."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "typically take 5-7 business days ... Unfortunately, I cannot expedite",
+      "after_excerpt": "usually take 5-7 business days ... I'm sorry, but I'm not able to speed the refund up",
+      "note": "Same total ($1,095.55, still bold), same timeline, same refusal, and it still asks again whether to proceed."
+    },
+    {
+      "event_index": 17,
+      "change_type": "wording",
+      "before_excerpt": "I understand, but I really need the refund sooner. Can you escalate this",
+      "after_excerpt": "I get that, but I really need the money faster. Could you escalate this",
+      "note": "Same escalation request."
+    },
+    {
+      "event_index": 18,
+      "change_type": "formatting",
+      "before_excerpt": "{\"summary\":\"User wants to return ...\"}",
+      "after_excerpt": "{\"summary\": \"User wants to return ...\"}",
+      "note": "Added whitespace only. The summary text and the tool name transfer_to_human_agents are kept exactly."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 19,
+    "failure_category": "unnecessary_transfer_to_human / failed_to_execute_return"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 22,
+      "step_number": 19,
+      "step_reason": "At step 19, the assistant prematurely called transfer to human tool whereas it should have first called the return order tool",
+      "failure_category": "Intent Not Supported",
+      "category_reason": "The agent cannot support the process to expedite the refund process quicker, that is within the 3 days requested by the user. Hence, the assistant transferred to the human agent.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

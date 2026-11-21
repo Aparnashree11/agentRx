@@ -1,0 +1,223 @@
+{
+  "trajectory_id": "21",
+  "failure_step_index": 28,
+  "failure_event_index": 40,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "At step 28, the user agent insisted on exchange of an item in 'pending' status which is not valid according to domain policy, when assistant asked if it could instead modify (corresponds to the ground truth), the user agent said no.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "neutral"
+    },
+    {
+      "index": 21,
+      "outcome": "neutral"
+    },
+    {
+      "index": 23,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "success"
+    },
+    {
+      "index": 27,
+      "outcome": "neutral"
+    },
+    {
+      "index": 29,
+      "outcome": "success"
+    },
+    {
+      "index": 31,
+      "outcome": "success"
+    },
+    {
+      "index": 33,
+      "outcome": "success"
+    },
+    {
+      "index": 35,
+      "outcome": "success"
+    },
+    {
+      "index": 37,
+      "outcome": "neutral"
+    },
+    {
+      "index": 39,
+      "outcome": "success"
+    },
+    {
+      "index": 41,
+      "outcome": "failure"
+    },
+    {
+      "index": 43,
+      "outcome": "success"
+    },
+    {
+      "index": 45,
+      "outcome": "neutral"
+    },
+    {
+      "index": 47,
+      "outcome": "success"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "changes_applied": [
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "I have reviewed your orders, and it seems the pair of shoes is part of order **#W9911714**.",
+      "after_excerpt": "I have reviewed your orders, and the pair of shoes appears to be part of order **#W9911714**.",
+      "note": "Hedging phrasing changed ('it seems' to 'appears'); the claim that the shoes are in the pending order is unchanged."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "Would you like me to assist you with modifying this pending order instead, or is there anything else I can help you with?",
+      "after_excerpt": "Would you like me to help you modify this pending order instead, or is there anything else I can help you with?",
+      "note": "Minor rephrasing of the offer; same question, same options, same order status."
+    },
+    {
+      "event_index": 26,
+      "change_type": "wording",
+      "before_excerpt": "Since the order is still marked as \"pending\" in our system, I cannot process an exchange for it. Exchanges can only be done for delivered orders.",
+      "after_excerpt": "Because the order is still \"pending\" in our system, I can't process an exchange on it, since exchanges are only allowed for delivered orders.",
+      "note": "Same refusal and same reason (pending status blocks exchange); only the sentence structure changed."
+    },
+    {
+      "event_index": 40,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W9911714\",\"item_ids\":[\"1340995114\"],\"new_item_ids\":[\"1421289881\"],\"payment_method_id\":\"paypal_3798357\"}",
+      "after_excerpt": "{\"order_id\": \"#W9911714\", \"item_ids\": [\"1340995114\"], \"new_item_ids\": [\"1421289881\"], \"payment_method_id\": \"paypal_3798357\"}",
+      "note": "Whitespace-only change to the JSON arguments string; the keys, values, and the PayPal payment_method_id are identical, so the call is unchanged."
+    },
+    {
+      "event_index": 42,
+      "change_type": "wording",
+      "before_excerpt": "The item in your order **#W9911714** has been successfully modified... feel free to let me know!",
+      "after_excerpt": "Your order **#W9911714** has been successfully modified... Let me know if you want to adjust or ask about anything else.",
+      "note": "Rephrased the opening and closing sentences; the modification, item details, status, and $33.64 PayPal charge are stated the same way."
+    },
+    {
+      "event_index": 42,
+      "change_type": "emphasis",
+      "before_excerpt": "and the price difference of $33.64 has been charged to your PayPal account.",
+      "after_excerpt": "and a price difference of **$33.64** was charged to your **PayPal account**.",
+      "note": "Bolded the charge amount and payment method to make the PayPal charge more prominent; no fact added or removed."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 41,
+    "failure_category": "policy_violation: unconfirmed payment method in consequential order modification"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 11,
+      "step_number": 28,
+      "step_reason": "At step 28, the user agent insisted on exchange of an item in 'pending' status which is not valid according to domain policy, when assistant asked if it could instead modify (corresponds to the ground truth), the user agent said no.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The user agent's intent was wrong in the preceding steps, leading to an invalid request.",
+      "failed_agent": "User"
+    },
+    {
+      "failure_id": 12,
+      "step_number": 41,
+      "step_reason": "At step 41, the assistant did not explicitly ask for payment method from the user when modifying a pending order",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "The domain policy clearly states that before calling modify order on a pending order, the assistant must confirm payment method from the user.",
+      "failed_agent": "Assistant"
+    }
+  ]
+}

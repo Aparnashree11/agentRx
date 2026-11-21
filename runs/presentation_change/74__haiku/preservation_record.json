@@ -1,0 +1,197 @@
+{
+  "trajectory_id": "74",
+  "failure_step_index": 21,
+  "failure_event_index": 26,
+  "failure_category": "Instruction Adherence Failure",
+  "failure_summary": "At step 21, the agent called exchange order items tool on an order which is still in pending status which is invalid.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "neutral"
+    },
+    {
+      "index": 17,
+      "outcome": "neutral"
+    },
+    {
+      "index": 19,
+      "outcome": "neutral"
+    },
+    {
+      "index": 21,
+      "outcome": "failure"
+    },
+    {
+      "index": 23,
+      "outcome": "neutral"
+    },
+    {
+      "index": 25,
+      "outcome": "neutral"
+    },
+    {
+      "index": 27,
+      "outcome": "failure"
+    },
+    {
+      "index": 29,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with exchanging your laptop. First, I need to authenticate your identity. Could you please provide your email address?",
+      "after_excerpt": "I can help you exchange a laptop. First, I need to verify your identity. Please share your email address.",
+      "note": "Paraphrase of the same request for email or name+zip; no fact added or removed."
+    },
+    {
+      "event_index": 6,
+      "change_type": "wording",
+      "before_excerpt": "I have successfully located your account. Let me now check the details of your recent laptop purchase",
+      "after_excerpt": "Your account has been located. Next, I'll look up your recent laptop purchase",
+      "note": "Same statement that authentication succeeded and the agent will look up the laptop purchase; only the phrasing changed."
+    },
+    {
+      "event_index": 7,
+      "change_type": "wording",
+      "before_excerpt": "Oh, um, I don't really remember the order ID, but I just bought it recently.",
+      "after_excerpt": "I don't really remember the order ID, but I just bought it recently.",
+      "note": "Filler word removed from the user turn; the user still says they lack the order ID and want an i9 laptop exchange."
+    },
+    {
+      "event_index": 10,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W5166363\"}",
+      "after_excerpt": "{\"order_id\":\"#W5166363\"}",
+      "note": "Whitespace-only change to the JSON arguments string; keys and values are identical."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "The laptop you purchased has the following specifications:",
+      "after_excerpt": "**Your purchased laptop:** (bold heading) ... **Available laptops with an i9 processor for exchange:** (bold heading)",
+      "note": "Bold headings added to separate the two lists; the listed values are unchanged and no content was added."
+    },
+    {
+      "event_index": 16,
+      "change_type": "wording",
+      "before_excerpt": "Great choice! You've selected the following laptop for exchange: ... Could you confirm which payment method you'd like the refund to go to? It can either be your original payment method (PayPal) or your gift card.",
+      "after_excerpt": "Good choice. You've selected the following laptop for the exchange: ... Which payment method should receive the refund: your original payment method (PayPal) or your gift card?",
+      "note": "Same options offered (PayPal or gift card) and same price difference of $218.84; question rephrased."
+    },
+    {
+      "event_index": 18,
+      "change_type": "wording",
+      "before_excerpt": "The price difference of **$218.84** will be refunded to your original payment method (PayPal). Once confirmed, I will proceed with the exchange request. Please confirm if everything is correct and if I can proceed.",
+      "after_excerpt": "The price difference of **$218.84** will be refunded to your original payment method (PayPal). Please check that everything is correct. Once you confirm, I will submit the exchange request.",
+      "note": "Same confirmation request and same refund details; sentences reordered and reworded only."
+    },
+    {
+      "event_index": 22,
+      "change_type": "wording",
+      "before_excerpt": "It seems that the order status is still \"pending,\" and exchanges can only be processed for delivered orders. However, since the order is pending, we can modify the items",
+      "after_excerpt": "The order status is still \"pending,\" and exchanges can only be processed for delivered orders. Since the order is pending, I can modify the items",
+      "note": "Same statement that the order is pending and exchanges need delivered status; filler word removed and wording tightened."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "Certainly! I can assist you with canceling the pending order. The details of the order are as follows:",
+      "after_excerpt": "Certainly, I can help you cancel the pending order. Here are its details:",
+      "note": "Same order details and same request for a cancellation reason; phrasing only."
+    },
+    {
+      "event_index": 28,
+      "change_type": "wording",
+      "before_excerpt": "Your order (#W5166363) has been successfully canceled. ... The refund of **$2749.56** has been processed to your original payment method (PayPal). It should reflect in your account within 5 to 7 business days.",
+      "after_excerpt": "Your order (#W5166363) has been canceled. ... A refund of **$2749.56** has been issued to your original payment method (PayPal) and should appear within 5 to 7 business days.",
+      "note": "Same cancellation, same reason, same refund amount and timeline; the word 'successfully' removed and the refund sentence reworded."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 27,
+    "failure_category": "wrong_entity_action"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 29,
+      "step_number": 21,
+      "step_reason": "At step 21, the agent called exchange order items tool on an order which is still in pending status which is invalid.",
+      "failure_category": "Instruction Adherence Failure",
+      "category_reason": "Here, the agent called a tool with invalid arguments which led to an execution error.",
+      "failed_agent": "Assistant"
+    },
+    {
+      "failure_id": 30,
+      "step_number": 24,
+      "step_reason": "At step 24, the user agent asked the assistant to cancel the order instead of modifying it contrary to the task instruction provided to the user agent.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "Here, the user agent made a wrong request which is not aligned with the task instruction.",
+      "failed_agent": "User"
+    }
+  ]
+}

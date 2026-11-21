@@ -1,0 +1,8 @@
+{
+  "trajectory_id": "72",
+  "model": "haiku",
+  "passed": false,
+  "violations": [
+    "[VALUE CHANGED] event 18 call 0: tool-call argument values differ."
+  ]
+}

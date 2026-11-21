@@ -174,196 +174,119 @@
       "change_type": "wording",
       "before_excerpt": "Hey! I’d like to know how many t-shirt options are available in your online store right now.",
       "after_excerpt": "Hi there! Could you tell me how many t-shirt options your online store has available at the moment?",
-      "note": "Paraphrase. The request is still for the current count of available t-shirt options."
+      "note": "Paraphrase of the same request; matches the instruction's meaning."
     },
     {
       "event_index": 4,
       "change_type": "formatting",
       "before_excerpt": "{\"product_id\":\"9523456873\"}",
-      "after_excerpt": "{\"product_id\": \"9523456873\"}",
-      "note": "Only whitespace changed in the arguments JSON. Key and value are unchanged."
+      "after_excerpt": "{\n  \"product_id\": \"9523456873\"\n}",
+      "note": "Compact JSON switched to indented; same key and value."
     },
     {
       "event_index": 6,
       "change_type": "wording",
       "before_excerpt": "Currently, there are 11 available T-shirt options in our online store.",
-      "after_excerpt": "Right now, our online store has **11 available T-shirt options**.",
-      "note": "Paraphrase. The wrong count of 11 is kept exactly, so the failure is unchanged."
-    },
-    {
-      "event_index": 6,
-      "change_type": "emphasis",
-      "before_excerpt": "11 available T-shirt options",
-      "after_excerpt": "**11 available T-shirt options**",
-      "note": "Bolding makes the existing claim more visible. No fact is added or changed."
+      "after_excerpt": "Right now, our online store has 11 T-shirt options available.",
+      "note": "Paraphrase only; the incorrect count of 11 is kept, so the failure is still there."
     },
     {
       "event_index": 7,
       "change_type": "wording",
       "before_excerpt": "Got it, thank you! Also, I’d like some assistance with returning a few items I purchased.",
       "after_excerpt": "Great, thanks! I'd also like some help returning a few items I bought.",
-      "note": "Paraphrase with the same meaning."
+      "note": "Same meaning."
     },
     {
       "event_index": 8,
       "change_type": "wording",
-      "before_excerpt": "To get started, I need to authenticate your identity. Could you please provide your email address?",
-      "after_excerpt": "Before we begin, I need to verify your identity. Could you share your email address?",
-      "note": "Paraphrase. The same two authentication options (email, or name + zip) are still offered."
+      "before_excerpt": "I'd be happy to assist you with returning your items! To get started, I need to authenticate your identity.",
+      "after_excerpt": "I'm glad to help you return your items! First, I need to verify your identity.",
+      "note": "Same authentication request (email, or name + zip as the alternative)."
     },
     {
       "event_index": 9,
       "change_type": "wording",
       "before_excerpt": "Sure, my name is Yusuf Rossi, and my zip code is 19122.",
-      "after_excerpt": "Of course. I'm Yusuf Rossi, and my zip code is 19122.",
-      "note": "Paraphrase. Name and zip are identical."
+      "after_excerpt": "Of course, I'm Yusuf Rossi, and my zip code is 19122.",
+      "note": "Same name and zip."
     },
     {
       "event_index": 10,
       "change_type": "formatting",
       "before_excerpt": "{\"first_name\":\"Yusuf\",\"last_name\":\"Rossi\",\"zip\":\"19122\"}",
-      "after_excerpt": "{\"first_name\": \"Yusuf\", \"last_name\": \"Rossi\", \"zip\": \"19122\"}",
-      "note": "Only whitespace changed in the arguments JSON."
-    },
-    {
-      "event_index": 12,
-      "change_type": "formatting",
-      "before_excerpt": "{\"user_id\":\"yusuf_rossi_9620\"}",
-      "after_excerpt": "{\"user_id\": \"yusuf_rossi_9620\"}",
-      "note": "Only whitespace changed in the arguments JSON."
-    },
-    {
-      "event_index": 13,
-      "change_type": "formatting",
-      "before_excerpt": "{\"name\": {...}, \"address\": {...}, \"email\": \"yusuf.rossi7301@example.com\", ...}",
-      "after_excerpt": "{\"email\": \"yusuf.rossi7301@example.com\", \"name\": {...}, \"address\": {...}, ...}",
-      "note": "The email key moved to the front of the tool-result object. All keys and values are identical."
+      "after_excerpt": "{\"zip\":\"19122\",\"first_name\":\"Yusuf\",\"last_name\":\"Rossi\"}",
+      "note": "Keys reordered inside the arguments object; keys and values unchanged."
     },
     {
       "event_index": 14,
       "change_type": "wording",
-      "before_excerpt": "I have successfully authenticated your identity. Could you please provide the order ID and the items you'd like to return?",
-      "after_excerpt": "I've verified your identity. Could you share the order ID and the items you'd like to return?",
-      "note": "Paraphrase. Authentication still reads as successful."
+      "before_excerpt": "Thank you, Yusuf! I have successfully authenticated your identity.",
+      "after_excerpt": "Thanks, Yusuf! Your identity has been verified.",
+      "note": "Same meaning; still asks for the order ID and items."
     },
     {
       "event_index": 15,
       "change_type": "wording",
       "before_excerpt": "I don’t have the order ID with me right now, but I want to return the cleaner, headphones, and the smart watch.",
-      "after_excerpt": "I don't have the order ID on hand right now, but the items I want to return are the cleaner, the headphones, and the smart watch.",
-      "note": "Paraphrase. The same three items are named and the order ID is still missing."
-    },
-    {
-      "event_index": 16,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W6247578\"}",
-      "after_excerpt": "{\"order_id\":\"#W6247578\"}",
-      "note": "Whitespace removed. The value is unchanged."
+      "after_excerpt": "I don't have the order ID on hand at the moment, but the items I want to return are the cleaner, the headphones, and the smart watch.",
+      "note": "Same three items and same missing order ID."
     },
     {
       "event_index": 17,
       "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W6247578\", \"user_id\": ... (compact)",
-      "after_excerpt": "{\n  \"order_id\": \"#W6247578\",\n  \"user_id\": ... (indented)",
-      "note": "The compact tool-result JSON was re-serialized with 2-space indentation. Keys, key order, and values are identical."
-    },
-    {
-      "event_index": 18,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W9711842\"}",
-      "after_excerpt": "{\"order_id\":\"#W9711842\"}",
-      "note": "Whitespace removed. The value is unchanged."
+      "before_excerpt": "{\"order_id\": \"#W6247578\", \"user_id\": ...",
+      "after_excerpt": "{\n  \"order_id\": \"#W6247578\",\n  \"user_id\": ...",
+      "note": "Compact tool result switched to 2-space indented JSON; every key, value and the key order are identical."
     },
     {
       "event_index": 19,
       "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W9711842\", ..., \"status\": \"cancelled\", \"payment_history\": ...}",
-      "after_excerpt": "{\"status\": \"cancelled\", \"order_id\": \"#W9711842\", ..., \"payment_history\": ...}",
-      "note": "The status key moved to the front of the object. All keys and values are identical."
-    },
-    {
-      "event_index": 20,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\":\"#W4776164\"}",
-      "after_excerpt": "{\"order_id\": \"#W4776164\"}",
-      "note": "Only whitespace changed."
-    },
-    {
-      "event_index": 21,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W4776164\", ..., \"status\": \"pending\", ...}",
-      "after_excerpt": "{\"status\": \"pending\", \"order_id\": \"#W4776164\", ...}",
-      "note": "The status key moved to the front of the object. All keys and values are identical."
-    },
-    {
-      "event_index": 22,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\":\"#W6679257\"}",
-      "after_excerpt": "{\"order_id\": \"#W6679257\"}",
-      "note": "Only whitespace changed."
-    },
-    {
-      "event_index": 23,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\": \"#W6679257\", ..., \"status\": \"delivered\", ...}",
-      "after_excerpt": "{\"status\": \"delivered\", \"order_id\": \"#W6679257\", ...}",
-      "note": "The status key moved to the front of the object. All keys and values are identical."
-    },
-    {
-      "event_index": 24,
-      "change_type": "formatting",
-      "before_excerpt": "{\"order_id\":\"#W2378156\"}",
-      "after_excerpt": "{\"order_id\": \"#W2378156\"}",
-      "note": "Only whitespace changed."
+      "before_excerpt": "{\"order_id\": \"#W9711842\", ... \"status\": \"cancelled\", \"payment_history\": ...",
+      "after_excerpt": "{\"status\": \"cancelled\", \"order_id\": \"#W9711842\", ... \"payment_history\": ...",
+      "note": "The status key moved to the front of the object; same keys and values."
     },
     {
       "event_index": 26,
       "change_type": "wording",
-      "before_excerpt": "The cleaner, headphones, and smart watch are part of order #W2378156, which has been delivered. I can assist you in returning these items. The refund will be processed to your original payment method",
-      "after_excerpt": "The cleaner, headphones, and smart watch are in order **#W2378156**, which has been delivered. I can help you return these items. Your refund will go back to your original payment method",
-      "note": "Paraphrase. The order ID, status, items, prices, and refund method are all the same."
+      "before_excerpt": "The cleaner, headphones, and smart watch are part of order #W2378156, which has been delivered. ... Please confirm if you'd like to proceed with the return.",
+      "after_excerpt": "The cleaner, headphones, and smart watch all belong to order #W2378156, which has been delivered, so I can help you return them. ... Could you confirm whether you want to go ahead with this return?",
+      "note": "Same order, items, prices, refund method and confirmation request; item list order unchanged."
     },
     {
       "event_index": 26,
       "change_type": "emphasis",
       "before_excerpt": "Here are the details of the items to be returned:",
-      "after_excerpt": "### Items to be returned",
-      "note": "The lead-in sentence became a markdown heading, and the order ID was bolded. The list contents are unchanged."
-    },
-    {
-      "event_index": 26,
-      "change_type": "wording",
-      "before_excerpt": "Please confirm if you'd like to proceed with the return.",
-      "after_excerpt": "Please confirm whether you'd like to go ahead with the return.",
-      "note": "Paraphrase. It is still an explicit request for confirmation."
+      "after_excerpt": "**Items to be returned:**",
+      "note": "Existing list label reworded and bolded; no facts added."
     },
     {
       "event_index": 27,
       "change_type": "wording",
       "before_excerpt": "Yes, I’d like to proceed with the return for all three items. Thank you!",
       "after_excerpt": "Yes, please go ahead with the return for all three items. Thanks!",
-      "note": "Paraphrase. The explicit 'Yes' confirmation for all three items is kept."
+      "note": "Explicit confirmation kept."
     },
     {
       "event_index": 28,
       "change_type": "formatting",
-      "before_excerpt": "{\"order_id\":\"#W2378156\",\"item_ids\":[\"4602305039\",\"4202497723\",\"9408160950\"],\"payment_method_id\":\"credit_card_9513926\"}",
-      "after_excerpt": "{\"payment_method_id\": \"credit_card_9513926\", \"order_id\": \"#W2378156\", \"item_ids\": [\"4602305039\", \"4202497723\", \"9408160950\"]}",
-      "note": "Keys were reordered and whitespace added. Key names, values, and the order of items in the list are identical."
+      "before_excerpt": "{\"order_id\":\"#W2378156\",\"item_ids\":[...],\"payment_method_id\":\"credit_card_9513926\"}",
+      "after_excerpt": "{\"item_ids\":[...],\"order_id\":\"#W2378156\",\"payment_method_id\":\"credit_card_9513926\"}",
+      "note": "Top-level keys reordered; the item_ids list order and all values are unchanged."
     },
     {
       "event_index": 30,
       "change_type": "wording",
       "before_excerpt": "The return request for the following items has been successfully processed: ... You will receive an email shortly with instructions on how to return the items.",
-      "after_excerpt": "Your return request for the items below has been processed successfully: ... You'll get an email shortly with instructions for returning the items.",
-      "note": "Paraphrase. The same items, prices, refund method, and email notice remain."
+      "after_excerpt": "Your return request has been processed successfully for these items: ... An email with instructions for sending back the items will arrive shortly.",
+      "note": "Same items, prices, refund method and email notice."
     },
     {
       "event_index": 31,
       "change_type": "wording",
       "before_excerpt": "Perfect, thanks so much for your help. That’s all for now! ###STOP###",
-      "after_excerpt": "Perfect, thank you so much for the help. That's everything for now! ###STOP###",
-      "note": "Paraphrase. The ###STOP### marker is kept verbatim."
+      "after_excerpt": "Great, thank you so much for helping. That's everything for now! ###STOP###",
+      "note": "Same closing; the ###STOP### marker is kept exactly."
     }
   ],
   "untouched": {
@@ -373,7 +296,7 @@
   },
   "model_guess": {
     "failure_step_index": 7,
-    "failure_category": "incorrect_information_from_tool_output"
+    "failure_category": "incorrect_information / miscount of tool output"
   },
   "failure_source": "ground_truth",
   "ground_truth_failures": [

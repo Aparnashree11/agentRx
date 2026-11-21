@@ -1,0 +1,195 @@
+{
+  "trajectory_id": "79",
+  "failure_step_index": 20,
+  "failure_event_index": 22,
+  "failure_category": "Underspecified User Intent",
+  "failure_summary": "The task instruction did not specify the color of the 1000ml bottle to be exchanged whether it was red or black. Because of this ambiguity, the user agent picked the black bottle whereas the ground truth as the red variant which did not correspond with the ground truth actions. The red variant instead matched the ground truth.",
+  "step_outcomes": [
+    {
+      "index": 3,
+      "outcome": "success"
+    },
+    {
+      "index": 5,
+      "outcome": "success"
+    },
+    {
+      "index": 7,
+      "outcome": "success"
+    },
+    {
+      "index": 9,
+      "outcome": "success"
+    },
+    {
+      "index": 11,
+      "outcome": "success"
+    },
+    {
+      "index": 13,
+      "outcome": "success"
+    },
+    {
+      "index": 15,
+      "outcome": "success"
+    },
+    {
+      "index": 17,
+      "outcome": "success"
+    },
+    {
+      "index": 19,
+      "outcome": "success"
+    },
+    {
+      "index": 21,
+      "outcome": "success"
+    },
+    {
+      "index": 23,
+      "outcome": "failure"
+    },
+    {
+      "index": 24,
+      "outcome": "success"
+    },
+    {
+      "index": 25,
+      "outcome": "neutral"
+    }
+  ],
+  "action_order": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "changes_applied": [
+    {
+      "event_index": 2,
+      "change_type": "wording",
+      "before_excerpt": "I can assist you with exchanging your water bottle. First, I need to authenticate your identity.",
+      "after_excerpt": "I can help you exchange your water bottle. First, I need to verify your identity.",
+      "note": "Paraphrase of an assistant request for authentication; same request, same meaning."
+    },
+    {
+      "event_index": 14,
+      "change_type": "wording",
+      "before_excerpt": "Unfortunately, exchanges can only be processed for delivered orders. Since both orders are still pending, I can assist you in modifying the items",
+      "after_excerpt": "Exchanges are only possible for delivered orders. Because both orders are still pending, I can help you modify the items",
+      "note": "Same statement that exchanges require delivered orders and the pending orders can be modified instead; only the phrasing changed."
+    },
+    {
+      "event_index": 14,
+      "change_type": "emphasis",
+      "before_excerpt": "This order is still pending.",
+      "after_excerpt": "This order is **still pending**.",
+      "note": "Bold added to an existing fact (order status); no fact added or removed."
+    },
+    {
+      "event_index": 16,
+      "change_type": "formatting",
+      "before_excerpt": "{\"product_id\":\"8310926033\"}",
+      "after_excerpt": "{\"product_id\": \"8310926033\"}",
+      "note": "Whitespace-only change to the JSON arguments string; keys and values identical."
+    },
+    {
+      "event_index": 18,
+      "change_type": "wording",
+      "before_excerpt": "The 1000ml glass water bottle (red) from your second order is currently unavailable. However, there are other similar options available",
+      "after_excerpt": "The 1000ml red glass bottle from your second order is out of stock right now. These similar options are available instead",
+      "note": "Paraphrase of the unavailability statement and option list; the same five options and prices are listed."
+    },
+    {
+      "event_index": 18,
+      "change_type": "emphasis",
+      "before_excerpt": "is currently unavailable",
+      "after_excerpt": "is **out of stock** right now",
+      "note": "Bold added to the unavailability fact; meaning unchanged."
+    },
+    {
+      "event_index": 20,
+      "change_type": "wording",
+      "before_excerpt": "Got it! You’d like to replace your current 500ml stainless steel water bottle (black) with the 1000ml ... Before proceeding, could you confirm",
+      "after_excerpt": "Understood. You want to swap your current 500ml stainless steel water bottle (black) for the 1000ml ... Before I proceed, please confirm",
+      "note": "Paraphrase of the confirmation request; item, price, card, and refund amount are unchanged."
+    },
+    {
+      "event_index": 20,
+      "change_type": "emphasis",
+      "before_excerpt": "The refund amount will be $6.28.",
+      "after_excerpt": "**The refund amount is $6.28.**",
+      "note": "Bold added to an existing figure; no value changed."
+    },
+    {
+      "event_index": 22,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\":\"#W8661412\",\"item_ids\":[\"3453331371\"],\"new_item_ids\":[\"7661609223\"],\"payment_method_id\":\"credit_card_7239357\"}",
+      "after_excerpt": "{\"order_id\": \"#W8661412\", \"item_ids\": [\"3453331371\"], \"new_item_ids\": [\"7661609223\"], \"payment_method_id\": \"credit_card_7239357\"}",
+      "note": "Whitespace-only change to the arguments string; every key, value, and id is identical and the key order is kept."
+    },
+    {
+      "event_index": 23,
+      "change_type": "formatting",
+      "before_excerpt": "{\"order_id\": \"#W8661412\", \"user_id\": \"emma_kovacs_9839\", \"address\": {...}, \"items\": [...], \"status\": \"pending (item modified)\", ...}",
+      "after_excerpt": "{\n  \"order_id\": \"#W8661412\",\n  \"user_id\": \"emma_kovacs_9839\",\n  \"address\": {...},\n  \"items\": [...],\n  \"status\": \"pending (item modified)\", ...\n}",
+      "note": "Indented the tool result for readability; all keys, values, ids, and the status string are identical and in the same order."
+    },
+    {
+      "event_index": 24,
+      "change_type": "wording",
+      "before_excerpt": "The modification has been successfully completed! Your 500ml stainless steel water bottle (black) has been replaced ... Your order status is now updated to",
+      "after_excerpt": "The change is complete. Your 500ml stainless steel water bottle (black) has been swapped for the 1000ml ... The order status now reads",
+      "note": "Paraphrase of the completion report; it still reports the same successful modification, refund, and status."
+    },
+    {
+      "event_index": 24,
+      "change_type": "emphasis",
+      "before_excerpt": "The price difference of $6.28 has been refunded ... status is now updated to \"pending (item modified).\"",
+      "after_excerpt": "the **$6.28** price difference was refunded ... reads **\"pending (item modified)\"**",
+      "note": "Bold added to existing amount and status; no fact added or removed."
+    }
+  ],
+  "untouched": {
+    "tool_names_preserved": true,
+    "tool_results_preserved": true,
+    "embedded_policy_reworded": false
+  },
+  "model_guess": {
+    "failure_step_index": 23,
+    "failure_category": "incorrect tool-call arguments on a consequential write action"
+  },
+  "failure_source": "ground_truth",
+  "ground_truth_failures": [
+    {
+      "failure_id": 31,
+      "step_number": 20,
+      "step_reason": "The task instruction did not specify the color of the 1000ml bottle to be exchanged whether it was red or black. Because of this ambiguity, the user agent picked the black bottle whereas the ground truth as the red variant which did not correspond with the ground truth actions. The red variant instead matched the ground truth.",
+      "failure_category": "Underspecified User Intent",
+      "category_reason": "The task instruction is underspecified with regards to the color of the 1000ml bottle to be exchanged.",
+      "failed_agent": "User"
+    }
+  ]
+}
