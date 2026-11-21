@@ -157,3 +157,156 @@ The decoy attraction rate is the fraction of paired, originally correct
 localizations that move onto an inserted event; `attracted_by_kind` splits those
 between noise and red herrings. The output also counts predictions on other
 original events, missing predictions and clean misses.
+
+### Generate presentation changes
+
+Presentation changes are new trajectories for AgentRx to test: the same events,
+in the same order, with only their presentation changed, so a robust root-cause
+judge should give the same verdict on the variant as on the original. The model
+proposes edits of three kinds:
+
+- **Wording** paraphrases an assistant message with the same meaning. Every
+  token containing a digit (IDs, prices, counts, zip codes) must survive
+  verbatim, so "10" can never become "ten".
+- **Emphasis** adds or removes markdown in an assistant message (bold, italics,
+  headings, bullets, code marks) without changing its words.
+- **Formatting** re-lays-out a JSON payload, either a tool response or a tool
+  call's arguments. The model only chooses a layout (`compact`, `spaced`,
+  `indented`) and a key order (`original`, `sorted`, `reverse`); Python writes
+  the JSON, so every key and value stays identical.
+
+As with step decoys, the model decides and Python edits. Each edit can touch only
+the one field its kind allows. Some steps are always locked: system messages
+(the policy), user turns, tool responses that are not JSON, and the arguments
+and results of tool calls on annotated failure steps. A failure step may still
+be reworded or emphasized, but it must stay exactly as clear and as wrong.
+Before anything is saved, a second check compares the result with the original,
+independently of the editing code. It confirms that event order and roles are
+unchanged, that every locked step is byte-identical, that tool names and call
+IDs are unchanged, that JSON values are strictly equal, and that prose keeps
+every digit token. A proposal that breaks a rule is kept as `invalid.json` for
+review. Steps are 1-based event positions and never move, so labels need no
+remapping.
+
+The generator imports this folder's shared helpers from `step_decoy`
+unchanged: dataset loading, layouts, hashing and prompt rendering. Its Claude
+Code call is its own, but it uses the same isolation: `--safe-mode`, no tools,
+no MCP, an empty working directory, a JSON schema for the answer, and a check
+that the requested model actually answered. The
+[prompt](../../agentrx/rewordings/presentation_change_prompt.txt) uses the same
+`<<PLACEHOLDER>>` style. Its slots are the domain policy, the tool
+descriptions, the task instruction, the root failure, the other annotated
+failures, the numbered events, and the editable steps with the kinds each one
+allows. Prose edits are currently defined for Tau's chat layout; another domain
+needs its own mapping of which roles may be reworded.
+
+```bash
+base=data/benchmark_versions/tau_retail/baseline/v1.0.0
+for m in haiku sonnet opus; do
+  python -m agentrx.rewordings.presentation_change generate --domain tau \
+    --trajectories "$base/tau_dataset_failed.json" --ground-truth "$base/tau_ground_truth.json" \
+    --model "$m" --effort medium --work "runs/presentation_change/tau/$m-medium" &
+done; wait
+```
+
+`--ids 2` runs a single-trajectory pilot, but a pilot work directory can never
+be released. An interrupted batch resumes with the same command. As in
+step_decoy, a work directory is locked to its settings in `config.json`. Each
+case's `generation.json` records the model that answered, the Claude Code
+version, the cost, and hashes of this generator and of the shared step_decoy
+code. Each valid case also gets `events.json` and a `validation.json` that lists
+every change and the `events_sha256` the review must name.
+
+**Every case must be released.** Following [RELEASE_PLAN.md](../../RELEASE_PLAN.md),
+a presentation-change release contains all labeled trajectories (29 for Tau),
+each one generated, valid and accepted. Nothing is excluded. If a case is
+invalid, has no edit, or is rejected in review, regenerate it by rerunning the
+same command with `--regenerate <id>`. The previous attempt is kept under
+`_superseded/<id>/<n>/` and recorded in the audit.
+
+**Regeneration is capped.** Each case gets at most `--max-attempts` attempts,
+default 3: the first one plus two regenerations. The cap is locked in
+`config.json` and recorded in the manifest. Regenerating until a reviewer
+accepts would bias the release toward easy-to-accept edits. A case that reaches
+the cap without being accepted cannot be regenerated, so that model's
+transformation is not releasable. Report it as an outcome; don't raise the cap.
+
+Write the review sheet, then review **each case**:
+
+```bash
+python -m agentrx.rewordings.presentation_change review-sheet --work runs/presentation_change/tau/sonnet-medium
+```
+
+This writes `review_sheet.md` and `reviews.template.json` in the work directory.
+For each case the sheet shows its attempt number, its root and other failures,
+the model's rationale, and every change with its checks. Prose edits appear in
+full, before and after, and edits on annotated failure steps are flagged with ⚠.
+The sheet also reports whether each review in an existing `reviews.json` is
+current, stale or missing. Unlike the step-decoy sheets, it suggests no
+decision. Python has already checked structure and values, so the review is
+about meaning: each paraphrase must say exactly what the original said, and
+every annotated failure must stay exactly as clear and as wrong. Fill in
+`decision`, `reviewer` and `reason` in the template and save it as
+`reviews.json`. Keep `events_sha256` as written, because it ties the review to
+the exact events you read. A review written before a case was regenerated is
+stale and is refused.
+
+```json
+{
+  "4": {"decision": "accept", "reviewer": "<your name>", "reason": "<what in the trace supports your decision>",
+        "events_sha256": "<copied from the template>"}
+}
+```
+
+Release each model's reviewed work directory with a fresh version. AgentRx
+then runs on it like any other release:
+
+```bash
+python -m agentrx.rewordings.presentation_change release --work runs/presentation_change/tau/sonnet-medium \
+  --reviews runs/presentation_change/tau/sonnet-medium/reviews.json --version v0.1.0
+
+release_dir=data/benchmark_versions/tau_retail/presentation_change/sonnet/v0.1.0
+python run.py "$release_dir/trajectories" --domain tau \
+  --ground-truth "$release_dir/ground_truth.json" --run-name tau_pc_sonnet
+```
+
+Release refuses with one message listing every case that needs attention and the
+fix for each. It refuses in these cases:
+
+- the work directory does not cover every labeled trajectory;
+- a case is missing, invalid, or has no edit;
+- a review is missing, unsigned, stale or a rejection;
+- the inputs changed since generation;
+- a rebuilt case differs from its saved events;
+- the version already exists.
+
+`trajectories/` has the baseline's layout, with every record identical to the
+baseline except its `traj`. `ground_truth.json` is the baseline labels
+unchanged, plus `original_step_number`, which always equals `step_number`; it
+is there only so the file has the same shape as a step-decoy release.
+`audit.json` records each case's proposal, generation metadata, attempt number,
+superseded attempts, review, applied changes and root failure. The manifest
+uses the step-decoy keys. It adds `helpers_sha256` (the shared code hash) and
+`regenerated` (attempts per regenerated case), and `total_cost_usd` includes
+superseded attempts.
+
+To measure verdict changes, use clean and variant reports from the same judge
+configuration, each containing a single decision per case:
+
+```bash
+python -m agentrx.rewordings.presentation_change compare --audit "$release_dir/audit.json" \
+  --clean runs/tau_baseline_v1/judge_output/runs/run1.json \
+  --variant runs/tau_pc_sonnet/judge_output/runs/run1.json
+```
+
+Paired cases are those the clean run localized correctly. For each one, the
+variant's verdict is compared with the clean verdict on both step and category,
+and classified as `same_step_same_category`, `step_moved`, `category_changed`
+(same step) or `step_and_category_changed`. Categories are read from the
+judge's integer `failure_case` codes with the judge's own
+`convert_to_failure_case`. The verdict-flip rate is the fraction of paired
+cases with any change; a category change with the step unchanged counts as a
+flip. `verdict_flip_rate_fully_correct` repeats the rate on the cases whose
+clean category also matched the annotation. Missing predictions and clean
+misses are counted separately, as in step_decoy, and `predictions` lists the
+root, clean and variant verdict for every case.
