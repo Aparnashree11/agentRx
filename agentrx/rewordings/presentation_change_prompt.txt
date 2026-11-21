@@ -18,12 +18,13 @@ Paraphrase the natural-language content of an assistant message. text is the com
 Make parts of an assistant message more or less prominent with markdown only: **bold**, *italics*, a heading line starting with #, bullet markers "- ", or `code` marks. text is the complete new content of that message.
 - The words must stay exactly the same, in the same order. The generator removes the markdown you add and rejects the edit if the remaining text differs from the original beyond whitespace.
 - Emphasize or de-emphasize existing evidence; do not reorder it.
+- **The text MUST visibly differ from the original.** It must contain at least one markdown mark (bold, italics, heading, bullet or code) that is not already in the message. Returning the original text unchanged is a no-op and is rejected.
 
 ### **formatting**
 Change the layout of a JSON payload: the content of a tool response, or the arguments of the tool calls an assistant message makes. You do not write the new JSON; the generator re-serializes it with the layout and key_order you choose, so every key and value stays identical.
 - layout: "compact" (no spaces), "spaced" (one space after , and :), or "indented" (two-space indentation).
 - key_order: "original", "sorted" or "reverse".
-- The chosen combination must actually change the payload's current text.
+- **The chosen layout and key_order MUST change the serialized JSON.** Look at how the payload is laid out now and do not pick the combination it already has: a payload that is already compact with keys in their original order is unchanged by "compact" + "original", and that edit is rejected. Change the layout, the key order, or both.
 
 ## Choosing Edits:
 - Only the steps listed under Editable Steps can be edited, and only with the kinds listed for each. Every other step, including system messages (the policy), user messages and tool responses that are not JSON, stays byte-for-byte identical.
