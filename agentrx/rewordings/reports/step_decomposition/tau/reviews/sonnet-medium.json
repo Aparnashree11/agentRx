@@ -1,0 +1,77 @@
+{
+  "2": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+  },
+  "3": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+  },
+  "4": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+  },
+  "21": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Verbatim two-way split of the user turn; the user still drops the shoe exchange and makes the underspecified request. No change before/after."
+  },
+  "32": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; the wrong tracking-number claim is preserved and the order it names (#W7449508) already appears in the trajectory context, so no new fact is introduced."
+  },
+  "39": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; the unsupported 'can't fetch the address from order details' claim is preserved and the request to the user is unchanged."
+  },
+  "55": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "59": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Reject: the split inserts a rationale ('since you can't confirm the order will be processed within the next 5 days') that is not in the original user turn and mischaracterizes the annotated failure (the user wrongly assuming one order is older). That changes the step rather than reorganizing it."
+  },
+  "63": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "71": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "79": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "82": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "87": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; the false 'all updates completed' claim is preserved (moved to the marked step) with the address details unchanged. Numeric flag is the order-ID boundary false positive."
+  },
+  "91": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+  },
+  "104": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; step 1 only correctly identifies the cancelled order (already in context) and the false 'no tracking number' claim is preserved verbatim in the marked step."
+  }
+}

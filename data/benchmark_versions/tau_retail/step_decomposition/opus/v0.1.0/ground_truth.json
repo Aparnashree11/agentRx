@@ -1,0 +1,96 @@
+[
+  {
+    "trajectory_id": 2,
+    "failures": [
+      {
+        "failure_id": 1,
+        "step_number": 3,
+        "step_reason": "At step 3, the assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+        "failure_category": "Instruction Adherence Failure",
+        "category_reason": "The assistant agent did not follow the expected policy of authenticating user information before providing product details.",
+        "failed_agent": "Assistant",
+        "original_step_number": 3
+      },
+      {
+        "failure_id": 2,
+        "step_number": 8,
+        "step_reason": "At step 7, the agent did not correctly count the number of available t-shirts from the tool call result.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+        "failed_agent": "Assistant",
+        "original_step_number": 7
+      }
+    ],
+    "root_cause": {
+      "failure_id": 2,
+      "reason_for_root_cause": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+    },
+    "failure_summary": "The agent did not correctly count the number of available t-shirts from the tool call result."
+  },
+  {
+    "trajectory_id": 3,
+    "failures": [
+      {
+        "failure_id": 3,
+        "step_number": 3,
+        "step_reason": "At step 3, The assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+        "failure_category": "Instruction Adherence Failure",
+        "category_reason": "The assistant agent did not follow the expected policy of authenticating user information before providing product details.",
+        "failed_agent": "Assistant",
+        "original_step_number": 3
+      },
+      {
+        "failure_id": 4,
+        "step_number": 9,
+        "step_reason": "At step 7, the agent did not correctly count the number of available t-shirts from the tool call result.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+        "failed_agent": "Assistant",
+        "original_step_number": 7
+      }
+    ],
+    "root_cause": {
+      "failure_id": 4,
+      "reason_for_root_cause": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+    },
+    "failure_summary": "The assistant did not correctly count the number of available t-shirts from the tool call result."
+  },
+  {
+    "trajectory_id": 39,
+    "failures": [
+      {
+        "failure_id": 20,
+        "step_number": 17,
+        "step_reason": "At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+        "failure_category": "Intent Plan Misalignment",
+        "category_reason": "The assistant wrongly reasons that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+        "failed_agent": "Assistant",
+        "original_step_number": 17
+      }
+    ],
+    "root_cause": {
+      "failure_id": 20,
+      "reason_for_root_cause": "Since the assistant was not able to update the address, it led to incorrect final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "Assistant believed it could not find the latest address using get_order_details and thus failed to modify the user address to the latest one."
+  },
+  {
+    "trajectory_id": 104,
+    "failures": [
+      {
+        "failure_id": 38,
+        "step_number": 58,
+        "step_reason": "The assistant mentioned to the user that the cancelled order #W1154986 did not have a tracking number. However, this is not true as in the tool output of get_order_details for order #W1154986, a tracking number is clearly present.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output of get_order_details tool call, leading to an incorrect assumption about the tracking number not being present in a cancelled order.",
+        "failed_agent": "Assistant",
+        "original_step_number": 57
+      }
+    ],
+    "root_cause": {
+      "failure_id": 38,
+      "reason_for_root_cause": "The assistant did not provide the tracking number of the cancelled order #W1154986 due to misinterpretation of tool output."
+    },
+    "failure_summary": "The assistant misinterpreted the tool output, assumed or misinterpreted the fact that cancelled order did not have a tracking number fiels and hence did not provide the tracking number of the cancelled order #W1154986 back to the user."
+  }
+]

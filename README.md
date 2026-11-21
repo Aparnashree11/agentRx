@@ -1,296 +1,199 @@
-# AgentRx 🩺
+# AgentRx: Step-Decomposition Trajectories
 
-**Diagnosing AI Agent Failures from Execution Trajectories**
+This branch (`step-decomposition`) adds a benchmark variant for [AgentRx](https://arxiv.org/abs/2602.02475): failed agent trajectories whose single annotated **root-cause step is split into several smaller steps**. The smaller steps are what the same actor would naturally do to carry out that one step, spread move by move. They test whether AgentRx's judge still finds the annotated root-cause step once the one guilty step is no longer a single line.
 
-[[Paper]](https://arxiv.org/abs/2602.02475) [[Dataset]](https://huggingface.co/datasets/microsoft/AgentRx)
+The decompositions were generated for the 29 Tau Retail baseline trajectories by three Claude models (Haiku 5.5, Sonnet 5.5 and Opus 5.5), reviewed, and released as versioned datasets ready to run through AgentRx.
 
-AI agents often fail in ways that are difficult to localize — executions are probabilistic, long-horizon, multi-agent, and mediated by noisy tool outputs. **AgentRx** is an automated, domain-agnostic diagnostic framework that pinpoints the *critical failure step* in a failed agent trajectory. It synthesizes constraints (invariants), evaluates them step-by-step, and produces an auditable validation log of constraint violations with associated evidence. An LLM-based judge uses this log to localize the critical step and classify the failure into a grounded 10-category taxonomy.
-
-AgentRx improves step localization and failure attribution over existing baselines across three domains: structured API workflows (Tau-bench), incident management (Flash), and open-ended web/file tasks (Magentic-One).
-
-```
-Raw logs ──▶ Trajectory IR ──▶ Invariants ──▶ Checker ──▶ Judge ──▶ Reports
-```
+For the full AgentRx pipeline documentation, see the README on the `main` branch.
 
 ---
 
-## Setup and Run a One-Trajectory Demo
+## What a step decomposition is
 
-### 1. Set up a new system
+The generating model takes the one annotated root-cause step and rewrites it as **two to four smaller consecutive steps by the same actor** that together say exactly what it did, with the same mistake left unfixed. Nothing before or after the step changes; only the step's position moves, and the ground truth is renumbered so the root failure points at the smaller step that still carries the mistake.
 
-You need Python 3.10 or newer, Git, and Node.js/npm for the GitHub Copilot CLI.
+Example from Tau task 2, where the agent miscounts available T-shirts at step 7:
+
+```
+5   assistant  get_product_details {"product_id":"9523456873"}     ← unchanged
+6   tool       {"name":"T-Shirt","variants":{...}}                 ← unchanged
+7   assistant  "Let me go through the T-shirt variants..."         ← smaller step 1
+8   assistant  "Currently, there are 11 available T-shirt options" ← smaller step 2  (root failure, was step 7)
+9   user       "Got it, thank you! ..."                            ← unchanged
+```
+
+The generator is domain-general. `--domain` selects the policy and tool descriptions as in `run.py`, the input can be any trajectory layout AgentRx reads, and the model proposes only the text of the smaller steps; Python replaces the step, keeps the actor, and renumbers. It does not use AgentRx's IR converter.
+
+A step that cannot be split without changing the failure is **declined** (`NO_VALID_DECOMPOSITION`). In Tau that is almost always an atomic tool call — a single `cancel_pending_order` or `calculate` whose mistake *is* the call — which cannot be spread across messages without inventing a step.
+
+---
+
+## What was generated
+
+All three runs used medium effort, one Claude Code call per trajectory, and the same prompt and generator code. Step decomposition applies to **text** root causes (an assistant's claim, a user's request); tool-call root steps are declined.
+
+| Generator | Release | Accepted | Left out (declined / invalid / rejected) | Avg. smaller steps | Avg. steps added | Cost |
+|---|---|---|---|---|---|---|
+| Haiku 5.5 | [`haiku/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/haiku/v0.1.0/manifest.json) | 13 | 16 (13 / 2 / 1) | 2.6 | 1.6 | $0.17 |
+| Sonnet 5.5 | [`sonnet/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0/manifest.json) | 14 | 15 (13 / 1 / 1) | 2.2 | 1.2 | $2.15 |
+| Opus 5.5 | [`opus/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/opus/v0.1.0/manifest.json) | 4 | 25 (25 / 0 / 0) | 2.5 | 1.5 | $4.37 |
+
+The [findings report](agentrx/rewordings/reports/step_decomposition/tau/findings.md) compares the three generators: what each decomposed and declined, where they agreed, the errors each made, and cost.
+
+---
+
+## Where everything is stored
+
+```
+agentrx/rewordings/
+├── step_decomposition.py                 # generator CLI: generate, release, compare
+├── step_decomposition_prompt.txt         # domain-general prompt with <<PLACEHOLDER>> slots
+└── reports/step_decomposition/tau/
+    ├── README.md
+    ├── findings.md                        # cross-model analysis
+    ├── review_sheets/<model>-medium.md    # per-trajectory review notes
+    └── reviews/<model>-medium.json        # signed review decisions used for release
+
+data/benchmark_versions/
+├── README.md                             # versioning rules and the full step-decomposition workflow
+└── tau_retail/
+    ├── baseline/v1.0.0/                   # parent: 29 original trajectories + labels
+    └── step_decomposition/<haiku|sonnet|opus>/v0.1.0/
+        ├── trajectories/tau_dataset_failed.json   # accepted trajectories, same layout as the baseline
+        ├── ground_truth.json             # labels renumbered to the new step positions
+        ├── audit.json                     # proposals, reviews, step maps, decomposed/error steps, skips
+        └── manifest.json                  # parent checksums, generator settings, cost, artifact checksums
+
+tests/test_step_decomposition.py          # layouts, generation, release, compare, Magentic-One
+
+runs/decomp/tau/<model>-medium/           # generation work folders (git-ignored, local only)
+```
+
+Releases are immutable. A change produces a new version (`v0.2.0`, …) and never overwrites an existing one.
+
+---
+
+## Setup
+
+You need Python 3.10 or newer and Node.js/npm for the GitHub Copilot CLI, which AgentRx uses by default.
 
 ```bash
 git clone https://github.com/aparnashree11/agentRx.git
 cd agentRx
+git switch step-decomposition
 python3.12 -m venv .venv
 source .venv/bin/activate       # Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
 pip install -e .
 npm install -g @github/copilot
 copilot login
 cp .env.example .env
 ```
 
-`copilot login` opens a browser or provides a device-code flow to sign in with your GitHub account. The Copilot CLI uses that sign-in; AgentRx does not need a GitHub API key.
-
-### 2. Configure Copilot in `.env`
-
-Set the endpoint to Copilot and select one model option in `.env`:
+In `.env`, set the endpoint AgentRx's judge will use:
 
 ```env
 AGENT_VERIFY_ENDPOINT_TYPE=copilot
 AGENT_VERIFY_COPILOT_MODEL=auto
 ```
 
-Use `auto` for Copilot to choose an available model, `fusion` for Copilot Fusion, or replace `auto` with a model ID available to your account. To see available choices, start `copilot` and enter `/model`.
-
-### 3. Run one Tau retail trajectory through the full pipeline
-
-This command runs all stages—IR conversion, static and dynamic invariant generation, checking, judging, and reporting—on one example trajectory:
-
-```bash
-python run.py trajectories/tau-retail/agentrx_walkthrough.json \
-  --domain tau \
-  --run-name tau_walkthrough
-```
-
-The walkthrough is a small synthetic trace intended for learning. Outputs are saved under `runs/tau_walkthrough/`, including `trajectory_ir.json`, `static_invariants.json`, `dynamic_invariants/`, `checker_results/`, `judge_output/`, and `plots/`.
-
-For a real Tau retail example, replace the input path with a file such as `trajectories/tau-retail/instruction_adherence_failure.json`.
-
-You can also install directly from GitHub without cloning:
-```bash
-pip install git+https://github.com/aparnashree11/agentRx.git
-```
+Running the released trajectories needs only this setup. Generating new decompositions also needs [Claude Code](#regenerate-or-extend).
 
 ---
 
-## Benchmark Dataset Versions
+## Run AgentRx on the step-decomposition trajectories
 
-Tau Retail and Magentic-One have independent baseline releases under `data/benchmark_versions/`. These contain byte-for-byte frozen copies of the trajectory and ground-truth files selected for the project baseline. The manifests retain the original source paths as provenance; the versioned release files are self-contained.
-
-- [Tau Retail baseline v1.0.0](data/benchmark_versions/tau_retail/baseline/v1.0.0/manifest.json)
-- [Magentic-One baseline v1.0.0](data/benchmark_versions/magentic_one/baseline/v1.0.0/manifest.json)
-
-The Tau Retail baseline has 29 failed trajectories and 29 labels. The Magentic-One baseline has 58 trajectories and 44 labels. Each manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
-
-### Run the full Tau Retail baseline
-
-This input file contains all 29 Tau baseline trajectories. The command runs the full pipeline on them and supplies the matching labels for evaluation:
+Each release is a drop-in replacement for the baseline input. Run one generator's release:
 
 ```bash
-python run.py \
-  data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_dataset_failed.json \
+release_dir=data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0
+python run.py "$release_dir/trajectories/tau_dataset_failed.json" \
+  --domain tau \
+  --ground-truth "$release_dir/ground_truth.json" \
+  --run-name tau_decomp_sonnet
+```
+
+Run all three:
+
+```bash
+for m in haiku sonnet opus; do
+  release_dir=data/benchmark_versions/tau_retail/step_decomposition/$m/v0.1.0
+  python run.py "$release_dir/trajectories/tau_dataset_failed.json" --domain tau \
+    --ground-truth "$release_dir/ground_truth.json" --run-name "tau_decomp_$m"
+done
+```
+
+Outputs go to `runs/tau_decomp_<model>/`, the same as any AgentRx run (`trajectory_ir.json`, invariants, `checker_results/`, `judge_output/`, `plots/`).
+
+### Measure whether the decomposition moved the judge
+
+You need a clean run on the original trajectories with **the same judge configuration**:
+
+```bash
+python run.py data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_dataset_failed.json \
   --domain tau \
   --ground-truth data/benchmark_versions/tau_retail/baseline/v1.0.0/tau_ground_truth.json \
   --run-name tau_baseline_v1
 ```
 
-Outputs are written to `runs/tau_baseline_v1/`. Use a distinct `--run-name` for each judge model so each model's results are kept separately.
-
----
-
-## Step-by-Step Usage
-
-You can run each stage individually and inspect the results between stages:
+Then compare the two judge reports:
 
 ```bash
-# 1. Normalize raw logs into Trajectory IR
-python run.py trajectory.json --stage ir --run-name my_run
-
-# 2. Generate static invariants
-python run.py trajectory.json --stage static --run-dir runs/my_run
-
-# 3. Generate dynamic (per-step) invariants
-python run.py trajectory.json --stage dynamic --run-dir runs/my_run
-
-# 4. Check all invariants against the trajectory
-python run.py trajectory.json --stage check --run-dir runs/my_run
-
-# 5. Run LLM judge for root-cause classification
-python run.py trajectory.json --stage judge --run-dir runs/my_run
-
-# 6. Generate report plots
-python run.py trajectory.json --stage report --run-dir runs/my_run
+python -m agentrx.rewordings.step_decomposition compare \
+  --audit data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0/audit.json \
+  --clean runs/tau_baseline_v1/judge_output/runs/run1.json \
+  --variant runs/tau_decomp_sonnet/judge_output/runs/run1.json
 ```
 
----
+The output classifies every trajectory the clean run localized correctly:
 
-## Pipeline Stages
+- `found_error_substep`: the judge still found the mistake, on the smaller step that carries it.
+- `drifted_within_decomposition`: the judge picked a sibling smaller step instead.
+- `other_original_event`: the judge picked another original step.
 
-| # | Stage | Output |
-|---|-------|--------|
-| 1 | **IR** — Normalize raw logs into canonical Trajectory IR | `trajectory_ir.json` |
-| 2 | **Static** — Generate policy/tool/structure invariants | `static_invariants.json` |
-| 3 | **Dynamic** — Generate per-step context-aware invariants | `dynamic_invariants/` |
-| 4 | **Check** — Evaluate invariants, record violations | `checker_results/` |
-| 5 | **Judge** — LLM classifies root-cause failure (10-category taxonomy) | `judge_output/` |
-| 6 | **Report** — Failure frequency plots | `plots/` |
+The **decomposition evasion rate** is the share whose prediction no longer lands on the mistake-carrying step.
 
 ---
 
-## Directory Structure
+## Regenerate or extend
 
-```
-AgentRx/
-├── run.py                       # CLI entry point (backward-compatible)
-├── pyproject.toml               # Package configuration (pip install -e .)
-├── requirements.txt             # Python dependencies
-├── agentrx/                     # Main package
-│   ├── cli.py                   # Console script entry point
-│   ├── ir/                      # Trajectory IR normalization
-│   ├── invariants/              # Invariant generation & checking
-│   ├── judge/                   # LLM-as-a-Judge evaluation
-│   ├── llm_clients/             # Azure OpenAI & TRAPI clients
-│   ├── pipeline/                # Config (globals.py), utilities
-│   └── reports/                 # Analysis & visualization
-├── data/
-│   ├── benchmark_versions/      # Frozen benchmark inputs, labels, and manifests
-│   ├── policies/                # Domain policies
-│   └── tool_schemas/            # Domain tool schemas
-├── trajectories/                # Sample trajectories (tau, magentic, test)
-└── runs/                        # Pipeline outputs (one folder per run)
-```
-
----
-
-## Supported Domains
-
-| Domain | Flag | Description |
-|--------|------|-------------|
-| **tau** | `--domain tau` | Tau-bench retail customer service |
-| **magentic** | `--domain magentic` | Magentic-One multi-agent |
-| **flash** | `--domain flash` | Flash/orchestrator incident traces |
-| *(auto)* | *(default)* | Auto-detected; unknown formats use LLM-based IR fallback |
-
----
-
-## Other LLM Endpoints (Optional)
-
-Copilot CLI is the default endpoint. To use Azure OpenAI instead, set `AGENT_VERIFY_ENDPOINT_TYPE=azure` or pass `--endpoint azure`, then configure `AGENT_VERIFY_ENDPOINT`, `AGENT_VERIFY_DEPLOYMENT`, and `AGENT_VERIFY_MODEL_NAME` in `.env`. Azure authentication uses Azure identity credentials, for example `az login` for local development.
-
-TRAPI is a Microsoft Research internal endpoint. To use it, set `AGENT_VERIFY_ENDPOINT_TYPE=trapi` or pass `--endpoint trapi`, then configure `AGENT_VERIFY_TRAPI_INSTANCE`, `AGENT_VERIFY_TRAPI_DEPLOYMENT_NAME`, and `SCOPE`. TRAPI uses Azure AD authentication.
-
----
-
-## Failure Taxonomy
-
-| # | Category | Description |
-|---|----------|-------------|
-| 1 | **Instruction/Plan Adherence Failure** | Skips steps or adds unnecessary actions |
-| 2 | **Invention of New Information** | Fabricates or omits ungrounded facts |
-| 3 | **Invalid Invocation** | Malformed tool call (wrong args/types/schema) |
-| 4 | **Misinterpretation of Tool Output** | Incorrect reasoning about tool results |
-| 5 | **Intent-Plan Misalignment** | Pursues wrong objective |
-| 6 | **Underspecified User Intent** | Missing information to proceed |
-| 7 | **Intent Not Supported** | Action can't be performed with available tools |
-| 8 | **Guardrails Triggered** | Blocked by safety/RAI/access policies |
-| 9 | **System Failure** | Infra errors (timeouts, unreachable endpoints) |
-| 10 | **Inconclusive** | Insufficient evidence to classify |
-
----
-
-## Running Individual Modules
-
-Each module can also be run standalone:
-
-**Static Invariant Generator** — generate policy/tool invariants:
-```bash
-python agentrx/invariants/static_invariant_generator.py --input-path trajectory.json --domain tau
-```
-
-**Dynamic Invariant Generator** — generate per-step context-aware invariants:
-```bash
-python agentrx/invariants/dynamic_invariant_generator.py --input-path trajectory.json --domain tau --mode stepbystep
-```
-
-**Checker** — evaluate invariants against a trajectory:
-```bash
-python agentrx/invariants/checker.py --input-path trajectory.json --static-invariants static_inv.json --dynamic-invariants-dir dyn_inv/
-```
-
-**Judge** — run LLM-as-a-Judge classification:
-```bash
-python agentrx/judge/judge.py --domain tau --log_file trajectory.json --mode combined
-```
-
----
-
-## Third-Party Code
-
-This project uses the following third-party open source packages (installed via `requirements.txt`):
-
-- **openai** — OpenAI Python client (MIT License)
-- **azure-identity** / **azure-core** — Azure SDK authentication (MIT License)
-- **matplotlib** — Plotting and visualization (PSF-based License)
-- **tiktoken** — Token counting (MIT License)
-- **httpx** — HTTP client (BSD License)
-
-See [requirements.txt](requirements.txt) for the full list of dependencies.
-
----
-
-## Troubleshooting
-
-### `DefaultAzureCredential` timeout on local machines
-
-The Azure SDK's `DefaultAzureCredential` tries `ManagedIdentityCredential` before `AzureCliCredential`. On a local dev machine this probes the IMDS endpoint which doesn't exist locally, causing a ~5-10s timeout before falling back. This is expected behavior — the probe is how `DefaultAzureCredential` detects the hosting environment.
-
-**Fix:** Set the `AZURE_TOKEN_CREDENTIALS` environment variable to `dev` to exclude deployed-service credentials (e.g. `ManagedIdentityCredential`, `WorkloadIdentityCredential`) from the chain, so `DefaultAzureCredential` skips straight to developer-tool credentials like `AzureCliCredential`:
+Generating decompositions needs [Claude Code](https://claude.com/claude-code), signed in. If `claude` is not on your PATH, set `CLAUDE_BIN` to its executable.
 
 ```bash
-# PowerShell
-$env:AZURE_TOKEN_CREDENTIALS = "dev"
+base=data/benchmark_versions/tau_retail/baseline/v1.0.0
+python -m agentrx.rewordings.step_decomposition generate --domain tau \
+  --trajectories "$base/tau_dataset_failed.json" --ground-truth "$base/tau_ground_truth.json" \
+  --model sonnet --effort medium --work runs/decomp/tau/sonnet-medium
 
-# Bash / Linux / macOS
-export AZURE_TOKEN_CREDENTIALS=dev
+# review each case, write reviews.json, then:
+python -m agentrx.rewordings.step_decomposition release --work runs/decomp/tau/sonnet-medium \
+  --reviews runs/decomp/tau/sonnet-medium/reviews.json --version v0.2.0
 ```
 
-Or add `AZURE_TOKEN_CREDENTIALS=dev` to your `.env` file.
+Generation sends the policy and trajectories to Anthropic. For Magentic-One, use `--domain magentic` with the `magentic_one/baseline/v1.0.0/trajectories` folder and its ground truth. The review checklist, the generator's rules and every output file are described in [the dataset versioning notes](data/benchmark_versions/README.md#generate-step-decompositions).
 
-> Requires `azure-identity >= 1.23.0`. See [Exclude a credential type category](https://learn.microsoft.com/azure/developer/python/sdk/authentication/credential-chains?tabs=dac#exclude-a-credential-type-category) for details.
-
----
-
-## Contributing
-
-This project welcomes contributions and suggestions. Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+Run the tests with `python -m pytest tests/test_step_decomposition.py`.
 
 ---
 
-## Trademarks
+## Caveats
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
-
----
-
-## License
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Licensed under the [MIT](LICENSE.txt) license.
+- **Decomposition only applies to text steps.** A tool-call root cause (a single `cancel_pending_order`, `calculate`, `exchange_delivered_order_items`) is declined, because splitting it would mean inventing an extra message or call. That is why the accept counts are well under 29.
+- **The models differ in how conservative they are.** Haiku and Sonnet split both assistant and user text turns; Opus declined all user turns and most assistant text, accepting only 4. Treat the generator choice as a variable, not a detail.
+- **Tasks 2, 3 and 4 are related** — same user, same T-shirt miscount — so their decompositions look alike. Treat them as one group when computing rates.
+- **One sample per model.** Each trajectory was generated once per model, without seed control.
+- **How the reviews were done.** A reviewer confirmed each accepted case keeps the same actor and the same unfixed mistake. An automatic numeric-token check flags cases for a closer look; it over-flags Tau order IDs (the digits are glued to a `W` prefix), and those were checked by hand.
 
 ---
 
-## Citation
+## Upstream AgentRx, license and citation
 
-If you use AgentRx, please cite:
+AgentRx is by Microsoft Research ([paper](https://arxiv.org/abs/2602.02475), [dataset](https://huggingface.co/datasets/microsoft/AgentRx)) and is licensed under the [MIT](LICENSE.txt) license. Copyright (c) Microsoft Corporation. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ```bibtex
 @article{barke2026agentrx,
   title={AgentRx: Diagnosing AI Agent Failures from Execution Trajectories},
-  author={Barke, Shraddha and Goyal, Arnav and Khare, Alind and Singh, Avaljot and Nath, Suman and Bansal, Chetan},
+  author={Barke, Shraddha and others},
   journal={arXiv preprint arXiv:2602.02475},
   year={2026}
 }
 ```
-

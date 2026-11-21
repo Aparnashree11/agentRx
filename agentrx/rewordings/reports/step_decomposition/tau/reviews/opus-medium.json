@@ -1,0 +1,22 @@
+{
+  "2": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+  },
+  "3": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+  },
+  "39": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; the unsupported 'can't fetch the address from order details' claim is preserved and the request to the user is unchanged."
+  },
+  "104": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Same-actor split; step 1 only correctly identifies the cancelled order (already in context) and the false 'no tracking number' claim is preserved verbatim in the marked step."
+  }
+}
