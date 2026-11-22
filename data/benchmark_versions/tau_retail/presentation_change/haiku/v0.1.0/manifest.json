@@ -63,15 +63,22 @@
       "99",
       "104",
       "105"
+    ],
+    "prose_roles": [
+      "assistant"
+    ],
+    "policy_roles": [
+      "system"
     ]
   },
   "artifact_sha256": {
-    "audit.json": "286b4725af240e94335f77dd7882c1c1deeb6a2e8d535b41d5d0baa9e14bf6d1",
+    "audit.json": "eb16afeab0aa21baf5962251dce1643f562d4c7a5202d67eb22bdce5bac03187",
     "ground_truth.json": "84d7efe298a2ee56a50a7ef109530e61de329efd089f1c836b512663c3ef1bd4",
-    "trajectories/tau_dataset_failed.json": "dc029cc02fe26aae56c642fcd8988340bb78a29ab219cf1394f821abc018218b"
+    "trajectories/tau_dataset_failed.json": "3fb1f761e4c20fd23b0859fa6fd73b78976c8c2b5393e5c7bb8751f610a826bf"
   },
   "generator_sha256": [
-    "6a3681dfab153161ff5cc6d7c88cbed64b8def0aecf54212e4e7bb7acd5ab05d"
+    "6a3681dfab153161ff5cc6d7c88cbed64b8def0aecf54212e4e7bb7acd5ab05d",
+    "eb1ecdd445e199090ecd106468a648449198ed251510ec1735f9ef492ed5574f"
   ],
   "helpers_sha256": [
     "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
@@ -79,7 +86,7 @@
   "claude_versions": [
     "2.1.330 (Claude Code)"
   ],
-  "total_cost_usd": 0.151479,
+  "total_cost_usd": 0.156884,
   "accepted_ids": [
     "2",
     "3",
@@ -114,6 +121,7 @@
   "attempted_count": 29,
   "regenerated": {
     "31": 1,
+    "72": 1,
     "74": 1
   }
 }

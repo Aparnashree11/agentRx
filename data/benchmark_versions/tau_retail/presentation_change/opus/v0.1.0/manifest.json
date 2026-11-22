@@ -63,6 +63,12 @@
       "99",
       "104",
       "105"
+    ],
+    "prose_roles": [
+      "assistant"
+    ],
+    "policy_roles": [
+      "system"
     ]
   },
   "artifact_sha256": {
