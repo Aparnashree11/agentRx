@@ -228,7 +228,8 @@ INLINE_MARKUP = re.compile(r"\*+|`+")
 
 def digit_tokens(text):
     """Every whitespace-separated token containing a digit (IDs, prices, counts, zips),
-    trimmed of surrounding punctuation. Wording must keep each one verbatim."""
+    trimmed of surrounding punctuation. Wording must keep each one verbatim, as a whole
+    token: callers compare these sets, so "11" is not kept by "110" or "#W11"."""
     return {t.strip(EDGE) for t in text.split() if any(c.isdigit() for c in t)} - {""}
 
 
@@ -311,7 +312,8 @@ def apply_edits(case, label, proposal, roles):
             if not isinstance(new, str) or not new.strip() or new == old:
                 raise ValueError(f"Step {step}: {kind} needs new text that differs from the original")
             if kind == "wording":
-                lost = sorted(t for t in digit_tokens(old) if t not in new)
+                # Whole tokens, not substrings: "11" -> "110" must fail.
+                lost = sorted(digit_tokens(old) - digit_tokens(new))
                 if lost:
                     raise ValueError(f"Step {step}: wording drops values {lost}")
             elif plain(new) != plain(old):
@@ -376,7 +378,7 @@ def check_preserved(original, edited, edited_steps, roles):
             if o[key] == e[key]:
                 continue
             if key == text and who in roles["prose_roles"] and isinstance(e[key], str):
-                lost = sorted(t for t in digit_tokens(o[key] or "") if t not in e[key])
+                lost = sorted(digit_tokens(o[key] or "") - digit_tokens(e[key]))
                 if lost:
                     violations.append(f"[VALUE DROPPED] step {n}: prose lost {lost}")
             elif key == text and n in results:

@@ -144,6 +144,8 @@ class EditRulesTest(unittest.TestCase):
                 edit(step=3, kind="formatting", layout="indented", key_order="sorted"), "not editable"),
             "dropped digit ('eleven' for '11')": (
                 edit(step=7, kind="wording", text="There are eleven T-shirt options."), "drops values"),
+            "digit token changed ('110' contains '11')": (
+                edit(step=7, kind="wording", text="There are 110 T-shirt options."), "drops values"),
             "emphasis changing words": (
                 edit(step=9, kind="emphasis", text="**Happy to help with your return!**"), "changed the words"),
             "non-JSON tool response": (
@@ -167,6 +169,19 @@ class EditRulesTest(unittest.TestCase):
             with self.subTest(name), self.assertRaisesRegex(ValueError, message):
                 pc.apply_edits(CASES["2"], LABELS["2"], proposal, TAU_ROLES)
 
+    def test_digit_tokens_must_match_whole(self):
+        case = dict(events=[dict(role="assistant", content="11 available")])
+        label = dict(failures=[])
+        for text in ("110 available", "#11 available", "1 available"):
+            with self.subTest(text):
+                with self.assertRaisesRegex(ValueError, r"drops values \['11'\]"):
+                    pc.apply_edits(case, label, edit(step=1, kind="wording", text=text), TAU_ROLES)
+                self.assertTrue(any("VALUE DROPPED" in v for v in pc.check_preserved(
+                    case["events"], [dict(role="assistant", content=text)], {1}, TAU_ROLES)))
+        # Surrounding punctuation and markdown are not part of the token.
+        events, _ = pc.apply_edits(case, label, edit(step=1, kind="wording", text="Available: **11**."), TAU_ROLES)
+        self.assertEqual(events[0]["content"], "Available: **11**.")
+
     def test_check_preserved_catches_tampering(self):
         events, _ = pc.apply_edits(CASES["2"], LABELS["2"], PROPOSAL, TAU_ROLES)
         tamper = {
@@ -184,6 +199,7 @@ class EditRulesTest(unittest.TestCase):
             "non-JSON tool text": (lambda e: e[11].update(content="yusuf_rossi_9621"), "LOCKED STEP CHANGED"),
             "prose drops a digit": (lambda e: e[6].update(content="Several T-shirts are available."),
                                     "VALUE DROPPED"),
+            "prose turns 11 into 110": (lambda e: e[6].update(content="110 available"), "VALUE DROPPED"),
             "role": (lambda e: e[6].update(role="user"), "ROLE CHANGED"),
             "extra key": (lambda e: e[6].update(note="x"), "KEYS CHANGED"),
             "event removed": (lambda e: e.pop(), "ORDER/LENGTH"),
