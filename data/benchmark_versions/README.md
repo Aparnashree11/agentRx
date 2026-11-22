@@ -197,8 +197,14 @@ that the requested model actually answered. The
 `<<PLACEHOLDER>>` style. Its slots are the domain policy, the tool
 descriptions, the task instruction, the root failure, the other annotated
 failures, the numbered events, and the editable steps with the kinds each one
-allows. Prose edits are currently defined for Tau's chat layout; another domain
-needs its own mapping of which roles may be reworded.
+allows. Roles and text fields are read with step_decoy's helpers, and tool
+results are found by call-ID links, so any layout AgentRx reads works. Which
+roles may be reworded and which carry the policy are set per domain with
+`--prose-roles` and `--policy-roles`. Tau defaults to `assistant` and `system`.
+Another domain, such as Magentic-One, passes its own role names as they appear
+in its trajectories. Every other role's text stays locked. The prompt names
+these roles through its role slots, and the roles are locked in `config.json`
+and recorded in the manifest.
 
 ```bash
 base=data/benchmark_versions/tau_retail/baseline/v1.0.0
@@ -217,19 +223,26 @@ version, the cost, and hashes of this generator and of the shared step_decoy
 code. Each valid case also gets `events.json` and a `validation.json` that lists
 every change and the `events_sha256` the review must name.
 
-**Every case must be released.** Following [RELEASE_PLAN.md](../../RELEASE_PLAN.md),
-a presentation-change release contains all labeled trajectories (29 for Tau),
-each one generated, valid and accepted. Nothing is excluded. If a case is
-invalid, has no edit, or is rejected in review, regenerate it by rerunning the
-same command with `--regenerate <id>`. The previous attempt is kept under
-`_superseded/<id>/<n>/` and recorded in the audit.
+**Every case must be accounted for.** Following [RELEASE_PLAN.md](../../RELEASE_PLAN.md),
+a presentation-change release covers all labeled trajectories (29 for Tau).
+Each one must be generated, valid and accepted, unless it is excluded at the
+attempt cap (below). If a case is invalid, has no edit, or is rejected in
+review, regenerate it by rerunning the same command with `--regenerate <id>`.
+The previous attempt is kept under `_superseded/<id>/<n>/` and recorded in the
+audit.
 
 **Regeneration is capped.** Each case gets at most `--max-attempts` attempts,
 default 3: the first one plus two regenerations. The cap is locked in
 `config.json` and recorded in the manifest. Regenerating until a reviewer
-accepts would bias the release toward easy-to-accept edits. A case that reaches
-the cap without being accepted cannot be regenerated, so that model's
-transformation is not releasable. Report it as an outcome; don't raise the cap.
+accepts would bias the release toward easy-to-accept edits. A case that is
+still not releasable after the cap, because its final attempt is invalid, has no
+edit, was rejected, or fails the current checks, cannot be regenerated. Release
+then excludes it, as step-decoy releases left out task 31. The excluded case is
+left out of `trajectories/` and `ground_truth.json`. It is documented, with its
+reason, in the manifest's `excluded_ids` and `excluded` and in the audit, which
+also keeps every attempt. Report it as an outcome; don't raise the cap. Only
+stuck cases are excluded. A case with attempts left, a missing or stale review,
+or drift still blocks the release.
 
 Write the review sheet, then review **each case**:
 
@@ -274,21 +287,25 @@ Release refuses with one message listing every case that needs attention and the
 fix for each. It refuses in these cases:
 
 - the work directory does not cover every labeled trajectory;
-- a case is missing, invalid, or has no edit;
-- a review is missing, unsigned, stale or a rejection;
+- a case is missing;
+- a case with attempts left is invalid, has no edit or was rejected (at the cap
+  it is excluded instead);
+- a review is missing, unsigned or stale;
 - the inputs changed since generation;
 - a rebuilt case differs from its saved events;
 - the version already exists.
 
-`trajectories/` has the baseline's layout, with every record identical to the
-baseline except its `traj`. `ground_truth.json` is the baseline labels
+`trajectories/` has the baseline's layout and holds the accepted cases, each
+record identical to the baseline except its `traj`. `ground_truth.json` is the baseline labels
 unchanged, plus `original_step_number`, which always equals `step_number`; it
 is there only so the file has the same shape as a step-decoy release.
 `audit.json` records each case's proposal, generation metadata, attempt number,
-superseded attempts, review, applied changes and root failure. The manifest
-uses the step-decoy keys. It adds `helpers_sha256` (the shared code hash) and
-`regenerated` (attempts per regenerated case), and `total_cost_usd` includes
-superseded attempts.
+superseded attempts, review, applied changes and root failure, and, for an
+excluded case, its exclusion reason. The manifest uses the step-decoy keys, and
+`attempted_count` counts every case, excluded ones included. It adds
+`helpers_sha256` (the shared code hash), `regenerated` (attempts per
+regenerated case), and `excluded_ids` and `excluded` (each excluded case with
+its reason). `total_cost_usd` includes superseded attempts.
 
 To measure verdict changes, use clean and variant reports from the same judge
 configuration, each containing a single decision per case:
