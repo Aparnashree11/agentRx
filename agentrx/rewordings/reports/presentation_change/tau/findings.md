@@ -1,6 +1,6 @@
 # Presentation-change generation: Haiku vs Sonnet vs Opus on Tau Retail
 
-**Date:** 2026-11-22 · **Status:** reviewed. Every case in every model's release has a signed accept review (reviewer Uzma Fatima). Haiku and Opus are released as `v0.1.0`; Sonnet is not released yet. No AgentRx results yet.
+**Date:** 2026-11-22 · **Status:** reviewed. Every case in every model's release has a signed accept review (reviewer Uzma Fatima). All three are released as `v0.1.0`: Haiku and Opus with 29/29 cases, and Sonnet with 28/29 (case 28 excluded). No AgentRx results yet.
 
 ## Setup
 
@@ -26,7 +26,7 @@ Each model was sampled once per trajectory, with no seed control.
 | Edits in final cases (formatting / wording / emphasis) | 84 / 34 / 59 | 83 / 27 / 34 | 131 / 67 / 48 |
 | Prose edits on annotated failure steps | 8 | 7 | 9 |
 | Cost, all attempts | $0.16 | $2.37 | $5.10 |
-| Release | [`haiku/v0.1.0`](../../../../../data/benchmark_versions/tau_retail/presentation_change/haiku/v0.1.0/manifest.json) | not released | [`opus/v0.1.0`](../../../../../data/benchmark_versions/tau_retail/presentation_change/opus/v0.1.0/manifest.json) |
+| Release | [`haiku/v0.1.0`](../../../../../data/benchmark_versions/tau_retail/presentation_change/haiku/v0.1.0/manifest.json) | [`sonnet/v0.1.0`](../../../../../data/benchmark_versions/tau_retail/presentation_change/sonnet/v0.1.0/manifest.json) | [`opus/v0.1.0`](../../../../../data/benchmark_versions/tau_retail/presentation_change/opus/v0.1.0/manifest.json) |
 
 ### Why cases were regenerated
 
@@ -48,6 +48,6 @@ Each model was sampled once per trajectory, with no seed control.
 ## Notes
 
 - The Haiku and Opus `v0.1.0` manifests predate exclusion support, so they have no `excluded_ids` field; neither excluded any case. Haiku's release holds case 72's second attempt.
-- The Sonnet release will carry `excluded_ids: ["28"]` with its reason, and all three attempts recorded in `audit.json`.
+- The Sonnet release carries `excluded_ids: ["28"]` with its reason, and all three attempts are recorded in its `audit.json`.
 - Haiku 72's first attempt was reviewed and accepted under the substring check. The whole-token check then invalidated it, and attempt 2 was reviewed again before release.
 - Numbers come from each work folder's `config.json`, `generation.json` and `validation.json`, and from the earlier attempts kept in `_superseded/`.
