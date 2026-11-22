@@ -154,6 +154,57 @@ def config_roles(config):
     return resolve_roles(config["domain"])
 
 
+ROLE_SLOTS = ("PROSE_MESSAGE", "TOOL_CALL_MESSAGE", "LOCKED_STEPS")
+
+
+def join(items, word):
+    """'a', 'a and b', 'a, b and c' (no serial comma, as in the template's own lists)."""
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + f" {word} " + items[-1]
+
+
+def a_message(roles_):
+    """'an assistant message', 'an Assistant or WebSurfer message'; 'a message' if none."""
+    names = sorted(roles_)
+    if not names:
+        return "a message"
+    joined = join(names, "or")
+    first = joined.lower()
+    article = "an" if first[:1] in "aeiou" and not first.startswith(("us", "uni")) else "a"
+    return f"{article} {joined} message"
+
+
+def role_slots(cases, roles):
+    """Prompt text that names this domain's roles, so the template says no role name
+    itself. Derived from the roles and the dataset only (both locked in config.json),
+    so it is the same for every case of a work directory. For Tau it reproduces the
+    earlier hand-written wording exactly ("an assistant message"; "system messages
+    (the policy), user messages and tool responses that are not JSON")."""
+    events = [e for c in cases.values() for e in c["events"]]
+    results = [e for c in cases.values() for n in tool_results(c["events"]) for e in [c["events"][n - 1]]]
+    seen = {role(e) for e in events}
+    # A role whose every event answers a tool call is described as "tool responses".
+    result_only = {r for r in seen if r in {role(e) for e in results}
+                   and sum(role(e) == r for e in events) == sum(role(e) == r for e in results)}
+    other = sorted(seen - set(roles["prose_roles"]) - set(roles["policy_roles"]) - result_only)
+    locked = [join(roles["policy_roles"], "and") + " messages (the policy)"] if roles["policy_roles"] else []
+    locked += [join(other, "and") + " messages"] if other else []
+    locked.append("tool responses that are not JSON")
+    return dict(PROSE_MESSAGE=a_message(roles["prose_roles"]),
+                TOOL_CALL_MESSAGE=a_message({role(e) for e in events if e.get("tool_calls")}),
+                LOCKED_STEPS=join(locked, "and"))
+
+
+def fill_role_slots(template, slots):
+    """First pass, once per work directory: fill only the role slots. The per-case slots
+    are left for step_decoy.render(), which then checks that none is missing."""
+    if any("<<" in v for v in slots.values()):
+        raise ValueError("Role names may not contain '<<'")  # would be re-filled by render()
+    if set(re.findall(r"<<([A-Z_]+)>>", template)) & set(ROLE_SLOTS) != set(ROLE_SLOTS):
+        raise ValueError(f"Prompt template must contain every role slot: {list(ROLE_SLOTS)}")
+    return re.sub(r"<<(%s)>>" % "|".join(ROLE_SLOTS), lambda m: slots[m.group(1)], template)
+
+
 def tool_results(events):
     """1-based steps of events that answer a tool call made earlier in the trajectory."""
     calls, found = set(), set()
@@ -460,7 +511,11 @@ def generate(args):
     model = MODELS[args.model]
     roles = resolve_roles(args.domain, args.prose_roles, args.policy_roles)
     policy, tools = domain_inputs(args.domain, args.policy)
-    prompt = TEMPLATE.read_text(encoding="utf-8")
+    # The role slots are filled here, once, and prompt_sha256 below hashes the result:
+    # the instructions the model actually reads for this domain and these roles. For Tau
+    # with the default roles this equals the earlier all-literal template byte for byte,
+    # so work directories locked before the slots existed keep the same prompt_sha256.
+    prompt = fill_role_slots(TEMPLATE.read_text(encoding="utf-8"), role_slots(cases, roles))
     # Everything that changes what the model sees, plus the variant so a step-decoy and
     # a presentation-change work directory can never be mixed up. The code hashes and
     # Claude Code version are recorded per case instead (as in step_decoy), so a code

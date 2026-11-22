@@ -290,6 +290,33 @@ class DomainGenericTest(unittest.TestCase):
         self.assertEqual(events[n - 1]["content"], "**" + text + "**")
         self.assertEqual(sum(a != b for a, b in zip(case["events"], events)), 1)
 
+    def test_prompt_role_slots(self):
+        template = pc.TEMPLATE.read_text(encoding="utf-8")
+        for name in ("assistant", "user messages", "system messages"):
+            self.assertNotIn(name, template)                 # the template names no role itself
+        slots = pc.role_slots(CASES, TAU_ROLES)
+        self.assertEqual(slots, dict(
+            PROSE_MESSAGE="an assistant message", TOOL_CALL_MESSAGE="an assistant message",
+            LOCKED_STEPS="system messages (the policy), user messages and tool responses that are not JSON"))
+        filled = pc.fill_role_slots(template, slots)
+        # Tau's filled prompt is the earlier hand-written one, so prompt_sha256 is unchanged.
+        self.assertIn("Paraphrase the natural-language content of an assistant message.", filled)
+        self.assertIn("the arguments of the tool calls an assistant message makes.", filled)
+        self.assertTrue(pc.digest((pc.SYSTEM + "\n" + filled).encode()).startswith("5fd8b3fb1768"))
+        _, cases, _, _ = pc.load_dataset(MAGENTIC / "trajectories", MAGENTIC / "magentic_one_ground_truth.json")
+        slots = pc.role_slots(cases, pc.resolve_roles("magentic", ["Orchestrator (thought)", "Assistant"]))
+        self.assertEqual(slots["PROSE_MESSAGE"], "an Assistant or Orchestrator (thought) message")
+        self.assertEqual(slots["TOOL_CALL_MESSAGE"], "a message")        # Magentic makes no tool calls
+        self.assertTrue(slots["LOCKED_STEPS"].startswith("ComputerTerminal, FileSurfer, "))
+        self.assertTrue(slots["LOCKED_STEPS"].endswith("WebSurfer and human messages and tool responses that are not JSON"))
+        self.assertEqual(pc.role_slots({"x": OTHER_LAYOUT}, OTHER_ROLES), dict(
+            PROSE_MESSAGE="an agent message", TOOL_CALL_MESSAGE="an agent message",
+            LOCKED_STEPS="planner messages (the policy), client messages and tool responses that are not JSON"))
+        with self.assertRaisesRegex(ValueError, "may not contain"):
+            pc.fill_role_slots(template, dict(slots, PROSE_MESSAGE="a <<POLICY>> message"))
+        with self.assertRaisesRegex(ValueError, "every role slot"):
+            pc.fill_role_slots(template.replace("<<LOCKED_STEPS>>", "x"), slots)
+
     def test_generate_locks_roles_in_config(self):
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"

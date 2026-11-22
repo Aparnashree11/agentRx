@@ -6,7 +6,7 @@ Read the domain policy, the tool or agent descriptions, the task instruction, th
 
 ## Edit Kinds:
 ### **wording**
-Paraphrase the natural-language content of an assistant message. text is the complete new content of that message.
+Paraphrase the natural-language content of <<PROSE_MESSAGE>>. text is the complete new content of that message.
 - Keep the meaning exactly: the same requests, claims, answers, questions, confirmations and mistakes, in the same order. Add no fact and drop none.
 - Keep every concrete value verbatim: IDs, order numbers, item and product IDs, names, emails, addresses, zip codes, prices, counts, dates and tool names. The generator rejects a paraphrase that loses any token containing a digit, so write "10", never "ten".
 - A message that is wrong must stay wrong in the same way. Do not correct, soften, hedge or explain a mistake, and do not make a correct message look doubtful.
@@ -15,19 +15,19 @@ Paraphrase the natural-language content of an assistant message. text is the com
   - Incident Management: "The alert fired at 14:02 because CPU stayed above 95%." -> "CPU remained above 95%, which triggered the alert at 14:02."
 
 ### **emphasis**
-Make parts of an assistant message more or less prominent with markdown only: **bold**, *italics*, a heading line starting with #, bullet markers "- ", or `code` marks. text is the complete new content of that message.
+Make parts of <<PROSE_MESSAGE>> more or less prominent with markdown only: **bold**, *italics*, a heading line starting with #, bullet markers "- ", or `code` marks. text is the complete new content of that message.
 - The words must stay exactly the same, in the same order. The generator removes the markdown you add and rejects the edit if the remaining text differs from the original beyond whitespace.
 - Emphasize or de-emphasize existing evidence; do not reorder it.
 - **The text MUST visibly differ from the original.** It must contain at least one markdown mark (bold, italics, heading, bullet or code) that is not already in the message. Returning the original text unchanged is a no-op and is rejected.
 
 ### **formatting**
-Change the layout of a JSON payload: the content of a tool response, or the arguments of the tool calls an assistant message makes. You do not write the new JSON; the generator re-serializes it with the layout and key_order you choose, so every key and value stays identical.
+Change the layout of a JSON payload: the content of a tool response, or the arguments of the tool calls <<TOOL_CALL_MESSAGE>> makes. You do not write the new JSON; the generator re-serializes it with the layout and key_order you choose, so every key and value stays identical.
 - layout: "compact" (no spaces), "spaced" (one space after , and :), or "indented" (two-space indentation).
 - key_order: "original", "sorted" or "reverse".
 - **The chosen layout and key_order MUST change the serialized JSON.** Look at how the payload is laid out now and do not pick the combination it already has: a payload that is already compact with keys in their original order is unchanged by "compact" + "original", and that edit is rejected. Change the layout, the key order, or both.
 
 ## Choosing Edits:
-- Only the steps listed under Editable Steps can be edited, and only with the kinds listed for each. Every other step, including system messages (the policy), user messages and tool responses that are not JSON, stays byte-for-byte identical.
+- Only the steps listed under Editable Steps can be edited, and only with the kinds listed for each. Every other step, including <<LOCKED_STEPS>>, stays byte-for-byte identical.
 - A step takes at most one wording or emphasis edit and at most one formatting edit.
 - Prefer a mix of kinds spread across the trajectory, including steps near the annotated failures, so that a judge relying on surface presentation would be affected.
 - An annotated failure step may take wording or emphasis, never formatting. Its failure must stay exactly as clear and as wrong as in the original.
