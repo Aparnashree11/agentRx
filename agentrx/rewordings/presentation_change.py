@@ -3,16 +3,22 @@
 A presentation change alters how a failed trajectory's evidence is shown, never
 what happened, so a robust root-cause judge should give the same verdict on the
 variant as on the original. Three kinds of edit are allowed:
-  - wording:    paraphrase an assistant message (same meaning, same values);
-  - emphasis:   add or remove markdown in an assistant message (same words);
+  - wording:    paraphrase a prose message (same meaning, same values);
+  - emphasis:   add or remove markdown in a prose message (same words);
   - formatting: re-lay-out a JSON tool response or tool-call arguments (same keys
                 and values; Python re-serializes, the model only picks the style).
+
+Like step_decoy, nothing is tied to one layout: roles are read with its role(),
+text with its content_key(), and tool results are found by call-ID links. Which
+roles count as prose and which carry the policy is set per domain (DEFAULT_ROLES,
+or --prose-roles / --policy-roles; Tau: assistant and system).
 
 This mirrors agentrx/rewordings/step_decoy.py: the model decides, Python edits.
 The model returns a small structured proposal (which step, which kind, the new
 text or layout); Python applies it only to the field that kind may touch, so tool
-names, call IDs, tool values and the policy cannot change. System messages, user
-messages and non-JSON tool responses are always locked, and an annotated failure
+names, call IDs, tool values and the policy cannot change. Policy messages, the text
+of every non-prose role (Tau: user turns) and non-JSON tool responses are always
+locked, and an annotated failure
 step takes wording or emphasis only. A second, independent check then compares
 the result with the original before anything is saved. Steps are 1-based event
 positions, as in the AgentRx baselines and the step-decoy releases. No IR conversion.
@@ -41,8 +47,9 @@ from agentrx.invariants.domain_registry import get_domain_config, list_domains
 from agentrx.judge.judge import convert_to_failure_case
 from agentrx.rewordings import step_decoy
 from agentrx.rewordings.step_decoy import (
-    DATASETS, MODELS, PROVIDER, ROOT, VERSIONS, claude_version, digest, domain_inputs, dump_source,
-    instruction, lines, load_dataset, read, render, root_failure, safe_name, stored, write)
+    CALL_ID_KEYS, DATASETS, MODELS, PROVIDER, ROOT, VERSIONS, claude_version, content_key, digest,
+    domain_inputs, dump_source, instruction, lines, load_dataset, read, render, role, root_failure,
+    safe_name, stored, write)
 
 # The prompt template, with <<PLACEHOLDER>> slots filled by step_decoy.render().
 TEMPLATE = ROOT / "agentrx/rewordings/presentation_change_prompt.txt"
@@ -63,11 +70,20 @@ REVIEW_FIELDS = ("reviewer", "reason", "events_sha256")
 # ---------- What the model may propose ----------
 
 KINDS = ("wording", "emphasis", "formatting")
-PROSE_KINDS = ("wording", "emphasis")  # replace an assistant message's text content
-# Roles whose prose may be reworded. User turns are locked (we never change what the
-# user asked). This is Tau's chat layout; other domains need their own mapping, and
-# until then their trajectories simply have no prose steps to edit.
-PROSE_ROLES = ("assistant",)
+PROSE_KINDS = ("wording", "emphasis")  # replace a prose message's text content
+# Roles are read with step_decoy.role() and text with step_decoy.content_key(), so any
+# layout AgentRx reads works. Which roles may be reworded (prose) and which carry the
+# policy is a per-domain choice, set with --prose-roles / --policy-roles and locked in
+# config.json. These are the defaults; a domain not listed must pass --prose-roles.
+# Every role that is neither prose nor a tool result is locked (Tau: user turns).
+# Magentic-One has no default on purpose: which of its agents' messages count as
+# rewordable prose (e.g. "Orchestrator (thought)") is a study decision, not a guess.
+DEFAULT_ROLES = {"tau": dict(prose_roles=["assistant"], policy_roles=["system"])}
+# A tool result is found from the data, not a role name: an event whose call-ID field
+# names a tool call made earlier in the trajectory (step_decoy's call-ID convention).
+# A bare "id" is left out because at the top level of an event it is usually the
+# event's own ID, not a link to a call.
+RESULT_ID_KEYS = tuple(k for k in CALL_ID_KEYS if k != "id")
 # How the generator re-serializes a JSON payload for a formatting edit.
 LAYOUTS = {
     "compact": dict(separators=(",", ":")),
@@ -117,14 +133,47 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, ensure_ascii=False)
 
 
-def payloads(event):
-    """(path, parsed value) for each JSON payload in an event: a tool response's
-    content, or the arguments of each tool call. A path is a tuple of keys/indices."""
+def resolve_roles(domain, prose_roles=None, policy_roles=None):
+    """The prose and policy roles for a domain: the flags if given, else DEFAULT_ROLES."""
+    default = DEFAULT_ROLES.get(domain, {})
+    prose = sorted(set(prose_roles or default.get("prose_roles") or []))
+    policy = sorted(set(default.get("policy_roles", []) if policy_roles is None else policy_roles))
+    if not prose:
+        raise ValueError(f"Domain {domain!r} has no default prose roles; pass --prose-roles "
+                         f"(the role names as they appear in its trajectories)")
+    if set(prose) & set(policy):
+        raise ValueError(f"A role cannot be both prose and policy: {sorted(set(prose) & set(policy))}")
+    return dict(prose_roles=prose, policy_roles=policy)
+
+
+def config_roles(config):
+    """The roles a work directory was generated with. Configs written before roles were
+    configurable lack the keys; only Tau was generated then, with today's defaults."""
+    if "prose_roles" in config:
+        return dict(prose_roles=config["prose_roles"], policy_roles=config["policy_roles"])
+    return resolve_roles(config["domain"])
+
+
+def tool_results(events):
+    """1-based steps of events that answer a tool call made earlier in the trajectory."""
+    calls, found = set(), set()
+    for n, event in enumerate(events, 1):
+        if any(isinstance(event.get(k), str) and event[k] in calls for k in RESULT_ID_KEYS):
+            found.add(n)
+        calls |= {c.get("id") for c in event.get("tool_calls") or [] if isinstance(c, dict)}
+    return found
+
+
+def payloads(event, is_result):
+    """(path, parsed value) for each JSON payload in an event: a tool result's content
+    (is_result: see tool_results), or the arguments of each tool call. A path is a
+    tuple of keys/indices."""
     found = []
-    if event.get("role") == "tool":
-        value = json_container(event.get("content"))
+    key = content_key(event)
+    if is_result and key:
+        value = json_container(event[key])
         if value is not None:
-            found.append((("content",), value))
+            found.append(((key,), value))
     for i, call in enumerate(event.get("tool_calls") or []):
         value = json_container((call.get("function") or {}).get("arguments"))
         if value is not None:
@@ -160,10 +209,10 @@ def serialize(value, layout, key_order):
     return json.dumps(reorder(value, key_order), ensure_ascii=False, **LAYOUTS[layout])
 
 
-def can_format(event):
+def can_format(event, is_result):
     """True if some layout/key_order would change at least one payload's text."""
     return any(serialize(value, layout, order) != get_path(event, path)
-               for path, value in payloads(event) for layout in LAYOUTS for order in KEY_ORDERS)
+               for path, value in payloads(event, is_result) for layout in LAYOUTS for order in KEY_ORDERS)
 
 
 # ---------- Prose rules (wording and emphasis) ----------
@@ -194,19 +243,21 @@ def failure_steps(label):
     return {f.get("step_number") for f in label.get("failures") or []}
 
 
-def editable_steps(case, label):
+def editable_steps(case, label, roles):
     """{step: [kinds]} for every step that may be edited; any step not returned is locked.
-    - prose (wording, emphasis): assistant messages with text content, including
+    - prose (wording, emphasis): events of a prose role with text content, including
       annotated failure steps;
     - formatting: events carrying a JSON payload some layout would change, except
       annotated failure steps.
-    System, user and non-JSON tool events never qualify."""
-    failing, allowed = failure_steps(label), {}
+    Policy-role events, other roles' text and non-JSON tool results never qualify."""
+    failing, allowed, results = failure_steps(label), {}, tool_results(case["events"])
     for n, event in enumerate(case["events"], 1):
-        kinds = []
-        if event.get("role") in PROSE_ROLES and isinstance(event.get("content"), str) and event["content"].strip():
+        if role(event) in roles["policy_roles"]:
+            continue
+        kinds, key = [], content_key(event)
+        if role(event) in roles["prose_roles"] and key and isinstance(event[key], str) and event[key].strip():
             kinds += PROSE_KINDS
-        if n not in failing and can_format(event):
+        if n not in failing and can_format(event, n in results):
             kinds.append("formatting")
         if kinds:
             allowed[n] = kinds
@@ -223,7 +274,7 @@ class PreservationError(ValueError):
         self.violations = violations
 
 
-def apply_edits(case, label, proposal):
+def apply_edits(case, label, proposal, roles):
     """Apply the proposed edits; return the edited events and a log of each change.
     Raises ValueError on any rule break (PreservationError if the re-check fails).
     Deterministic, so release can rebuild the same variant and refuse drift."""
@@ -234,7 +285,7 @@ def apply_edits(case, label, proposal):
     for key in ("rationale", "preservation_evidence"):
         if not isinstance(proposal.get(key), str) or not proposal[key].strip():
             raise ValueError(f"Missing {key}")
-    allowed = editable_steps(case, label)
+    allowed, results = editable_steps(case, label, roles), tool_results(events)
     edited, done, changes = deepcopy(events), set(), []
 
     for item in items:
@@ -255,7 +306,8 @@ def apply_edits(case, label, proposal):
         if kind in PROSE_KINDS:
             if "layout" in item or "key_order" in item:
                 raise ValueError(f"Step {step}: {kind} takes text, not layout or key_order")
-            old, new = event["content"], item.get("text")
+            key = content_key(event)  # the field this event's text lives in
+            old, new = event[key], item.get("text")
             if not isinstance(new, str) or not new.strip() or new == old:
                 raise ValueError(f"Step {step}: {kind} needs new text that differs from the original")
             if kind == "wording":
@@ -264,8 +316,8 @@ def apply_edits(case, label, proposal):
                     raise ValueError(f"Step {step}: wording drops values {lost}")
             elif plain(new) != plain(old):
                 raise ValueError(f"Step {step}: emphasis changed the words, not just the markdown")
-            event["content"] = new
-            changes.append(dict(step=step, kind=kind, fields=["content"], before=old, after=new,
+            event[key] = new
+            changes.append(dict(step=step, kind=kind, fields=[key], before=old, after=new,
                                 reason=item["reason"]))
         else:
             if "text" in item:
@@ -274,7 +326,7 @@ def apply_edits(case, label, proposal):
             if layout not in LAYOUTS or order not in KEY_ORDERS:
                 raise ValueError(f"Step {step}: formatting needs a layout and a key_order")
             fields = []
-            for path, value in payloads(event):
+            for path, value in payloads(event, step in results):
                 new = serialize(value, layout, order)
                 if new != get_path(event, path):
                     set_path(event, path, new)
@@ -286,30 +338,32 @@ def apply_edits(case, label, proposal):
 
     # Second line of defence: re-check the result against the original, independently
     # of the code above, so a bug there cannot slip a real change into a release.
-    violations = check_preserved(events, edited, {s for s, _ in done})
+    violations = check_preserved(events, edited, {s for s, _ in done}, roles)
     if violations:
         raise PreservationError(violations)
     return edited, sorted(changes, key=lambda c: (c["step"], c["kind"]))
 
 
-def check_preserved(original, edited, edited_steps):
+def check_preserved(original, edited, edited_steps, roles):
     """Every way the edited events may differ from the original, as violations.
     Ported from the old parse_and_validate: same events, order and roles; the policy
     byte-identical; tool names, call IDs and JSON values unchanged. Added here: steps
-    that were not edited must be identical; user and non-JSON tool content is locked;
-    prose keeps every digit token; values compare strictly (1, 1.0, true differ)."""
+    that were not edited must be identical; text of non-prose roles and non-JSON tool
+    results is locked; prose keeps every digit token; values compare strictly (1, 1.0,
+    true differ). Roles, text fields and tool results are found as in editable_steps,
+    but from the original events only, so an edit cannot relabel its way past a check."""
     if len(original) != len(edited):
         return [f"[ORDER/LENGTH] event count changed: {len(original)} -> {len(edited)}"]
-    violations = []
+    violations, results = [], tool_results(original)
     for n, (o, e) in enumerate(zip(original, edited), 1):
         if o == e:
             continue
-        role = o.get("role")
-        if role != e.get("role"):
-            violations.append(f"[ROLE CHANGED] step {n}: {role!r} -> {e.get('role')!r}")
+        who = role(o)
+        if who != role(e):
+            violations.append(f"[ROLE CHANGED] step {n}: {who!r} -> {role(e)!r}")
             continue
-        if role == "system":
-            violations.append(f"[POLICY CHANGED] step {n}: the system/policy message must stay byte-for-byte identical")
+        if who in roles["policy_roles"]:
+            violations.append(f"[POLICY CHANGED] step {n}: the {who}/policy message must stay byte-for-byte identical")
             continue
         if n not in edited_steps:
             violations.append(f"[LOCKED STEP CHANGED] step {n} was not edited but differs")
@@ -317,14 +371,15 @@ def check_preserved(original, edited, edited_steps):
         if set(o) != set(e):
             violations.append(f"[KEYS CHANGED] step {n}: {sorted(set(o) ^ set(e))}")
             continue
+        text = content_key(o)
         for key in o:
             if o[key] == e[key]:
                 continue
-            if key == "content" and role in PROSE_ROLES and isinstance(e[key], str):
+            if key == text and who in roles["prose_roles"] and isinstance(e[key], str):
                 lost = sorted(t for t in digit_tokens(o[key] or "") if t not in e[key])
                 if lost:
                     violations.append(f"[VALUE DROPPED] step {n}: prose lost {lost}")
-            elif key == "content" and role == "tool":
+            elif key == text and n in results:
                 before, after = json_container(o[key]), json_container(e[key])
                 if before is None:
                     violations.append(f"[TOOL TEXT CHANGED] step {n}: non-JSON tool responses are locked")
@@ -401,6 +456,7 @@ def generate(args):
     if type(args.max_attempts) is not int or args.max_attempts < 1:
         raise ValueError("--max-attempts must be at least 1")
     model = MODELS[args.model]
+    roles = resolve_roles(args.domain, args.prose_roles, args.policy_roles)
     policy, tools = domain_inputs(args.domain, args.policy)
     prompt = TEMPLATE.read_text(encoding="utf-8")
     # Everything that changes what the model sees, plus the variant so a step-decoy and
@@ -414,10 +470,11 @@ def generate(args):
                     policy_sha256=digest(policy.encode()), prompt_sha256=digest((SYSTEM + "\n" + prompt).encode()),
                     tools_sha256=digest(json.dumps(tools, sort_keys=True).encode()),
                     output_schema_sha256=digest(json.dumps(SCHEMA, sort_keys=True).encode()),
-                    max_attempts=args.max_attempts, ids=ids)
+                    max_attempts=args.max_attempts, ids=ids, **roles)
     args.work.mkdir(parents=True, exist_ok=True)
     config = args.work / "config.json"
-    if config.exists() and read(config) != settings:
+    # config_roles fills in the roles of a config written before they were recorded.
+    if config.exists() and {**read(config), **config_roles(read(config))} != settings:
         raise ValueError("Work directory belongs to a different configuration. Choose a fresh --work.")
     if not config.exists():
         write(config, settings)
@@ -449,7 +506,7 @@ def generate(args):
             root = root_failure(label)  # the label's root_cause, not simply failures[0]
         except (KeyError, StopIteration):
             root = None
-        allowed = editable_steps(case, label)
+        allowed = editable_steps(case, label, roles)
         generation = None
         if root is None:
             proposal = {"decision": "NO_VALID_EDIT", "reason": "The label has no root-cause failure"}
@@ -461,7 +518,7 @@ def generate(args):
                              ROOT_FAILURE=root,
                              OTHER_FAILURES=lines(f for f in label["failures"] if f is not root),
                              TRAJECTORY=lines({"step": n, "event": e} for n, e in enumerate(case["events"], 1)),
-                             EDITABLE_STEPS=lines({"step": n, "role": case["events"][n - 1].get("role"), "kinds": k}
+                             EDITABLE_STEPS=lines({"step": n, "role": role(case["events"][n - 1]), "kinds": k}
                                                   for n, k in allowed.items()))
             version = version or claude_version(args.claude_bin)
             try:
@@ -481,7 +538,7 @@ def generate(args):
             write(staging / "proposal.json", proposal)
             if proposal.get("decision") == "EDIT":
                 try:
-                    events, changes = apply_edits(case, label, proposal)
+                    events, changes = apply_edits(case, label, proposal, roles)
                 except ValueError as exc:
                     # Keep the model's output for review instead of failing the batch.
                     write(staging / "invalid.json", {"error": str(exc),
@@ -551,7 +608,7 @@ def release(args):
     if set(config["ids"]) != set(labeled):
         raise ValueError(f"A release needs every labeled trajectory: this work directory covers "
                          f"{len(config['ids'])} of {len(labeled)}. Generate the full set in a fresh --work.")
-    reviews = read(args.reviews)
+    reviews, roles = read(args.reviews), config_roles(config)
     cap = config["max_attempts"]
     problems, replaced, truth, audit = [], {}, [], {}
     for tid in config["ids"]:
@@ -596,7 +653,7 @@ def release(args):
             continue
         # Rebuild from the proposal with the current code and refuse any drift.
         try:
-            events, changes = apply_edits(cases[tid], labels[tid], p)
+            events, changes = apply_edits(cases[tid], labels[tid], p, roles)
         except ValueError as exc:
             problems.append(f"{tid}: no longer valid under the current code ({exc}); {regen}")
             continue
@@ -640,7 +697,7 @@ def release(args):
         write(staging / "manifest.json", dict(
             domain=config["domain"], variant=VARIANT, version=args.version,
             parent=dict(trajectories=config["trajectories"], ground_truth=config["ground_truth"], sha256=hashes),
-            generator=config, artifact_sha256=artifacts,
+            generator={**config, **roles}, artifact_sha256=artifacts,
             generator_sha256=sorted({r["generator_sha256"] for r in runs}),
             helpers_sha256=sorted({r["helpers_sha256"] for r in runs}),
             claude_versions=sorted({r["claude_version"] for r in runs}),
@@ -797,11 +854,11 @@ def review_sheet(args):
         out.append(f"**Preservation evidence (model's claim):** {proposal['preservation_evidence']}")
         out += ["", "| Step | Kind | Change | Checks |", "|---|---|---|---|"]
         for c in validation["changes_applied"]:
-            role = events[c["step"] - 1].get("role")
+            who = role(events[c["step"] - 1])
             if c["kind"] == "formatting":
                 change = f"{', '.join(c['fields'])} re-laid out (layout `{c['layout']}`, key order `{c['key_order']}`)"
             else:
-                change = f"{role} message {'paraphrased' if c['kind'] == 'wording' else 'markdown only'} (below)"
+                change = f"{who} message {'paraphrased' if c['kind'] == 'wording' else 'markdown only'} (below)"
             flag = (" ⚠ **root failure step**" if root and c["step"] == root["step_number"]
                     else " ⚠ **annotated failure step**" if c["step"] in failing else "")
             out.append(f"| {c['step']} | {c['kind']} | {cell(change)} | passed{flag} |")
@@ -856,6 +913,12 @@ def main():
                      help="Trajectory file or folder in any layout AgentRx reads")
     gen.add_argument("--ground-truth", type=Path, required=True, help="Labels with root_cause and failures")
     gen.add_argument("--policy", help="Policy file (default: the domain's policy)")
+    gen.add_argument("--prose-roles", nargs="+", metavar="ROLE",
+                     help="Roles whose messages may be reworded, as they appear in the trajectories "
+                          "(default for tau: assistant; required for other domains); locked in config.json")
+    gen.add_argument("--policy-roles", nargs="*", metavar="ROLE",
+                     help="Roles that carry the policy and stay byte-identical "
+                          "(default for tau: system; none otherwise); locked in config.json")
     gen.add_argument("--work", type=Path, required=True)
     gen.add_argument("--ids", nargs="+", help="Trajectory IDs (default: every labeled trajectory)")
     gen.add_argument("--model", required=True, choices=MODELS,

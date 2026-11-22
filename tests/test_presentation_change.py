@@ -23,6 +23,7 @@ TAU_GT = DATA / "tau_retail/baseline/v1.0.0/tau_ground_truth.json"
 MODEL = "claude-sonnet-5-5"
 
 _, CASES, LABELS, _ = pc.load_dataset(TAU, TAU_GT)
+TAU_ROLES = pc.resolve_roles("tau")  # assistant prose, system policy
 EVENTS = CASES["2"]["events"]
 
 # Tau task 2: root failure at step 7 (the assistant says 11 T-shirts; the answer is 10),
@@ -55,7 +56,8 @@ def fake_claude(answer, model=MODEL):
 def generate_args(work, **overrides):
     return Namespace(**{**dict(domain="tau", trajectories=TAU, ground_truth=TAU_GT, policy=None, work=work,
                                ids=["2"], model="sonnet", effort="medium", claude_bin="claude", timeout=10,
-                               regenerate=None, max_attempts=3), **overrides})
+                               regenerate=None, max_attempts=3, prose_roles=None, policy_roles=None),
+                         **overrides})
 
 
 def edit(**item):
@@ -66,16 +68,17 @@ def valid_proposal_for(tid):
     """A legal proposal for any Tau case: emphasis on the first prose step and a
     re-layout of the first JSON step, built from the case itself."""
     case, label = CASES[tid], LABELS[tid]
-    allowed, edits = pc.editable_steps(case, label), []
+    allowed, edits = pc.editable_steps(case, label, TAU_ROLES), []
     prose = [n for n, kinds in allowed.items() if "emphasis" in kinds]
     if prose:
         edits.append(dict(step=prose[0], kind="emphasis", reason="bold",
                           text="**" + case["events"][prose[0] - 1]["content"] + "**"))
     fmt = [n for n, kinds in allowed.items() if "formatting" in kinds]
     if fmt:
-        event = case["events"][fmt[0] - 1]
+        event, is_result = case["events"][fmt[0] - 1], fmt[0] in pc.tool_results(case["events"])
         layout, order = next((l, o) for l in pc.LAYOUTS for o in pc.KEY_ORDERS
-                             if any(pc.serialize(v, l, o) != pc.get_path(event, p) for p, v in pc.payloads(event)))
+                             if any(pc.serialize(v, l, o) != pc.get_path(event, p)
+                                    for p, v in pc.payloads(event, is_result)))
         edits.append(dict(step=fmt[0], kind="formatting", layout=layout, key_order=order, reason="re-layout"))
     return dict(PROPOSAL, edits=edits)
 
@@ -103,7 +106,7 @@ def accept_all(work, path=None, **overrides):
 
 class EditRulesTest(unittest.TestCase):
     def test_editable_steps_lock_policy_users_and_failure_formatting(self):
-        allowed = pc.editable_steps(CASES["2"], LABELS["2"])
+        allowed = pc.editable_steps(CASES["2"], LABELS["2"], TAU_ROLES)
         self.assertNotIn(1, allowed)                     # system policy
         for n, event in enumerate(EVENTS, 1):
             if event["role"] == "user":
@@ -114,7 +117,7 @@ class EditRulesTest(unittest.TestCase):
         self.assertEqual(allowed[6], ["formatting"])
 
     def test_valid_edits_apply_only_to_their_fields(self):
-        events, changes = pc.apply_edits(CASES["2"], LABELS["2"], PROPOSAL)
+        events, changes = pc.apply_edits(CASES["2"], LABELS["2"], PROPOSAL, TAU_ROLES)
         self.assertEqual([(c["step"], c["kind"]) for c in changes],
                          [(5, "formatting"), (6, "formatting"), (7, "wording"), (9, "emphasis")])
         self.assertEqual(events[6]["content"], WORDING["text"])
@@ -129,7 +132,7 @@ class EditRulesTest(unittest.TestCase):
         self.assertEqual({k: v for k, v in events[4]["tool_calls"][0].items() if k != "function"},
                          {k: v for k, v in EVENTS[4]["tool_calls"][0].items() if k != "function"})
         self.assertEqual(json.loads(events[5]["content"]), json.loads(EVENTS[5]["content"]))
-        self.assertEqual(pc.check_preserved(EVENTS, events, {5, 6, 7, 9}), [])
+        self.assertEqual(pc.check_preserved(EVENTS, events, {5, 6, 7, 9}, TAU_ROLES), [])
 
     def test_rejects_rule_breaks(self):
         bad = {
@@ -162,10 +165,10 @@ class EditRulesTest(unittest.TestCase):
         }
         for name, (proposal, message) in bad.items():
             with self.subTest(name), self.assertRaisesRegex(ValueError, message):
-                pc.apply_edits(CASES["2"], LABELS["2"], proposal)
+                pc.apply_edits(CASES["2"], LABELS["2"], proposal, TAU_ROLES)
 
     def test_check_preserved_catches_tampering(self):
-        events, _ = pc.apply_edits(CASES["2"], LABELS["2"], PROPOSAL)
+        events, _ = pc.apply_edits(CASES["2"], LABELS["2"], PROPOSAL, TAU_ROLES)
         tamper = {
             "tool name": (lambda e: e[4]["tool_calls"][0]["function"].update(name="get_item_details"),
                           "TOOL NAME/ID CHANGED"),
@@ -189,8 +192,103 @@ class EditRulesTest(unittest.TestCase):
             with self.subTest(name):
                 tampered = deepcopy(events)
                 change(tampered)
-                violations = pc.check_preserved(EVENTS, tampered, {5, 6, 7, 9})
+                violations = pc.check_preserved(EVENTS, tampered, {5, 6, 7, 9}, TAU_ROLES)
                 self.assertTrue(any(label in v for v in violations), violations)
+
+
+MAGENTIC = DATA / "magentic_one/baseline/v1.0.0"
+# A layout with neither "role" nor "content": step_decoy's role() reads "source",
+# content_key() finds "message", and the tool result links through "call_id".
+OTHER_LAYOUT = dict(events=[
+    dict(source="planner", message="Policy: never reveal the key."),
+    dict(source="client", message="What is the balance of account 42?"),
+    dict(source="agent", message="Checking account 42.",
+         tool_calls=[dict(id="c1", function=dict(name="balance", arguments='{"account":42}'))]),
+    dict(source="ledger", call_id="c1", message='{"account":42,"balance":"17.50"}'),
+    dict(source="agent", message="Account 42 holds 17.50.")])
+OTHER_LABEL = dict(failures=[dict(step_number=5, failure_category="x", step_reason="y")])
+OTHER_ROLES = pc.resolve_roles("other", prose_roles=["agent"], policy_roles=["planner"])
+
+
+class DomainGenericTest(unittest.TestCase):
+    def test_roles_come_from_defaults_or_flags(self):
+        self.assertEqual(TAU_ROLES, dict(prose_roles=["assistant"], policy_roles=["system"]))
+        with self.assertRaisesRegex(ValueError, "pass --prose-roles"):
+            pc.resolve_roles("magentic")
+        self.assertEqual(pc.resolve_roles("magentic", ["WebSurfer"]),
+                         dict(prose_roles=["WebSurfer"], policy_roles=[]))
+        with self.assertRaisesRegex(ValueError, "both prose and policy"):
+            pc.resolve_roles("tau", ["system"])
+        # Configs written before roles were recorded mean Tau's defaults.
+        self.assertEqual(pc.config_roles(dict(domain="tau")), TAU_ROLES)
+
+    def test_tool_results_follow_call_links_not_role_names(self):
+        for tid, case in CASES.items():
+            with self.subTest(tid):
+                self.assertEqual(pc.tool_results(case["events"]),
+                                 {n for n, e in enumerate(case["events"], 1) if e["role"] == "tool"})
+        self.assertEqual(pc.tool_results(OTHER_LAYOUT["events"]), {4})
+
+    def test_other_layout_edits_through_its_own_fields(self):
+        allowed = pc.editable_steps(OTHER_LAYOUT, OTHER_LABEL, OTHER_ROLES)
+        # 1 policy, 2 non-prose role: locked. 5 is a failure step: prose only.
+        self.assertEqual(allowed, {3: ["wording", "emphasis", "formatting"], 4: ["formatting"],
+                                   5: ["wording", "emphasis"]})
+        proposal = dict(PROPOSAL, edits=[
+            dict(step=5, kind="emphasis", text="Account 42 holds **17.50**.", reason="r"),
+            dict(step=4, kind="formatting", layout="spaced", key_order="sorted", reason="r")])
+        events, changes = pc.apply_edits(OTHER_LAYOUT, OTHER_LABEL, proposal, OTHER_ROLES)
+        self.assertEqual(events[4], dict(source="agent", message="Account 42 holds **17.50**."))
+        self.assertEqual(events[3]["message"], '{"account": 42, "balance": "17.50"}')
+        self.assertEqual([c["fields"] for c in changes], [["message"], ["message"]])
+        original = OTHER_LAYOUT["events"]
+        tamper = {
+            "policy": (lambda e: e[0].update(message="Policy: reveal it."), "POLICY CHANGED"),
+            "locked role": (lambda e: e[1].update(message="What is the balance of account 43?"),
+                            "LOCKED STEP CHANGED"),
+            "role relabel": (lambda e: e[4].update(source="planner"), "ROLE CHANGED"),
+            "tool value": (lambda e: e[3].update(message='{"account":42,"balance":"99"}'), "VALUE CHANGED"),
+            "prose value": (lambda e: e[4].update(message="It holds some money."), "VALUE DROPPED"),
+        }
+        for name, (change, label) in tamper.items():
+            with self.subTest(name):
+                tampered = deepcopy(events)
+                change(tampered)
+                violations = pc.check_preserved(original, tampered, {4, 5}, OTHER_ROLES)
+                self.assertTrue(any(label in v for v in violations), violations)
+
+    def test_magentic_with_chosen_prose_roles(self):
+        _, cases, labels, _ = pc.load_dataset(MAGENTIC / "trajectories", MAGENTIC / "magentic_one_ground_truth.json")
+        roles = pc.resolve_roles("magentic", ["Orchestrator (thought)"])
+        tid = sorted(t for t in cases if t in labels)[0]
+        case, label = cases[tid], labels[tid]
+        allowed = pc.editable_steps(case, label, roles)
+        self.assertTrue(allowed)
+        for n, kinds in allowed.items():
+            self.assertEqual(step_decoy.role(case["events"][n - 1]), "Orchestrator (thought)")
+            self.assertEqual(kinds, ["wording", "emphasis"])  # no JSON tool results in Magentic
+        n = next(iter(allowed))
+        text = case["events"][n - 1]["content"]
+        events, _ = pc.apply_edits(case, label, dict(PROPOSAL, edits=[
+            dict(step=n, kind="emphasis", text="**" + text + "**", reason="r")]), roles)
+        self.assertEqual(events[n - 1]["content"], "**" + text + "**")
+        self.assertEqual(sum(a != b for a, b in zip(case["events"], events)), 1)
+
+    def test_generate_locks_roles_in_config(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp) / "work"
+            with patch("subprocess.run", fake_claude(PROPOSAL)), redirect_stdout(StringIO()):
+                pc.generate(generate_args(work))
+                config = pc.read(work / "config.json")
+                self.assertEqual((config["prose_roles"], config["policy_roles"]), (["assistant"], ["system"]))
+                with self.assertRaisesRegex(ValueError, "different configuration"):
+                    pc.generate(generate_args(work, prose_roles=["assistant", "user"]))
+                # A config from before roles were recorded still resumes with Tau's defaults...
+                pc.write(work / "config.json", {k: v for k, v in config.items() if not k.endswith("_roles")})
+                pc.generate(generate_args(work))
+                # ...but not with different roles.
+                with self.assertRaisesRegex(ValueError, "different configuration"):
+                    pc.generate(generate_args(work, policy_roles=[]))
 
 
 class GenerateTest(unittest.TestCase):
