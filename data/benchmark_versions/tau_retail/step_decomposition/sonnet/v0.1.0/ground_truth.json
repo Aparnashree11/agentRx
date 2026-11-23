@@ -60,7 +60,7 @@
     "failures": [
       {
         "failure_id": 5,
-        "step_number": 16,
+        "step_number": 17,
         "step_reason": "At step 15, the assistant agent incorrectly counted the number of available t-shirts.",
         "failure_category": "Misinterpretation of Tool Output",
         "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
@@ -73,6 +73,52 @@
       "reason_for_root_cause": "The incorrect count does not correspond with ground truth output."
     },
     "failure_summary": "Assistant misinterpreted the tool output and incorrectly counted the number of available t-shirts."
+  },
+  {
+    "trajectory_id": 20,
+    "failures": [
+      {
+        "failure_id": 7,
+        "step_number": 22,
+        "step_reason": "At step 21, the assistant mistook two of the orders which were processed as delivered",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect understanding of the order statuses.",
+        "failed_agent": "Assistant",
+        "original_step_number": 21
+      },
+      {
+        "failure_id": 8,
+        "step_number": 43,
+        "step_reason": "At step 41, the assistant mistook the replacement item as available while it was actually out of stock.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect understanding of the item availability.",
+        "failed_agent": "Assistant",
+        "original_step_number": 41
+      },
+      {
+        "failure_id": 9,
+        "step_number": 51,
+        "step_reason": "At step 49, the assistant tried to exchange delivered items for a order that is in processed status which is invalid.",
+        "failure_category": "Invalid Invocation",
+        "category_reason": "The assistant called a tool with invalid arguments which led to an execution error.",
+        "failed_agent": "Assistant",
+        "original_step_number": 49
+      },
+      {
+        "failure_id": 10,
+        "step_number": 63,
+        "step_reason": "At step 61, the assistant again tried to exchange delivered items for a order that is in processed status which is invalid.",
+        "failure_category": "Invalid Invocation",
+        "category_reason": "The assistant called a tool with invalid arguments which led to an execution error.",
+        "failed_agent": "Assistant",
+        "original_step_number": 61
+      }
+    ],
+    "root_cause": {
+      "failure_id": 7,
+      "reason_for_root_cause": "The assistant did not recover from misinterpretation error, which led to subsequent failures in the trajectory."
+    },
+    "failure_summary": "Assistant mistook two of the orders that were processed as delivered."
   },
   {
     "trajectory_id": 21,
@@ -126,7 +172,7 @@
     "failures": [
       {
         "failure_id": 20,
-        "step_number": 17,
+        "step_number": 18,
         "step_reason": "At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
         "failure_category": "Intent Plan Misalignment",
         "category_reason": "The assistant wrongly reasons that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
@@ -145,7 +191,7 @@
     "failures": [
       {
         "failure_id": 23,
-        "step_number": 33,
+        "step_number": 34,
         "step_reason": "The user asked the assistant to return the air purifier, smart watch, and coffee maker while it should have also asked it to return the water bottle from the order according to the task instruction.",
         "failure_category": "Underspecified User Intent",
         "category_reason": "The user agent only partially specified the items to be returned contrary to the task instruction which asks the user agent to return all the items.",

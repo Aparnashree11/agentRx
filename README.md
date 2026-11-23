@@ -19,24 +19,25 @@ Example from Tau task 2, where the agent miscounts available T-shirts at step 7:
 6   tool       {"name":"T-Shirt","variants":{...}}                 ← unchanged
 7   assistant  "Let me go through the T-shirt variants..."         ← smaller step 1
 8   assistant  "Currently, there are 11 available T-shirt options" ← smaller step 2  (root failure, was step 7)
-9   user       "Got it, thank you! ..."                            ← unchanged
+9   assistant  "Each option varies by color, size, material..."    ← smaller step 3
+10  user       "Got it, thank you! ..."                            ← unchanged
 ```
 
 The generator is domain-general. `--domain` selects the policy and tool descriptions as in `run.py`, the input can be any trajectory layout AgentRx reads, and the model proposes only the text of the smaller steps; Python replaces the step, keeps the actor, and renumbers. It does not use AgentRx's IR converter.
 
-A step that cannot be split without changing the failure is **declined** (`NO_VALID_DECOMPOSITION`). In Tau that is almost always an atomic tool call — a single `cancel_pending_order` or `calculate` whose mistake *is* the call — which cannot be spread across messages without inventing a step.
+A step whose only content is a tool call — a silent `cancel_pending_order` or `calculate` whose mistake *is* the call — cannot be split without inventing a narration the agent never spoke, so those are **rejected in review** rather than released. In Tau, 12 of the 29 root steps are such silent calls. (The generator can still decline a step with `NO_VALID_DECOMPOSITION`; with the current prompt none of the 29 were declined.)
 
 ---
 
 ## What was generated
 
-All three runs used medium effort, one Claude Code call per trajectory, and the same prompt and generator code. Step decomposition applies to **text** root causes (an assistant's claim, a user's request); tool-call root steps are declined.
+All three runs used medium effort, one Claude Code call per trajectory, and the same prompt and generator code. With a prompt that states plainly that splitting one turn produces consecutive same-actor messages, **every model proposes a split for all 29 trajectories**; review keeps the ones whose root step is the agent's own text and rejects the 12 silent tool-call steps, where the narration would be fabricated.
 
-| Generator | Release | Accepted | Left out (declined / invalid / rejected) | Avg. smaller steps | Avg. steps added | Cost |
+| Generator | Release | Accepted | Rejected | Avg. smaller steps | Avg. steps added | Cost |
 |---|---|---|---|---|---|---|
-| Haiku 5.5 | [`haiku/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/haiku/v0.1.0/manifest.json) | 13 | 16 (13 / 2 / 1) | 2.6 | 1.6 | $0.17 |
-| Sonnet 5.5 | [`sonnet/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0/manifest.json) | 14 | 15 (13 / 1 / 1) | 2.2 | 1.2 | $2.15 |
-| Opus 5.5 | [`opus/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/opus/v0.1.0/manifest.json) | 4 | 25 (25 / 0 / 0) | 2.5 | 1.5 | $4.37 |
+| Haiku 5.5 | [`haiku/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/haiku/v0.1.0/manifest.json) | 16 | 13 | 2.8 | 1.8 | $0.16 |
+| Sonnet 5.5 | [`sonnet/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0/manifest.json) | 15 | 14 | 2.6 | 1.6 | $2.21 |
+| Opus 5.5 | [`opus/v0.1.0`](data/benchmark_versions/tau_retail/step_decomposition/opus/v0.1.0/manifest.json) | 15 | 14 | 2.2 | 1.2 | $4.49 |
 
 The [findings report](agentrx/rewordings/reports/step_decomposition/tau/findings.md) compares the three generators: what each decomposed and declined, where they agreed, the errors each made, and cost.
 
@@ -177,11 +178,12 @@ Run the tests with `python -m pytest tests/test_step_decomposition.py`.
 
 ## Caveats
 
-- **Decomposition only applies to text steps.** A tool-call root cause (a single `cancel_pending_order`, `calculate`, `exchange_delivered_order_items`) is declined, because splitting it would mean inventing an extra message or call. That is why the accept counts are well under 29.
-- **The models differ in how conservative they are.** Haiku and Sonnet split both assistant and user text turns; Opus declined all user turns and most assistant text, accepting only 4. Treat the generator choice as a variable, not a detail.
+- **Every accepted trajectory now has two messages in a row from the same actor** (assistant then assistant, or user then user), which never happens in the original Tau data. This is inherent to splitting one turn, and the generator only enforces the dataset's role transitions at the outer boundaries of a split. A judge could in principle pick up on the unseen repetition; it is deliberately allowed here, unlike in the step-decoy variant, which rejects any sequence not seen in the data.
+- **Silent tool-call steps are rejected, not released.** A root cause that is a bare `cancel_pending_order`, `calculate` or `exchange_delivered_order_items` with no agent text can only be "split" by inventing narration, so review rejects all 12 such steps. That is why the accept counts are about 15–16, not 29.
+- **The generator model is a small lever here, once the prompt is clear.** An earlier prompt wording made Opus refuse most splits (it accepted only 4), which looked like model conservatism; with the prompt fixed, all three decompose all 29 and accept nearly the same set (Sonnet and Opus accept the identical 15; Haiku adds task 59). Do not read the earlier "Opus is conservative" result as a model property.
 - **Tasks 2, 3 and 4 are related** — same user, same T-shirt miscount — so their decompositions look alike. Treat them as one group when computing rates.
 - **One sample per model.** Each trajectory was generated once per model, without seed control.
-- **How the reviews were done.** A reviewer confirmed each accepted case keeps the same actor and the same unfixed mistake. An automatic numeric-token check flags cases for a closer look; it over-flags Tau order IDs (the digits are glued to a `W` prefix), and those were checked by hand.
+- **How the reviews were done.** A reviewer read every candidate and confirmed each accepted case keeps the same actor and the same unfixed mistake and invents nothing. Rejections are fabrications or lost mistakes: the 12 silent tool calls, task 80 (the `###STOP` failure marker is dropped), and task 59 for Sonnet and Opus (an invented "5 days" rationale). Per-case decisions and reasons are in each release's `audit.json` and in [the review sheets](agentrx/rewordings/reports/step_decomposition/tau/review_sheets/).
 
 ---
 
@@ -192,7 +194,7 @@ AgentRx is by Microsoft Research ([paper](https://arxiv.org/abs/2602.02475), [da
 ```bibtex
 @article{barke2026agentrx,
   title={AgentRx: Diagnosing AI Agent Failures from Execution Trajectories},
-  author={Barke, Shraddha and others},
+  author={Barke, Shraddha and Goyal, Arnav and Khare, Alind and Singh, Avaljot and Nath, Suman and Bansal, Chetan},
   journal={arXiv preprint arXiv:2602.02475},
   year={2026}
 }

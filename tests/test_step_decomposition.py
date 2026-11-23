@@ -152,6 +152,32 @@ class TauDecompositionTest(unittest.TestCase):
             self.assertIn("1-based positions", decomp.read(work / "4/invalid.json")["error"])
             self.assertFalse((work / "4/events.json").exists())
 
+    def test_tool_call_root_keeps_the_call_on_the_last_smaller_step(self):
+        """A root step that makes a tool call must split with the call on the LAST
+        smaller step: the tool result that followed the step has to stay right after
+        the call, since an "assistant text -> tool result" sequence never occurs in Tau.
+        (Task 20's root at step 21 is an assistant message that makes a get_product_details
+        call; its result is the next event.)"""
+        case, label, allowed = tau_case("20")
+        root = decomp.root_failure(label)["step_number"]
+        original = case["events"][root - 1]
+        self.assertTrue(original.get("tool_calls") or original.get("function_call"))  # tool-call root
+        following = decomp.signature(case["events"][root])  # the tool result after it
+        proposal = dict(
+            PROPOSAL,
+            substeps=[{"content": "Here is how I'll handle the upgrades you asked for."},
+                      {"content": "These two delivered orders can be exchanged for pricier versions."},
+                      {"content": "Let me pull up the most expensive option for the first product."}],
+            error_substeps=[2])
+        events, mapped, mapping, record = decomp.materialize(case, label, proposal, allowed)
+        block = events[root - 1:root - 1 + len(proposal["substeps"])]
+        has_call = lambda e: bool(e.get("tool_calls") or e.get("function_call"))
+        self.assertFalse(any(has_call(e) for e in block[:-1]))       # no call on the lead-in steps
+        self.assertEqual(block[-1].get("tool_calls"), original.get("tool_calls"))  # call rides the last step
+        self.assertTrue(has_call(block[-1]))
+        self.assertEqual(decomp.signature(events[root - 1 + len(block)]), following)  # result still follows the call
+        self.assertEqual(decomp.role(block[0]), decomp.role(original))  # same actor throughout
+
     def test_materialize_rejects_bad_decompositions(self):
         case, label, allowed = tau_case()
         bad = {

@@ -28,7 +28,7 @@
     },
     "policy": "data/policies/retail_policy.txt",
     "policy_sha256": "55e04468c37e5396dd4f97f63f4bc2d169a43c115ebc0fd72cb0bb0fa5e05fc8",
-    "prompt_sha256": "f7ee807cba6f92ed89e893bcf21834ead00d00c863b68ff161538f2c6a537cc6",
+    "prompt_sha256": "3a40fcfac8fe5c68151121cf76d8862eadd9b1cb95acd253081cdf28f36f9b2f",
     "tools_sha256": "bd4aef2a8f317e9601edf3edb4fcc464a88913813d9e4d4bd22f77692d9f47cc",
     "output_schema_sha256": "03d22a1cc3aac8ae853bbad76323de333ea36f2632df8278fa5a4ba787153126",
     "ids": [
@@ -64,21 +64,32 @@
     ]
   },
   "artifact_sha256": {
-    "audit.json": "5a2c1f8fac6eaa80cb443a55380f3c93126bc83b67e5866f7968807b31c93634",
-    "ground_truth.json": "0b9350ee77fbd10d9ae6d8d43c9223a21ee3d7dc5a71518555611098895753ad",
-    "trajectories/tau_dataset_failed.json": "81c6025826891a9aec200293fd34315b51090b061a7b4f421aa55b34a2963ca2"
+    "audit.json": "abe05fe17b96645c83eb41fd427fb4000009f2f3c68709efa7dfbfa8a43b8820",
+    "ground_truth.json": "434c6bbde5aef52edf0384f123a156acc495ab7905039a891350eadace3319d7",
+    "trajectories/tau_dataset_failed.json": "e019e134b2e23965f8d1f77d3ae2e74a44bb67587783425a867a1a170a5923ed"
   },
   "generator_sha256": [
-    "31a4546e4b631d2b02b98d1cc0c99825d5990f1380b63bb4a49cb0bee96d4dfb"
+    "1216f90aef68d27f34a880f479d632f95b70ac9800dbbe7c3a43388ec503b12f"
   ],
   "claude_versions": [
     "2.1.318 (Claude Code)"
   ],
-  "total_cost_usd": 4.366475,
+  "total_cost_usd": 4.488456,
   "accepted_ids": [
     "2",
     "3",
+    "4",
+    "20",
+    "21",
+    "32",
     "39",
+    "55",
+    "63",
+    "71",
+    "79",
+    "82",
+    "87",
+    "91",
     "104"
   ],
   "attempted_count": 29

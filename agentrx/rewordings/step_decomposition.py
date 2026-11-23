@@ -251,13 +251,16 @@ def materialize(case, label, proposal, allowed):
     rkey = role_key(root_event)
     if rkey is None:
         raise ValueError("Root step has no recognizable actor field")
-    # Clone the root step for each smaller step; keep any action (tool_calls) on the
-    # first only, so one step still performs it and the rest are the same actor's text.
+    # Clone the root step for each smaller step. Any action (a tool call) stays on the
+    # LAST smaller step, not the first: the tool result that followed the original step
+    # must come right after the call, and an "assistant text -> tool result" sequence
+    # never occurs in the data. The earlier smaller steps are the same actor's text
+    # leading up to the call, so one step still performs it.
     new_events = []
     for i, s in enumerate(subs):
         ev = deepcopy(root_event)
         ev[ckey] = s["content"].strip()
-        if i != 0:
+        if i != k - 1:
             ev.pop("tool_calls", None)
             ev.pop("function_call", None)
         new_events.append(ev)

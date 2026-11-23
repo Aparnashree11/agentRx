@@ -2,76 +2,146 @@
   "2": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 7, the agent did not correctly count the number of available t-shirts from the tool call result."
   },
   "3": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 7, the agent did not correctly count the number of available t-shirts from the tool call result."
   },
   "4": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean same-actor split; the wrong count of 11 is preserved verbatim in the marked step and the lead-in is narration (the task's own retail example endorses this). Nothing before or after the step changed."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 15, the assistant agent incorrectly counted the number of available t-shirts."
+  },
+  "12": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "20": {
+    "decision": "accept",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 21, the assistant mistook two of the orders which were processed as delivered"
   },
   "21": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Verbatim two-way split of the user turn; the user still drops the shoe exchange and makes the underspecified request. No change before/after."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 28, the user agent insisted on exchange of an item in 'pending' status which is not valid according to domain policy, when assistant asked if it could instead modify (corresponds to the ground"
+  },
+  "28": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "31": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   },
   "32": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Same-actor split; the wrong tracking-number claim is preserved and the order it names (#W7449508) already appears in the trajectory context, so no new fact is introduced."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet."
+  },
+  "34": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "38": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   },
   "39": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Same-actor split; the unsupported 'can't fetch the address from order details' claim is preserved and the request to the user is unchanged."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to t"
+  },
+  "41": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "47": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   },
   "55": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: The user asked the assistant to return the air purifier, smart watch, and coffee maker while it should have also asked it to return the water bottle from the order according to the task instruction."
   },
   "59": {
     "decision": "reject",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Reject: the split inserts a rationale ('since you can't confirm the order will be processed within the next 5 days') that is not in the original user turn and mischaracterizes the annotated failure (the user wrongly assuming one order is older). That changes the step rather than reorganizing it."
+    "reason": "The first smaller step invents a rationale ('since you can't confirm the order will be processed within 5 days') that is absent from the user's original turn and misstates the annotated cause (the user wrongly assuming one order was older). This changes the step rather than splitting it."
   },
   "63": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: In step 32, the user agent asked the assistant to add an item to a pending order instead of replacing it with the cheaper item. This is because of unclear original task instruction."
   },
   "71": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions."
+  },
+  "72": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "74": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   },
   "79": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: The task instruction did not specify the color of the 1000ml bottle to be exchanged whether it was red or black. Because of this ambiguity, the user agent picked the black bottle whereas the ground tr"
+  },
+  "80": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The original user turn ends with the '###STOP' marker that carries the annotated failure (execution ended prematurely); every smaller-step split drops that marker, so the decomposition does not preserve the annotated mistake."
   },
   "82": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: At step 20, the user agent asked the assistant to the return the tablets from both the orders, however, it was supposed to ask to return all the items from a single order, hence, did not follow the ta"
   },
   "87": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Same-actor split; the false 'all updates completed' claim is preserved (moved to the marked step) with the address details unchanged. Numeric flag is the order-ID boundary false positive."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: The assistant agent should have modified all the three pending order addresses but it only modified the first two pending order addresses and claimed that it completed all the updates."
   },
   "91": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Clean split of the one user turn into same-actor messages; the deviating request is preserved in the marked step and no new facts are added. (Numeric flag is a false positive: the order ID is glued to its 'W' prefix, so the word-boundary check misses it.)"
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction."
+  },
+  "98": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
+  },
+  "99": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   },
   "104": {
     "decision": "accept",
     "reviewer": "Pranudeep Metuku",
-    "reason": "Same-actor split; step 1 only correctly identifies the cancelled order (already in context) and the false 'no tracking number' claim is preserved verbatim in the marked step."
+    "reason": "Faithful split of the actor's own words: the annotated mistake is preserved unchanged on the marked smaller step, the lead-in only restates context already in the trajectory, the actor is unchanged, and nothing before or after the step is altered. Annotated cause: The assistant mentioned to the user that the cancelled order #W1154986 did not have a tracking number. However, this is not true as in the tool output of get_order_details for order #W1154986, a track"
+  },
+  "105": {
+    "decision": "reject",
+    "reviewer": "Pranudeep Metuku",
+    "reason": "The annotated root step is a silent tool call with no text of the agent's own, so the smaller steps narrate an explanation the agent never produced. That fabricates content instead of reorganizing it; per the review policy, silent tool-call steps are not decomposed."
   }
 }
