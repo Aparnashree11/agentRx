@@ -1,60 +1,155 @@
-# AgentRx Release Plan v0
+# RELEASE_PLAN.md — Fooling the Flight Recorder
 
-**Status:** Draft research release plan. The thresholds below are proposed gates for this project, not previously measured results.
+**Team:** Uzma Fatima, Pranudeep Metuku, Aparna Shree Govindarajan · CS6170 AI Capstone, Fall 2026
+**Version:** v0 · November 24, 2026
+**Supersedes:** the earlier `RELEASE_PLAN.md` on `step-decoy` and `step-decomposition`, whose §3 gate ("require all 29 Tau cases per transformation") no rewording meets. The new gate is in Section 3.
 
-## 1. Serving pattern and model versions
+> Items in [brackets] must be filled or confirmed before commit.
 
-AgentRx is run as a local Python CLI (`python run.py`). It is not an AgentRx-hosted production service. The CLI runs the pipeline locally and calls a separately operated LLM provider through Copilot CLI, Azure OpenAI, or the internal TRAPI endpoint. Benchmark snapshots and run artifacts are stored as files; selected aggregate results may be published with the project.
+## Release candidate
 
-The baseline experiment compares judge-model diagnoses on the same frozen trajectory, IR, invariant, and checker inputs. Planned judge candidates are `gpt-6.1-sol`, `gpt-6-luna`, and a third model selected before the run is frozen. For every release run, record the provider, exact model/deployment and version, API version if applicable, Copilot CLI version and Fusion tier if used, endpoint, run date, and relevant decoding settings. Keep the generated invariant and checker artifacts fixed while changing only the judge model.
+**The rewording framework:** a single tool that takes failed agent trajectories in any layout AgentRx reads, produces three label-preserving rewordings, stores each as a versioned dataset release, re-judges each release with AgentRx, and writes a comparison report.
 
-The current Copilot setting `fusion` selects a provider-managed model and may not identify an immutable underlying model version. Such runs are exploratory unless the resolved model/version is recorded. Do not describe them as pinned-model results. Do not promote a release run if its model identity cannot be established. Only send benchmark traces to provider accounts whose data-use and retention terms permit this research.
-
-To isolate judge-model effects, generate IR, static invariants, dynamic invariants, and checker results once, then reuse those artifacts for each judge. The current CLI uses the configured endpoint across stages; create a separate run directory per judge and resume each from the judge stage so the pre-judge inputs stay fixed. Record hashes of those shared inputs in the experiment record.
-
-## 2. Pipeline stages, audience, retention, and expected cases
-
-The current baseline has **29 Tau Retail trajectories with 29 labels**. Magentic-One has **58 trajectories, of which 44 have labels**. Baseline runs use the full available trajectory set; labeled accuracy metrics use only cases with matching ground truth.
-
-| Stage | Output and who can see it | Expected cases / calls | Retention |
+| Rewording | Generator | What changes | Paired metric (`compare()`) |
 |---|---|---|---|
-| **IR** | Normalized trajectories in `trajectory_ir.json`. Project researchers see the files. Conversion is normally local; if the domain converter falls back to the LLM converter, the configured provider also receives the input trace. | 29 Tau or 58 Magentic-One trajectories per run. | Keep with the restricted run artifacts for 12 months after the final project report; retain the released source snapshot and manifest with the research release. |
-| **Static invariants** | Domain-level invariants. Researchers see prompts and results. The selected provider receives the policy, tool information, and sample trajectory used in the prompt. | Current runner generates one static-invariant set per input dataset, using its first trajectory as the sample. | Same as run artifacts; restrict prompt dumps to the project team. |
-| **Dynamic invariants** | Per-trajectory assertions. Researchers see prompts and results; the provider sees the trajectory context and static invariants included in each prompt. | 29 or 58 trajectories. Step-by-step mode calls once per step; one-shot calls once per trajectory. | Same as run artifacts; restrict prompt dumps to the project team. |
-| **Checker** | Violation and telemetry JSON. Python checks run locally. If NL checks are enabled, the configured provider also sees the evidence sent to that check. | All 29 or 58 trajectories. | Same as run artifacts. |
-| **Judge** | Root-cause step and failure category. Researchers see outputs; the judge provider receives the trajectory and checker context required by the selected prompt mode. | One result per trajectory per judge model: 29 Tau; up to 58 Magentic-One. Evaluate labeled accuracy on 29 Tau and 44 Magentic-One cases. | Same as run artifacts. Keep model identity and prompt/config metadata with every result. |
-| **Report** | Aggregate accuracy, localization, and model-agreement results for the project team, course reviewers, and research readers. Do not publish case-level traces or prompts unless their release is permitted. | Report every completed case and show the denominator for each metric. | Keep the final report and aggregate tables with the research release. |
+| Step decomposition | Claude Haiku 5.5 | The root-cause step is split into 2–4 smaller steps by the same actor | `decomposition_evasion_rate` |
+| Step decoy | Claude Sonnet 5.5 | Noise replays and failed-attempt red herrings are inserted before the root cause | `decoy_attraction_rate` |
+| Presentation change | Claude Opus 5.5 | Wording, emphasis or JSON layout changes; nothing moves | `verdict_flip_rate` |
 
-**Retention proposal:** restrict per-case prompts, traces, and intermediate outputs to the project team and retain them for 12 months after the final report. Then delete them unless a course, institutional, publication, or provider requirement calls for a different period. Keep version manifests, code revision, model/config metadata, and aggregate results with the released study. Provider-side retention is governed by the provider and must be checked separately.
+- **Commit:** the merge of `step-decomposition`, `presentation-change-v2` (which already contains `step-decoy`) and `baseline-results`, tagged `week11-release`. [Commit hash.] The tag must also contain the judge outputs behind every reported number, including the clean baseline run the rewordings were compared against. None of the three rewording branches contains judge outputs yet.
+- **Artifact:** there is no trained model file. The candidate is the framework code (`agentrx/rewordings/`) plus the frozen data releases under `data/benchmark_versions/`.
+- **Fallback:** the Week 8 baseline (Section 4).
+
+**Generator choice rule.** For each rewording, we choose the generator whose variants cause the largest drop in step accuracy (±2) against the baseline, counted in trajectories, and break ties by the lowest category accuracy (decoy: Sonnet 5/28 vs. Haiku 6/28; decomposition: Haiku 3/16 vs. Opus 3/15). The decomposition tie-break is decided by the denominator, not the count: both have 3 correct, and Haiku has one more accepted case (task 59, which Sonnet and Opus failed review on). This rule was written **after** the τ-bench results were seen. The choices rest on single runs and differences of 0–3 trajectories. They will be re-checked against the committed baseline (Section 3) before the Magentic-One stage.
+
+## 1. Serving pattern
+
+**Published as data.** The framework runs offline as a command-line tool, operated by the team. Its outputs are versioned datasets and reports, not a live service.
+
+**Pinned versions:**
+
+| Component | Pinned version |
+|---|---|
+| Judge | gpt-6.1-sol via the GitHub Copilot API, one-shot (`--dynamic-mode oneshot`), single judge, all-at-once. [Exact model version string as logged.] |
+| Generators | `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5` (full IDs, not aliases), medium effort, via Claude Code [2.1.327; confirm for all three]. The run is refused if `modelUsage` reports a different model. |
+| AgentRx | [upstream commit used] |
+| Baseline data | `data/benchmark_versions/tau_retail/baseline/v1.0.0/`, pinned by SHA-256 |
+| Releases | `data/benchmark_versions/tau_retail/<rewording>/<model>/v0.1.0/`, each with a manifest of SHA-256 values, generator code hash, prompt hash and cost |
+
+Generator calls run isolated: `--safe-mode --tools "" --strict-mcp-config --disable-slash-commands --no-session-persistence`, an empty working directory, and structured JSON output.
+
+## 2. Stages
+
+| Stage | Who sees the outputs | How long | Expected cases |
+|---|---|---|---|
+| **0. τ-bench, team only** (generation and review done; gate in Section 3 not yet met) | The three of us | Until Nov 30 | 29 trajectories × 3 rewordings. Released: decomposition 16, decoy 28, presentation change 29 |
+| **0a. Results presentation** (Nov 24) | Instructor and class | One session | Aggregate τ-bench rates from single runs, labeled preliminary. No trajectories, prompts or generator code. [Team to confirm this is covered by the same NDA reading as the showcase.] |
+| **1. Magentic-One, team only** | The three of us | Dec 1 to Dec 3 | Up to 44 labeled traces per rewording (38 were scored at baseline). Decomposition will likely accept about half. Paired cases are limited to traces the clean run gets right. |
+| **2. Disclosure** | AgentRx maintainers at Microsoft Research, with instructor approval | From Dec 3, 2026, for 90 days | Aggregate report, plus gated access to variants on request |
+| **3. Class showcase** | Instructor and class | Dec 8 | Aggregate rates only. No trajectories, prompts or generator code. [Team to confirm the showcase is not "publication" under the NDA.] |
+| **4. Public write-up** | Anyone | No earlier than about March 3, 2027 | Aggregate findings only |
+
+Generator prompts, reworded trajectories and judge outputs on reworded data stay inside the team at every stage, except for gated maintainer access in Stage 2.
 
 ## 3. Promotion gate
 
-Promotion means accepting a run as a reproducible research result; it does not mean deploying AgentRx for operational decisions.
+A rewording moves from one stage to the next only if every condition below holds.
 
-**Gate metric:** complete, valid case coverage. **Threshold: 100%.** Before promotion, the dataset checksums must match the baseline manifests, every expected trajectory must have a parseable pipeline result for each judge model, and each result must contain a root-cause step and category. Minimum sample sizes are 29 Tau trajectories per judge model and 58 Magentic-One trajectories per model. Magentic-One accuracy claims require at least 44 ground-truth-matched cases; report the remaining 14 as unlabeled rather than counting them as correct or incorrect.
+**Validity**
+- Every automated check passes: structural checks, and for presentation change the independent `check_preserved()` re-check.
+- Every released case has a signed review whose reason names something specific to that case. Boilerplate reasons don't count.
+- The review scripts and review sheets are committed. The step-decoy suggestion script is not committed yet.
 
-Report root-cause category accuracy and step-localization accuracy against ground truth, plus pairwise model agreement. Report each metric with its case count and uncertainty, grouped at minimum by domain, judge model, and rewording condition; include failure category where sample size permits. Include every subgroup flagged as a gap in the Week 9 review. The exact Week 9 subgroup list is not in this repository, so the project lead must add that list to the experiment record before sign-off. Do not use model agreement itself as a promotion threshold: disagreement between judges is a research outcome.
+**Minimum cases**
+- At least 15 accepted variants per rewording.
+- At least 8 paired cases. A paired case is one the clean run got right. Tasks 2, 3 and 4 count as one case.
+- A rewording that misses either minimum is reported as preliminary and is not promoted. Decomposition is at risk: its 16 accepted τ-bench cases overlap with only the trajectories the clean run localized correctly. [Count the paired cases per rewording.]
 
-For a rewording release, require all 29 Tau cases per transformation, unchanged trajectory IDs and labels, and a documented label-preservation review before promoting the variant. Magentic-One transfer results are reported separately and must state the 58-trajectory / 44-labeled coverage.
+**Same conditions**
+- A clean baseline run with the same judge config is committed, and every variant is compared against it.
+- Judge outputs for every variant run are committed, so the report can be reproduced from the tag.
+
+**Spread**
+- Each release is judged at least 3 times. A rate is reported as mean ± standard deviation, with its n.
+
+**Metrics and thresholds**
+- **Primary:** the paired rate for each rewording (table above), with its count and Wilson 95% interval. The gate does not require a minimum effect size, because the project measures robustness rather than optimizing a model. A rewording counts as "moving the verdict" only if its rate is larger than the clean run's own run-to-run flip rate on the same cases, computed from the three committed sol runs.
+- **Secondary:** category accuracy, and step accuracy, defined as the predicted step being within 2 steps of the label. Step accuracy alone would count a judge that picks an adjacent decoy or split step as correct; the paired rates above catch that, because `compare()` checks whether the judge landed on the real root, a decoy, or a split step.
+- **Metric change disclosure:** the Week 7 card named exact-step accuracy as the headline metric. We changed it to step accuracy (±2) after seeing the results.
+
+**Per group (Week 9 gap)**
+- Report every rate separately for user-attributed failures (Underspecified User Intent, n = 8 on τ-bench, 0/8 at baseline) and agent-attributed failures (n = 21).
+- Mark any group under 10 cases as too small to support a conclusion.
+
+**Before Stage 1, fix or disclose the known tells**
+- **Decoy:** 100 of 122 red herrings use error strings that never appear in the real data. Most swap the last two characters of an ID. Some replays sit directly after the call they copy.
+- **Presentation change:** 16–27% of formatting edits are erased by AgentRx's IR converter before the judge sees them. Some emphasis edits bold the mistake itself.
+- **Decomposition:** task 32 adds a clue to the mistake. Consecutive messages from the same actor never occur in the original data.
+- **Magentic-One setup:** decide which agents count as "prose" roles for presentation change. Redact the 188 phone-like strings and 10 email addresses before any trace goes to a generator or the judge.
 
 ## 4. Rollback
 
-**Owner:** the project lead owns release decisions; the experiment owner stops a run and checks artifacts; the data owner restores the baseline snapshot and verifies checksums.
+**Owner:** [Pranudeep Metuku, data steward]
 
-**Triggers:** a checksum mismatch; an unrecorded or changed model version; missing or invalid per-case output; a prompt, invariant, checker, or dataset change during a model comparison; or a data-handling/provider-policy issue.
+**Triggers.** Roll back when any of these happens:
+- a released variant turns out to change the true failure (a validity failure found after release);
+- a manifest or input SHA-256 doesn't match;
+- the judge or a generator answers with a model version other than the pinned one;
+- a report's numbers can't be reproduced from the tag;
+- a disclosure or confidentiality term is breached. In that case, withdraw the release and notify the instructor.
 
-**Steps:** stop promotion and mark the run as invalid or exploratory; preserve its logs for diagnosis; restore the Week 8 baseline if that snapshot is available, otherwise restore the last accepted frozen baseline and pipeline configuration; rerun the integrity and coverage gate. Roll back the model to the previous pinned version. If no model version can be pinned or the provider cannot be used under approved terms, switch off model calls and do not issue an AgentRx diagnosis. For comparison work, rollback is an integrity and reproducibility action, not an automatic decision to accept whichever model agrees more often.
+**Target:** the Week 8 baseline. Merge `baseline-results` without squashing, and keep the branch, so that `ac01913` stays reachable. It is the frozen `tau_retail/baseline/v1.0.0` data with the committed sol runs at [`ac01913`](https://github.com/Aparnashree11/agentRx/commit/ac019130950b52ac99d233b628a5965eef241e44), which AgentRx scores with no rewording. For a single bad rewording release, the target is that rewording's previous version.
 
-## 5. User notice and recourse
+**Steps:**
+1. Record the current commit, data versions and judge version (the rehearsal table below).
+2. `git fetch --tags && git checkout ac01913`
+3. `bash scripts/reproduce_baseline.sh`
+4. Check the **computed** values against the known output. The script's "HEADLINE … reproduced" line is hard-coded and doesn't count as a check.
+   - Step accuracy: 0.4138 for all three runs.
+   - Category accuracy: 0.3448, 0.2759 and 0.3103.
+5. Mark the withdrawn release as withdrawn in `data/benchmark_versions/README.md`, and add a line to the changelog (Section 5).
 
-For demos and reports, tell users that AgentRx is a research prototype, that its diagnosis is model-generated and can be wrong, which dataset release and model configuration produced the result, and that it must not be used as the sole basis for a real-world decision. Do not present an invariant violation as proof of root cause.
+### Rollback rehearsal (record of one run)
 
-If a result appears wrong, users should be able to flag the run or trajectory ID to the project team. A researcher will review the source trace, IR, invariant, checker evidence, and judge output; correct the analysis if needed; and publish a new versioned result rather than silently overwriting a released artifact. Provide a manual review path, and allow the result to be excluded from an aggregate after documenting the reason.
+| Field | Value |
+|---|---|
+| Date and time | [ ] |
+| Run by | [ ] |
+| Current version: commit / data version / judge version | [ ] / [ ] / gpt-6.1-sol [ ] |
+| Target: commit / data version | `ac01913` / `tau_retail/baseline/v1.0.0` |
+| Time to switch | [ ] |
+| Steps done by hand | [ ] |
+| Known input → known output | 29 τ-bench trajectories, 3 sol runs → step 0.4138 ×3; category 0.3448 / 0.2759 / 0.3103. Matched: [yes / no] |
+| Problems found | [ ] |
 
-## 6. Risk scope and release rules
+## 5. What users are told (G18), and what they can do when the output is wrong (G9)
 
-**Medium-risk scope for v0:** offline academic experiments, code review, and supervised classroom demos using the versioned benchmark data. Outputs are advisory research artifacts for the project team. A person reviews any interpretation; the pipeline does not take actions on users, accounts, or external systems.
+**Users** are AgentRx maintainers, and engineers or researchers who read the report.
 
-**High-risk uses are out of scope:** production monitoring or remediation, safety-critical workflows, or decisions affecting access to healthcare, finance, employment, education, legal outcomes, or other consequential services. Do not release AgentRx for those uses under v0. Any proposed high-risk use requires a separate risk, privacy, security, and domain review; representative validation data; named operational ownership; human oversight; incident handling; and an approved rollback path before a pilot.
+**Every report states:**
+- the judge and generator versions, and the commit and data versions used;
+- each rate with its count and interval, how many runs it rests on, and which groups are too small to read;
+- that verdicts are leads to verify, not findings, and that a category label is not evidence of whether the user or the agent was at fault;
+- the known tells (Section 3) and whether they were fixed.
 
-For all releases, use immutable dataset and code versions, record model and prompt configuration, preserve audit evidence, and publish limitations and subgroup results. Never silently replace a released dataset, model configuration, or result.
+**Changes (G18):** each new release version is listed in a changelog in `data/benchmark_versions/README.md`. The entry says what changed and why, and gives the new SHA-256 values. Maintainers who have access get a note when a release they use is replaced or withdrawn.
+
+**When a variant or rate looks wrong (G9):**
+- **Trace it.** Every released case has an `audit.json` entry with the proposal, the review, and the step map from original to variant steps, so a reader can check the exact case.
+- **Report it.** Open an issue, or contact [Uzma Fatima, validity review and disclosure], naming the release and the case ID.
+- **Expect a fix.** A confirmed bad case is removed in a new patch version (for example v0.1.1), the report is regenerated, and the changelog records the case and the reason. Old versions are never overwritten.
+
+## 6. Scoping conditions as release rules (high-risk project)
+
+The binding text is Specification §8, which the Development Contract (§2) makes a term of the contract. As restated in proposal §6:
+
+| Scoping condition | Release rule |
+|---|---|
+| Text-only attacks | The framework changes only trajectory text and JSON layout. No code execution, no changes to tools or the environment, and no edits outside the trajectory. |
+| One auditor (AgentRx) | Results are reported for AgentRx only. A second tool requires a new plan and instructor approval. |
+| Three attack classes | The release contains exactly three rewordings: decomposition, decoy and presentation change. A new class needs a plan change. |
+| Sandboxed runs | Every generator call uses the isolation flags in Section 1. A run without them is refused. |
+| Modest compute | Spending is capped at [$__] per rewording per domain. τ-bench cost: about $0.16 (decomposition with Haiku), $2.30 (decoy with Sonnet) and $5.10 (presentation change with Opus). |
+| Findings written for the maintainers | The first audience outside the team is the AgentRx maintainers (Stage 2). Nothing is shown publicly before Dec 3, and nothing is published before the window closes. |
+
+**Confidentiality:** the generators, their prompts and the reworded trajectories are confidential and gated. The repository holding them, and the gated τ-bench data, stays private. [Confirm `Aparnashree11/agentRx` is private.] They are deleted when the disclosure window closes (about March 3, 2027), unless the maintainers ask in writing to keep them.

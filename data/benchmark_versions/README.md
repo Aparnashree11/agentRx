@@ -165,10 +165,10 @@ in the same order, with only their presentation changed, so a robust root-cause
 judge should give the same verdict on the variant as on the original. The model
 proposes edits of three kinds:
 
-- **Wording** paraphrases an assistant message with the same meaning. Every
+- **Wording** paraphrases a message from a prose role (Tau: assistant) with the same meaning. Every
   token containing a digit (IDs, prices, counts, zip codes) must survive
   verbatim, so "10" can never become "ten".
-- **Emphasis** adds or removes markdown in an assistant message (bold, italics,
+- **Emphasis** adds or removes markdown in a prose-role message (bold, italics,
   headings, bullets, code marks) without changing its words.
 - **Formatting** re-lays-out a JSON payload, either a tool response or a tool
   call's arguments. The model only chooses a layout (`compact`, `spaced`,
@@ -176,8 +176,9 @@ proposes edits of three kinds:
   the JSON, so every key and value stays identical.
 
 As with step decoys, the model decides and Python edits. Each edit can touch only
-the one field its kind allows. Some steps are always locked: system messages
-(the policy), user turns, tool responses that are not JSON, and the arguments
+the one field its kind allows. Some steps are always locked: policy-role
+messages (Tau: system), the text of every other non-prose role (Tau: user
+turns), tool responses that are not JSON, and the arguments
 and results of tool calls on annotated failure steps. A failure step may still
 be reworded or emphasized, but it must stay exactly as clear and as wrong.
 Before anything is saved, a second check compares the result with the original,
