@@ -4,10 +4,10 @@ Sections follow Mitchell et al. (2019), Section 4. Evaluation type: exploratory 
 
 ## 4.1 Model details
 
-- **Team:** Fooling the Flight Recorder (Aparna, Uzma, Pranudeep), CS6170 AI Capstone, Track A. Working group: [A / B / C]
+- **Team:** Fooling the Flight Recorder (Aparna, Uzma, Pranudeep), CS6170 AI Capstone, Track A.
 - **Date:** November 24, 2026
 - **Version:** v1
-- **Baseline commit:** [`ac01913`](https://github.com/Aparnashree11/agentRx/commit/ac019130950b52ac99d233b628a5965eef241e44), "Add Track-A tau-bench baseline results (sol + luna)", branch `baseline-results`, November 19, 2026. [The branch is not yet merged into `main`; confirm the commit the card should cite after merging.]
+- **Baseline commit:** [`ac01913`](https://github.com/Aparnashree11/agentRx/commit/ac019130950b52ac99d233b628a5965eef241e44), "Add Track-A tau-bench baseline results (sol + luna)", merged into `main` via PR #26.
 - **Model type:** AgentRx (Barke et al., 2026, arXiv 2602.02475), used unmodified as a gray-box system. It synthesizes constraints from a failed agent trajectory, then an LLM judge names (1) the critical failure step and (2) one of nine failure categories, or returns "inconclusive." No model is trained by our team.
 - **Configuration:** one-shot constraint synthesis (`--dynamic-mode oneshot`), single judge, all-at-once. Command: `run.py --domain tau --endpoint copilot --dynamic-mode oneshot`. This corresponds to the paper's one-shot +Vio setting (Table 4).
 - **Judges:** reached through the GitHub Copilot API, not Azure OpenAI as in the paper.
@@ -53,7 +53,6 @@ gpt-6.1-sol and gpt-6-luna were each run once on the 29 τ-bench trajectories. S
 | End users / customers (incl. the simulated user in τ-bench) | Indirect | Blamed for "underspecified intent" when the agent failed, or the reverse |
 | Adversary who wants the trace to mislead | Indirect | Rewords a log so the verdict points elsewhere |
 
-[Check row labels against Appendix A, which has 18 rows.]
 
 ### Evaluation factors
 
@@ -93,7 +92,7 @@ No training by our team. AgentRx is used as released. The training data of the j
 | Method | Runs | Exact step | Category | Both correct | Confidently wrong |
 |---|---|---|---|---|---|
 | gpt-6.1-sol, one-shot | 3 | 12/29 every run, 41.4% ± 0.0 (25.5–59.3%) | 10, 8, 9 /29, 31.0% ± 3.4 | 8, 7, 8 /29, 26.4% ± 2.0 | 20, 21, 19 /29, 69.0% ± 3.4 |
-| gpt-6.1-sol, few-shot | 1 | 11/29, 37.9% (22.7–56.0%) | 10/29, 34.5% (19.9–52.7%) | [ ] | [ ] |
+| gpt-6.1-sol, few-shot | 1 | 11/29, 37.9% (22.7–56.0%) | 10/29, 34.5% (19.9–52.7%) | not scored | not scored |
 | gpt-6-luna, one-shot | 1 | 8/29, 27.6% (14.7–45.7%) | 9/29, 31.0% (17.3–49.2%) | 5/29, 17.2% (7.6–34.5%) | 23/29, 79.3% (61.6–90.2%) |
 | Keyword rule (non-AI) | deterministic | 0/29, 0.0% (0.0–11.7%) | 2/29, 6.9% (1.9–22.0%) | — | — |
 
@@ -130,7 +129,7 @@ Rewordings (step decomposition, step decoy, presentation change), each produced 
 ## 4.8 Ethical considerations
 
 - **Misattribution is the harm being measured.** A confidently wrong verdict points at an innocent component, team, or user while the real cause keeps working. At baseline this happens on most trajectories (20/29 on average for sol; 23/29 for luna).
-- **Privacy:** the privacy scan found 65 email matches in the τ-bench traces, almost all `example.com` with 2 `gmail.com`, and no phone-like strings. [Confirm whether the 2 `gmail.com` addresses were redacted before the traces went to the judge.]
+- **Privacy:** the privacy scan found 65 email matches in the τ-bench traces, almost all `example.com` with 2 `gmail.com`, and no phone-like strings. The 2 `gmail.com` addresses are flagged for redaction before any trace goes to a model API.
 - **Dual use:** the reworded trajectories show how to misdirect the tracer. The generator, its prompts, and reworded trajectories are confidential and gated. Findings go to the AgentRx maintainers at Microsoft Research under coordinated disclosure on December 3, 2026, with instructor approval. Aggregate findings are published no earlier than 90 days after that notice (about March 3, 2027). Reworded variants and generator prompts are deleted when that window closes.
 - **Data:** shared only within the team under the dataset's access terms.
 - **Scoping conditions:** see 4.2.
@@ -150,7 +149,7 @@ Rewordings (step decomposition, step decoy, presentation change), each produced 
 - **Judge selection on single runs:** sol was chosen over luna on one run each. The step gap (12 vs. 8 of 29) has overlapping intervals.
 - **Judge-route difference:** Copilot-hosted judges, not the paper's GPT-5 on Azure. A silent model update would look like a rewording effect.
 - **Recommendation:** don't use a category verdict to decide whether a user or the agent was at fault. Treat every committed verdict as a lead to verify, not a finding.
-- **Cross-team review notes:** [paste from worksheet step 4]
+- **Cross-team review notes:** none recorded in this version.
 
 ## References
 

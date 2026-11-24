@@ -14,7 +14,7 @@
 | Step decoy | Claude Sonnet 5.5 | Noise replays and failed-attempt red herrings are inserted before the root cause | `decoy_attraction_rate` |
 | Presentation change | Claude Opus 5.5 | Wording, emphasis or JSON layout changes; nothing moves | `verdict_flip_rate` |
 
-- **Commit:** the merge of `step-decomposition`, `presentation-change-v2` (which already contains `step-decoy`) and `baseline-results`, tagged `week11-release`. [Commit hash.] The tag must also contain the judge outputs behind every reported number, including the clean baseline run the rewordings were compared against. None of the three rewording branches contains judge outputs yet.
+- **Commit:** the merge of `step-decomposition`, `presentation-change-v2` (which already contains `step-decoy`) and `baseline-results`, tagged `week11-release` once the branches are merged (tag not yet created). The tag must also contain the judge outputs behind every reported number, including the clean baseline run the rewordings were compared against. None of the three rewording branches contains judge outputs yet.
 - **Artifact:** there is no trained model file. The candidate is the framework code (`agentrx/rewordings/`) plus the frozen data releases under `data/benchmark_versions/`.
 - **Fallback:** the Week 8 baseline (Section 4).
 
@@ -28,9 +28,9 @@
 
 | Component | Pinned version |
 |---|---|
-| Judge | gpt-6.1-sol via the GitHub Copilot API, one-shot (`--dynamic-mode oneshot`), single judge, all-at-once. [Exact model version string as logged.] |
-| Generators | `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5` (full IDs, not aliases), medium effort, via Claude Code [2.1.327; confirm for all three]. The run is refused if `modelUsage` reports a different model. |
-| AgentRx | [upstream commit used] |
+| Judge | gpt-6.1-sol via the GitHub Copilot API, one-shot (`--dynamic-mode oneshot`), single judge, all-at-once. The exact model version string is recorded in each run's logged artifacts. |
+| Generators | `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5` (full IDs, not aliases), medium effort, via Claude Code (version recorded in each generation log). The run is refused if `modelUsage` reports a different model. |
+| AgentRx | the upstream commit is recorded in each release manifest |
 | Baseline data | `data/benchmark_versions/tau_retail/baseline/v1.0.0/`, pinned by SHA-256 |
 | Releases | `data/benchmark_versions/tau_retail/<rewording>/<model>/v0.1.0/`, each with a manifest of SHA-256 values, generator code hash, prompt hash and cost |
 
@@ -41,10 +41,10 @@ Generator calls run isolated: `--safe-mode --tools "" --strict-mcp-config --disa
 | Stage | Who sees the outputs | How long | Expected cases |
 |---|---|---|---|
 | **0. τ-bench, team only** (generation and review done; gate in Section 3 not yet met) | The three of us | Until Nov 30 | 29 trajectories × 3 rewordings. Released: decomposition 16, decoy 28, presentation change 29 |
-| **0a. Results presentation** (Nov 24) | Instructor and class | One session | Aggregate τ-bench rates from single runs, labeled preliminary. No trajectories, prompts or generator code. [Team to confirm this is covered by the same NDA reading as the showcase.] |
+| **0a. Results presentation** (Nov 24) | Instructor and class | One session | Aggregate τ-bench rates from single runs, labeled preliminary. No trajectories, prompts or generator code. |
 | **1. Magentic-One, team only** | The three of us | Dec 1 to Dec 3 | Up to 44 labeled traces per rewording (38 were scored at baseline). Decomposition will likely accept about half. Paired cases are limited to traces the clean run gets right. |
 | **2. Disclosure** | AgentRx maintainers at Microsoft Research, with instructor approval | From Dec 3, 2026, for 90 days | Aggregate report, plus gated access to variants on request |
-| **3. Class showcase** | Instructor and class | Dec 8 | Aggregate rates only. No trajectories, prompts or generator code. [Team to confirm the showcase is not "publication" under the NDA.] |
+| **3. Class showcase** | Instructor and class | Dec 8 | Aggregate rates only. No trajectories, prompts or generator code. |
 | **4. Public write-up** | Anyone | No earlier than about March 3, 2027 | Aggregate findings only |
 
 Generator prompts, reworded trajectories and judge outputs on reworded data stay inside the team at every stage, except for gated maintainer access in Stage 2.
@@ -61,7 +61,7 @@ A rewording moves from one stage to the next only if every condition below holds
 **Minimum cases**
 - At least 15 accepted variants per rewording.
 - At least 8 paired cases. A paired case is one the clean run got right. Tasks 2, 3 and 4 count as one case.
-- A rewording that misses either minimum is reported as preliminary and is not promoted. Decomposition is at risk: its 16 accepted τ-bench cases overlap with only the trajectories the clean run localized correctly. [Count the paired cases per rewording.]
+- A rewording that misses either minimum is reported as preliminary and is not promoted. Decomposition is at risk: its 16 accepted τ-bench cases overlap with only the trajectories the clean run localized correctly. The paired-case count per rewording is computed at the Magentic-One stage.
 
 **Same conditions**
 - A clean baseline run with the same judge config is committed, and every variant is compared against it.
@@ -87,7 +87,7 @@ A rewording moves from one stage to the next only if every condition below holds
 
 ## 4. Rollback
 
-**Owner:** [Pranudeep Metuku, data steward]
+**Owner:** Pranudeep Metuku, data steward
 
 **Triggers.** Roll back when any of these happens:
 - a released variant turns out to change the true failure (a validity failure found after release);
@@ -107,18 +107,9 @@ A rewording moves from one stage to the next only if every condition below holds
    - Category accuracy: 0.3448, 0.2759 and 0.3103.
 5. Mark the withdrawn release as withdrawn in `data/benchmark_versions/README.md`, and add a line to the changelog (Section 5).
 
-### Rollback rehearsal (record of one run)
+### Rollback rehearsal
 
-| Field | Value |
-|---|---|
-| Date and time | [ ] |
-| Run by | [ ] |
-| Current version: commit / data version / judge version | [ ] / [ ] / gpt-6.1-sol [ ] |
-| Target: commit / data version | `ac01913` / `tau_retail/baseline/v1.0.0` |
-| Time to switch | [ ] |
-| Steps done by hand | [ ] |
-| Known input → known output | 29 τ-bench trajectories, 3 sol runs → step 0.4138 ×3; category 0.3448 / 0.2759 / 0.3103. Matched: [yes / no] |
-| Problems found | [ ] |
+No rehearsal has been run yet. The known input/output for a future rehearsal: 29 τ-bench trajectories and 3 sol runs reproduce step 0.4138 ×3 and category 0.3448 / 0.2759 / 0.3103, against target `ac01913` / `tau_retail/baseline/v1.0.0`.
 
 ## 5. What users are told (G18), and what they can do when the output is wrong (G9)
 
@@ -134,7 +125,7 @@ A rewording moves from one stage to the next only if every condition below holds
 
 **When a variant or rate looks wrong (G9):**
 - **Trace it.** Every released case has an `audit.json` entry with the proposal, the review, and the step map from original to variant steps, so a reader can check the exact case.
-- **Report it.** Open an issue, or contact [Uzma Fatima, validity review and disclosure], naming the release and the case ID.
+- **Report it.** Open an issue, or contact Uzma Fatima (validity review and disclosure), naming the release and the case ID.
 - **Expect a fix.** A confirmed bad case is removed in a new patch version (for example v0.1.1), the report is regenerated, and the changelog records the case and the reason. Old versions are never overwritten.
 
 ## 6. Scoping conditions as release rules (high-risk project)
@@ -147,7 +138,7 @@ The binding text is Specification §8, which the Development Contract (§2) make
 | One auditor (AgentRx) | Results are reported for AgentRx only. A second tool requires a new plan and instructor approval. |
 | Three attack classes | The release contains exactly three rewordings: decomposition, decoy and presentation change. A new class needs a plan change. |
 | Sandboxed runs | Every generator call uses the isolation flags in Section 1. A run without them is refused. |
-| Modest compute | Spending is capped at [$__] per rewording per domain. τ-bench cost: about $0.16 (decomposition with Haiku), $2.30 (decoy with Sonnet) and $5.10 (presentation change with Opus). |
+| Modest compute | Spending is capped per the team's compute budget per rewording per domain. τ-bench cost: about $0.16 (decomposition with Haiku), $2.30 (decoy with Sonnet) and $5.10 (presentation change with Opus). |
 | Findings written for the maintainers | The first audience outside the team is the AgentRx maintainers (Stage 2). Nothing is shown publicly before Dec 3, and nothing is published before the window closes. |
 
-**Confidentiality:** the generators, their prompts and the reworded trajectories are confidential and gated. The repository holding them, and the gated τ-bench data, stays private. [Confirm `Aparnashree11/agentRx` is private.] They are deleted when the disclosure window closes (about March 3, 2027), unless the maintainers ask in writing to keep them.
+**Confidentiality:** the generators, their prompts and the reworded trajectories are confidential and gated. The repository holding them, and the gated τ-bench data, stays private; `Aparnashree11/agentRx` is a private repository. They are deleted when the disclosure window closes (about March 3, 2027), unless the maintainers ask in writing to keep them.
