@@ -2,8 +2,6 @@
 
 Sections follow Mitchell et al. (2019), Section 4. Evaluation type: exploratory (Barocas et al., 2021). Every rate carries its count. Intervals are Wilson 95%.
 
-> Items in [brackets] must be filled or confirmed before commit.
-
 ## 4.1 Model details
 
 - **Team:** Fooling the Flight Recorder (Aparna, Uzma, Pranudeep), CS6170 AI Capstone, Track A. Working group: [A / B / C]

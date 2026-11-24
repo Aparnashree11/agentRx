@@ -4,8 +4,6 @@
 **Version:** v0 · November 24, 2026
 **Supersedes:** the earlier `RELEASE_PLAN.md` on `step-decoy` and `step-decomposition`, whose §3 gate ("require all 29 Tau cases per transformation") no rewording meets. The new gate is in Section 3.
 
-> Items in [brackets] must be filled or confirmed before commit.
-
 ## Release candidate
 
 **The rewording framework:** a single tool that takes failed agent trajectories in any layout AgentRx reads, produces three label-preserving rewordings, stores each as a versioned dataset release, re-judges each release with AgentRx, and writes a comparison report.
