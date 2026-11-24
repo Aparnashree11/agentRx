@@ -6,13 +6,6 @@
       "matched": 29,
       "labels_without_trace": 0,
       "traces_without_label": 0
-    },
-    "magentic": {
-      "traces": 59,
-      "labels": 44,
-      "matched": 44,
-      "labels_without_trace": 0,
-      "traces_without_label": 15
     }
   },
   "labels_tau": {
@@ -36,31 +29,6 @@
       "User": 10
     }
   },
-  "labels_magentic": {
-    "trajectories": 44,
-    "failure_entries": 295,
-    "max_failures_in_one": 55,
-    "duplicate_entries": 0,
-    "root_cause_id_type_mismatch": 1,
-    "root_cause_not_earliest_failure": 17,
-    "category_name_variants": {
-      "Instruction/Plan Adherence Failure": 197,
-      "Invention of new information": 8,
-      "Misinterpretation of Tool Output": 23,
-      "Guardrails Triggered": 24,
-      "Intent Plan Misalignment": 19,
-      "Intent not supported": 22,
-      "Invalid Invocation": 1,
-      "System Failure": 1
-    },
-    "agent_name_variants": {
-      "Websurfer": 13,
-      "FileSurfer": 5,
-      "Orchestrator": 67,
-      "WebSurfer": 207,
-      "Assistant": 3
-    }
-  },
   "adapter_round_trip": {
     "tau": {
       "checked": 29,
@@ -71,13 +39,6 @@
       "role_mismatches": 0,
       "trajectories_with_loss": [],
       "note": "Raw and IR content compared after parsing JSON tool outputs (the IR pretty-prints them)."
-    },
-    "magentic": {
-      "checked": 44,
-      "raw_entries": 2201,
-      "ir_substeps": 2201,
-      "raw_entries_missing_in_ir": 0,
-      "trajectories_with_loss": []
     }
   },
   "privacy_scan": {
@@ -89,18 +50,6 @@
       },
       "phone_like_matches": 0,
       "trajectories_with_hits": 28
-    },
-    "magentic": {
-      "email_matches": 10,
-      "email_domains": {
-        "turboscribe.ai": 4,
-        "gmail.com": 3,
-        "realtor.com": 1,
-        "caltech.edu": 1,
-        "bloomberg.net": 1
-      },
-      "phone_like_matches": 188,
-      "trajectories_with_hits": 19
     }
   }
 }
