@@ -68,12 +68,11 @@ pip install git+https://github.com/aparnashree11/agentRx.git
 
 ## Benchmark Dataset Versions
 
-Tau Retail and Magentic-One have independent baseline releases under `data/benchmark_versions/`. These contain byte-for-byte frozen copies of the trajectory and ground-truth files selected for the project baseline. The manifests retain the original source paths as provenance; the versioned release files are self-contained.
+Tau Retail has a baseline release under `data/benchmark_versions/`. It contains byte-for-byte frozen copies of the trajectory and ground-truth files selected for the project baseline. The manifest retains the original source paths as provenance; the versioned release files are self-contained.
 
 - [Tau Retail baseline v1.0.0](data/benchmark_versions/tau_retail/baseline/v1.0.0/manifest.json)
-- [Magentic-One baseline v1.0.0](data/benchmark_versions/magentic_one/baseline/v1.0.0/manifest.json)
 
-The Tau Retail baseline has 29 failed trajectories and 29 labels. The Magentic-One baseline has 58 trajectories and 44 labels. Each manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
+The Tau Retail baseline has 29 failed trajectories and 29 labels. The manifest records the original source paths, frozen artifact checksums, and trajectory IDs. Future rewordings should get their own immutable release directory and record the parent baseline, generation settings, and label-preservation validation. See [the dataset versioning notes](data/benchmark_versions/README.md).
 
 ### Run the full Tau Retail baseline
 
@@ -149,7 +148,7 @@ AgentRx/
 │   ├── benchmark_versions/      # Frozen benchmark inputs, labels, and manifests
 │   ├── policies/                # Domain policies
 │   └── tool_schemas/            # Domain tool schemas
-├── trajectories/                # Sample trajectories (tau, magentic, test)
+├── trajectories/                # Sample trajectories (tau, test)
 └── runs/                        # Pipeline outputs (one folder per run)
 ```
 

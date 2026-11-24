@@ -1,0 +1,1739 @@
+{
+    "summary": {
+        "model_name": "",
+        "api_version": "2024-12-01-preview",
+        "Correct cases": 9,
+        "Incorrect cases": 20,
+        "Average distance for correct cases": 0.6666666666666666,
+        "Average distance for incorrect cases": 7.15,
+        "Overall average distance": 5.137931034482759,
+        "Normalized average distance for correct cases": 0.014492753623188406,
+        "Normalized average distance for incorrect cases": 0.20789271615156374,
+        "Normalized overall average distance": 0.14787203812551622,
+        "Correct step number predictions": 12,
+        "Incorrect step number predictions": 17,
+        "Step number accuracy": 0.41379310344827586,
+        "Step accuracy within +-1": 0.4482758620689655,
+        "Step accuracy within +-2": 0.5172413793103449,
+        "Step accuracy within +-3": 0.5862068965517241,
+        "Step accuracy within +-4": 0.6206896551724138,
+        "Step accuracy within +-5": 0.6896551724137931,
+        "total_prompt_tokens": 260040,
+        "total_output_tokens": 7027,
+        "total_tokens": 267067,
+        "total_execution_time_sec": 356.6471
+    },
+    "detailed_results": [
+        {
+            "task_id": "2",
+            "failures": [
+                {
+                    "task_id": "2",
+                    "failure_case": 4,
+                    "description": "The agent miscounted the available T-shirt variants and reported 11 instead of 10.",
+                    "step_number": 7,
+                    "checklist_reasoning": "The agent understood the request and retrieved relevant product data. At step 6, the tool returned 12 variants, with 10 marked available and two unavailable. The agent's count of 11 contradicts that output, making this category 4 rather than missing information or an invalid invocation. The earlier authentication omission was subsequently remedied at steps 9\u201312; the incorrect count was never corrected."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 32,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8660,
+                    "output_tokens": 184,
+                    "total_tokens": 8844
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:57:25.610277",
+                    "end_time": "2026-10-27T02:57:33.993561",
+                    "execution_time_sec": 8.3832
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "54a11b2e-9043-42e3-85ea-e03e7db72416"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 7,
+            "step_median": 7,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 7,
+            "step_max": 7,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 7,
+            "gt_failure_description": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+        },
+        {
+            "task_id": "3",
+            "failures": [
+                {
+                    "task_id": "3",
+                    "failure_case": 4,
+                    "description": "The assistant reported 11 available T-shirt options instead of 10, misinterpreting the product tool's availability flags. This unresolved error precedes the later incomplete investigation of pending orders.",
+                    "step_number": 7,
+                    "checklist_reasoning": "Category 4 applies: the assistant received the complete variant data at step 6 but incorrectly counted availability. There are 12 variants, of which 2 are unavailable, leaving 10 available options. The tools succeeded and no information was missing. The earlier authentication omission was subsequently addressed at steps 11\u201312, but the availability error was never corrected."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 34,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 9605,
+                    "output_tokens": 225,
+                    "total_tokens": 9830
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:57:33.994384",
+                    "end_time": "2026-10-27T02:57:45.031920",
+                    "execution_time_sec": 11.0375
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "3817262d-7fb6-4db9-85f4-6086a5b3a3b7"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 7,
+            "step_median": 7,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 7,
+            "step_max": 7,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 7,
+            "gt_failure_description": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+        },
+        {
+            "task_id": "4",
+            "failures": [
+                {
+                    "task_id": "4",
+                    "failure_case": 4,
+                    "description": "The agent reported 11 available T-shirt options instead of 10 and never corrected that count. Later successful order modifications did not resolve this earlier failure.",
+                    "step_number": 15,
+                    "checklist_reasoning": "Category 4 applies: the agent received the T-shirt catalog at step 14 but incorrectly counted its available variants. There are 12 variants, with 10 marked available=true and 2 marked available=false. The reported count of 11 contradicts that tool output. This is a computation error based on available evidence, not missing information or a tool invocation failure."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 48,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 10464,
+                    "output_tokens": 204,
+                    "total_tokens": 10668
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:57:45.033344",
+                    "end_time": "2026-10-27T02:57:52.893171",
+                    "execution_time_sec": 7.8598
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "b1469019-8000-4c4e-9672-b61c91b380df"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 15,
+            "step_median": 15,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 15,
+            "step_max": 15,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 15,
+            "gt_failure_description": "The incorrect count does not correspond with ground truth output."
+        },
+        {
+            "task_id": "12",
+            "failures": [
+                {
+                    "task_id": "12",
+                    "failure_case": 1,
+                    "description": "The agent submitted the return without first presenting the complete return details, including the refund destination, and obtaining explicit user confirmation. The user's instruction to return all listed items did not confirm a refund to Visa. The subsequent objection and human transfer did not undo or resolve the unauthorized action.",
+                    "step_number": 19,
+                    "checklist_reasoning": "Category 1 applies: the agent pursued the correct return request and had the necessary order and payment information, but skipped the required confirmation procedure before updating the database. The tool call was valid and succeeded; there was no infrastructure failure or tool-output misinterpretation."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 26,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 5938,
+                    "output_tokens": 239,
+                    "total_tokens": 6178
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:57:52.894400",
+                    "end_time": "2026-10-27T02:58:02.431737",
+                    "execution_time_sec": 9.5373
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "089b1585-6d88-4ebf-92df-2de77c470699"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 19,
+            "step_median": 19,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 19,
+            "step_max": 19,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "1",
+            "gt_step_number": 19,
+            "gt_failure_description": "The agent did not recover from this error."
+        },
+        {
+            "task_id": "20",
+            "failures": [
+                {
+                    "task_id": "20",
+                    "failure_case": 4,
+                    "description": "The agent incorrectly treated processed orders as eligible for delivered-order exchanges. It later corrected this for #W4967593, but never corrected the same mistake for #W5733668 and attempted its exchange at step 61, which failed at step 62.",
+                    "step_number": 21,
+                    "checklist_reasoning": "Category 4 applies: the agent had order-detail outputs showing both #W4967593 and #W5733668 as processed (steps 14 and 18), but interpreted them as delivered at step 21. This contradicts available tool evidence rather than reflecting missing information or a malformed invocation."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 62,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 19376,
+                    "output_tokens": 221,
+                    "total_tokens": 19598
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:02.433563",
+                    "end_time": "2026-10-27T02:58:15.788120",
+                    "execution_time_sec": 13.3545
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "6b0bc2a3-5992-4cb9-91d7-c754276da34c"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 21,
+            "step_median": 21,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 21,
+            "step_max": 21,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 21,
+            "gt_failure_description": "The assistant did not recover from misinterpretation error, which led to subsequent failures in the trajectory."
+        },
+        {
+            "task_id": "21",
+            "failures": [
+                {
+                    "task_id": "21",
+                    "failure_case": 1,
+                    "description": "The agent combined a user-facing explanation about double-checking fulfillment with a think tool call. Policy required either a response or a tool call, not both. This violation was not subsequently corrected.",
+                    "step_number": 19,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the user's request and had the governing policy, but violated the explicit prohibition against responding to the user and making a tool call in the same turn. No malformed invocation, infrastructure error, or missing user information caused this violation."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 48,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 9804,
+                    "output_tokens": 230,
+                    "total_tokens": 10035
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:15.788804",
+                    "end_time": "2026-10-27T02:58:27.414198",
+                    "execution_time_sec": 11.6254
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "b7289643-1262-482a-a13b-8f86ba8c475f"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 19,
+            "step_median": 19,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 19,
+            "step_max": 19,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 9,
+            "step_error_distribution": {
+                "9": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 28,
+            "gt_failure_description": "The item should have been modified and not exchanged and exchange was not possible because of the order status. The agent did not recover from this error."
+        },
+        {
+            "task_id": "28",
+            "failures": [
+                {
+                    "task_id": "28",
+                    "failure_case": 5,
+                    "description": "The agent expanded an item-specific cancellation request into an order-wide cancellation without authorization. It should have explained that individual-item cancellation was unavailable and preserved the order rather than cancelling unrelated merchandise.",
+                    "step_number": 33,
+                    "checklist_reasoning": "Category 5 applies: the user authorized cancellation of only the garden hose, but the agent treated that as authorization to cancel the entire mixed-item order. Step 18 already showed four other products in the order. The cancellation call succeeded, so this was not an invocation or system failure. The later explanation did not restore the unintended cancellations."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 42,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 9622,
+                    "output_tokens": 241,
+                    "total_tokens": 9864
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:27.415190",
+                    "end_time": "2026-10-27T02:58:40.628579",
+                    "execution_time_sec": 13.2133
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "38e0cfdb-8e96-4d8e-82d6-18895640b500"
+            },
+            "frequency": {
+                "5": 1
+            },
+            "most_common_failure": "5",
+            "modes": [
+                "5"
+            ],
+            "mean": 5,
+            "median": 5,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 5,
+            "max": 5,
+            "proportions": {
+                "5": 1.0
+            },
+            "step_mean": 33,
+            "step_median": 33,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 33,
+            "step_max": 33,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 33,
+            "gt_failure_description": "The assistant called cancel order on the entire order which led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "31",
+            "failures": [
+                {
+                    "task_id": "31",
+                    "failure_case": 4,
+                    "description": "The assistant confused item-level cancellation with whole-order cancellation. It obtained boot-only confirmation, then canceled both items at step 31. Step 32 confirms the entire $397.26 order was canceled; no subsequent action corrected this.",
+                    "step_number": 29,
+                    "checklist_reasoning": "Category 4 applies: step 28 showed that #W5481803 contained both boots and a kettle, totaling $397.26. At step 29, the assistant ignored the kettle and treated the boots' $253.54 item price as the cancellation refund, incorrectly implying that order cancellation could selectively remove the boots."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 42,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8586,
+                    "output_tokens": 216,
+                    "total_tokens": 8802
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:40.629550",
+                    "end_time": "2026-10-27T02:58:50.246406",
+                    "execution_time_sec": 9.6168
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "08a5c36f-bf52-4153-a48a-c43a7dfd4821"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 29,
+            "step_median": 29,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 29,
+            "step_max": 29,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 2,
+            "step_error_distribution": {
+                "2": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 31,
+            "gt_failure_description": "The assistant called cancel order on the entire order which led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "32",
+            "failures": [
+                {
+                    "task_id": "32",
+                    "failure_case": 4,
+                    "description": "The agent reported tracking number 194496721133 for the tablet despite that shipment containing no tablet. Step 20 later revealed the tablet's actual tracking number, 746342064230, but the agent never corrected its earlier answer, leaving the first failure unresolved.",
+                    "step_number": 11,
+                    "checklist_reasoning": "Category 4 applies: the agent received order details at step 10 showing only an espresso machine and sneakers, but attributed that order's tracking number to the tablet. This contradicts the tool output rather than reflecting missing user information or a tool error."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 42,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7679,
+                    "output_tokens": 211,
+                    "total_tokens": 7890
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:50.247109",
+                    "end_time": "2026-10-27T02:58:58.393707",
+                    "execution_time_sec": 8.1466
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "0a0984e5-a6a2-4687-a689-950e19a1cd53"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 11,
+            "step_median": 11,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 11,
+            "step_max": 11,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 11,
+            "gt_failure_description": "The wrong tracking number mismatched with the actual ground truth tracking number."
+        },
+        {
+            "task_id": "34",
+            "failures": [
+                {
+                    "task_id": "34",
+                    "failure_case": 1,
+                    "description": "The agent offered to remove items through order modification despite policy expressly prohibiting that operation. It subsequently attempted unsupported modifications instead of explaining the limitation and pursuing a permitted alternative.",
+                    "step_number": 13,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the user's goal of removing office items while retaining hiking gear, but disregarded the explicit policy limiting pending-order item modifications to same-product variant substitutions. The restriction was available from step 1. The agent never corrected this error; failed calls and explanations about keyboard availability continued the unsupported approach. The shipping omission at step 29 is a later failure."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 30,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8126,
+                    "output_tokens": 272,
+                    "total_tokens": 8399
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:58:58.395628",
+                    "end_time": "2026-10-27T02:59:15.884052",
+                    "execution_time_sec": 17.4884
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "dfe99eaf-fc93-4a0e-b59a-3c0163b6e9dc"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 13,
+            "step_median": 13,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 13,
+            "step_max": 13,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 4,
+            "step_error_distribution": {
+                "4": 1
+            },
+            "gt_failure_case": "3",
+            "gt_step_number": 17,
+            "gt_failure_description": "The assistant called the modify order tool with invalid arguments, leading to an illegal tool call, and the agent did not recover from this error."
+        },
+        {
+            "task_id": "38",
+            "failures": [
+                {
+                    "task_id": "38",
+                    "failure_case": 4,
+                    "description": "The agent selected the $285.66 patio umbrella despite its available=false status. The cheapest available umbrella was the existing $288.82 variant, making the correct minimum basket total $1130.85, not $1127.69. The incorrect total was repeated at step 39.",
+                    "step_number": 37,
+                    "checklist_reasoning": "Category 4 applies: the agent had the product catalog output but ignored a crucial availability flag when choosing the cheapest umbrella. The calculation call was valid and executed correctly; its input selection was wrong. Earlier authentication and individual-item cancellation issues were subsequently corrected, but this pricing error was never corrected."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 46,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 11280,
+                    "output_tokens": 235,
+                    "total_tokens": 11516
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:59:15.884962",
+                    "end_time": "2026-10-27T02:59:27.101605",
+                    "execution_time_sec": 11.2166
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "3a34f1a3-a88c-412a-9f29-f39a13d657c9"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 37,
+            "step_median": 37,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 37,
+            "step_max": 37,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 37,
+            "gt_failure_description": "The assistant failed to recognize that the cheapest item was not available from the tool output, leading to an incorrect selection and hence, not matching with the ground truth."
+        },
+        {
+            "task_id": "39",
+            "failures": [
+                {
+                    "task_id": "39",
+                    "failure_case": 2,
+                    "description": "The assistant fabricated a limitation instead of inspecting known order #W5285031 to determine whether it contained the requested address. It then unnecessarily required the customer to supply the address. This failure remained unresolved.",
+                    "step_number": 17,
+                    "checklist_reasoning": "Category 2 applies: the assistant claimed that order details only reflect the current default address, but no user statement or tool output established this. The profile lookup supplied a default address and order ID, not the order's shipping address. This invented limitation caused the assistant to abandon retrieval. There was no failed order lookup or demonstrated access restriction."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 26,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7067,
+                    "output_tokens": 259,
+                    "total_tokens": 7326
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:59:27.102757",
+                    "end_time": "2026-10-27T02:59:38.402329",
+                    "execution_time_sec": 11.2995
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "beaf632b-7a12-4bc8-a835-a15dc828f70a"
+            },
+            "frequency": {
+                "2": 1
+            },
+            "most_common_failure": "2",
+            "modes": [
+                "2"
+            ],
+            "mean": 2,
+            "median": 2,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 2,
+            "max": 2,
+            "proportions": {
+                "2": 1.0
+            },
+            "step_mean": 17,
+            "step_median": 17,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 17,
+            "step_max": 17,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 17,
+            "gt_failure_description": "Since the assistant was not able to update the address, it led to incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "41",
+            "failures": [
+                {
+                    "task_id": "41",
+                    "failure_case": 1,
+                    "description": "The agent modified the puzzle items while the requested shipping correction remained unresolved, locking order #W4082615 with the incorrect address. It should have completed the address correction, with required confirmation, before modifying items. The later address update failed, and the human transfer provides no evidence that the correction was completed.",
+                    "step_number": 17,
+                    "checklist_reasoning": "Category 1 applies: the agent understood both requested changes and had the correct address, pending order status, and explicit policy warning that item modification prevents subsequent modifications. Nevertheless, it performed the locking item change before correcting the address. This is an execution-order and prerequisite failure, not misunderstood intent, fabricated information, or a malformed tool call."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 24,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8824,
+                    "output_tokens": 300,
+                    "total_tokens": 9124
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:59:38.403000",
+                    "end_time": "2026-10-27T02:59:50.382471",
+                    "execution_time_sec": 11.9794
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "66e3c3ca-e384-40b1-825b-7a9493884111"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 17,
+            "step_median": 17,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 17,
+            "step_max": 17,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 17,
+            "gt_failure_description": "The error at step 17 led to incorrect final outcome as the agent was not able to update the shipping address after modifying the items in the pending order."
+        },
+        {
+            "task_id": "47",
+            "failures": [
+                {
+                    "task_id": "47",
+                    "failure_case": 2,
+                    "description": "The agent incorrectly generalized refund timing from other workflows to returns, then relied on that unsupported timeline when refusing the three-day request and framing the escalation. No later evidence verified or corrected this claim.",
+                    "step_number": 17,
+                    "checklist_reasoning": "Category 2 applies: the agent asserted a PayPal return-refund timeline of 5\u20137 business days without supporting policy or tool evidence. The policy provides that timeline for cancellations and payment modifications, not returns. The earlier ambiguity about which vacuum cleaner to return was resolved when the user explicitly confirmed the listed canister model at step 16."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 20,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 5446,
+                    "output_tokens": 222,
+                    "total_tokens": 5668
+                },
+                "time": {
+                    "start_time": "2026-10-27T02:59:50.383747",
+                    "end_time": "2026-10-27T03:00:06.163581",
+                    "execution_time_sec": 15.7798
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "ed94ed98-96a3-4507-8a07-a1f78412ccaf"
+            },
+            "frequency": {
+                "2": 1
+            },
+            "most_common_failure": "2",
+            "modes": [
+                "2"
+            ],
+            "mean": 2,
+            "median": 2,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 2,
+            "max": 2,
+            "proportions": {
+                "2": 1.0
+            },
+            "step_mean": 17,
+            "step_median": 17,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 17,
+            "step_max": 17,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 2,
+            "step_error_distribution": {
+                "2": 1
+            },
+            "gt_failure_case": "7",
+            "gt_step_number": 19,
+            "gt_failure_description": "Premature transfer to the human agent which prevented the assistant to refund the order as included in the ground truth."
+        },
+        {
+            "task_id": "55",
+            "failures": [
+                {
+                    "task_id": "55",
+                    "failure_case": 1,
+                    "description": "The agent cancelled order #W4836353 using the unconfirmed reason 'no longer needed' instead of first obtaining the user's confirmation of that reason and the complete cancellation details. The successful tool execution and subsequent user gratitude did not retroactively resolve the authorization failure.",
+                    "step_number": 27,
+                    "checklist_reasoning": "The agent understood the user's goal and correctly authenticated the user and checked order statuses. However, policy required presenting cancellation details and obtaining confirmation of both the order ID and cancellation reason before acting. The user authorized cancellation of two orders but never confirmed an allowed cancellation reason. The agent skipped this prerequisite despite having the applicable policy."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 38,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 9573,
+                    "output_tokens": 272,
+                    "total_tokens": 9846
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:00:06.164209",
+                    "end_time": "2026-10-27T03:00:17.577140",
+                    "execution_time_sec": 11.4129
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "ba5f520b-11e0-4d45-8365-12a009c6e912"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 27,
+            "step_median": 27,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 27,
+            "step_max": 27,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 5,
+            "step_error_distribution": {
+                "5": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 32,
+            "gt_failure_description": "Due to underspecification from the user agent, the assistant omitted one of the items to be returned leading to incorrect tool call arguments and hence, final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "59",
+            "failures": [
+                {
+                    "task_id": "59",
+                    "failure_case": 2,
+                    "description": "The agent fabricated potential operational reasons for the processing-time difference instead of stating that the available records did not explain it. Qualifying these explanations as possibilities did not satisfy the policy prohibiting invented information. No later response retracted or corrected them.",
+                    "step_number": 11,
+                    "checklist_reasoning": "Category 2 applies: the agent introduced explanations involving item availability, warehouse demand, and shipping prioritization that were not supplied by the user, tools, or policy. The tool outputs established only that both orders were pending, with no fulfillment records or processing-delay explanations. These unsupported possibilities were used to answer the user's question."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 26,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 5940,
+                    "output_tokens": 269,
+                    "total_tokens": 6210
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:00:17.577811",
+                    "end_time": "2026-10-27T03:00:27.781938",
+                    "execution_time_sec": 10.2041
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "98873361-aff2-45d1-84f5-92ec375164bb"
+            },
+            "frequency": {
+                "2": 1
+            },
+            "most_common_failure": "2",
+            "modes": [
+                "2"
+            ],
+            "mean": 2,
+            "median": 2,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 2,
+            "max": 2,
+            "proportions": {
+                "2": 1.0
+            },
+            "step_mean": 11,
+            "step_median": 11,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 11,
+            "step_max": 11,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 3,
+            "step_error_distribution": {
+                "3": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 14,
+            "gt_failure_description": "User agent made an assumption that was not supported by the information provided by the assistant which led to incorrect action being performed by the assistant as compared to ground truth action."
+        },
+        {
+            "task_id": "63",
+            "failures": [
+                {
+                    "task_id": "63",
+                    "failure_case": 1,
+                    "description": "The agent said 'Let me check the available Bluetooth speaker options priced under $300 for you' while also invoking the think tool. This procedural violation was not resolved. The incomplete enumeration at step 29 is a subsequent, separate failure.",
+                    "step_number": 27,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the user's goal and had the necessary product information, but violated the explicit policy prohibiting a user-facing response and a tool call in the same turn. Step 27 combines both. This is not a malformed invocation or a tool-output interpretation error."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 36,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7611,
+                    "output_tokens": 240,
+                    "total_tokens": 7852
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:00:27.783065",
+                    "end_time": "2026-10-27T03:00:43.764999",
+                    "execution_time_sec": 15.9819
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "7c83ac53-e8ad-400d-80bf-dc54f506888b"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 27,
+            "step_median": 27,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 27,
+            "step_max": 27,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 5,
+            "step_error_distribution": {
+                "5": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 32,
+            "gt_failure_description": "Failure led to incorrect final outcome."
+        },
+        {
+            "task_id": "71",
+            "failures": [
+                {
+                    "task_id": "71",
+                    "failure_case": 1,
+                    "description": "The agent prematurely executed the desk-lamp modification, exhausting the order's single item-modification opportunity without confirming the complete set of changes. It also used gift_card_1711656 without user authorization for the price-difference refund. Consequently, the user's subsequent backpack modification could not be performed.",
+                    "step_number": 27,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the requested modifications and had the relevant policy and order details, but skipped mandatory prerequisites before executing the one-time item modification. It did not ask the user to confirm that all items to be modified had been provided, and it selected a refund payment method without obtaining the user's choice. No subsequent step resolved these omissions."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 36,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8417,
+                    "output_tokens": 303,
+                    "total_tokens": 8720
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:00:43.766263",
+                    "end_time": "2026-10-27T03:00:57.041343",
+                    "execution_time_sec": 13.275
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "a58f8e4b-6afc-4ba0-bee0-f3896136c6fc"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 27,
+            "step_median": 27,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 27,
+            "step_max": 27,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 3,
+            "step_error_distribution": {
+                "3": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 24,
+            "gt_failure_description": "The task instruction did not specify the type of black lamp and since there are multiple black lamps available, it led to incorrect matching of the ground truth actions. Did not recover from the error."
+        },
+        {
+            "task_id": "72",
+            "failures": [
+                {
+                    "task_id": "72",
+                    "failure_case": 1,
+                    "description": "The agent executed the irreversible item modification while the unwanted shipping address remained on the order, locking out the requested address update. It also charged the gift card without customer authorization and changed the lamp's power source without confirming that detail. These consequences were not resolved later.",
+                    "step_number": 21,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the requested item and shipping-address changes, but violated explicit execution requirements despite having the necessary policy and order information. It modified items before updating the address, without obtaining explicit confirmation of the complete changes or the customer's payment-method selection. The tool call succeeded, so this was not an invocation or system failure."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 28,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8674,
+                    "output_tokens": 300,
+                    "total_tokens": 8975
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:00:57.042853",
+                    "end_time": "2026-10-27T03:01:08.602480",
+                    "execution_time_sec": 11.5596
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "d660e05d-fc1d-46cd-b536-072b81673ee4"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 21,
+            "step_median": 21,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 21,
+            "step_max": 21,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 21,
+            "gt_failure_description": "The assistant came up with an incorrect plan with a wrong sequence of tool calls."
+        },
+        {
+            "task_id": "74",
+            "failures": [
+                {
+                    "task_id": "74",
+                    "failure_case": 4,
+                    "description": "The agent failed to reconcile the cancellation target with the order contents and cancelled the single-laptop order #W5166363 rather than identifying the five-item order specified by the supplied objective. The cancellation succeeded and was never corrected.",
+                    "step_number": 27,
+                    "checklist_reasoning": "Category 4 applies: the cancellation used a retrieved order snapshot containing one item, although the supplied cancellation objective identifies a five-item order. The invocation was well formed and succeeded, so this was not a tool or infrastructure failure. The earlier exchange eligibility error was acknowledged at step 23 and superseded by the user's cancellation request."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 30,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7626,
+                    "output_tokens": 241,
+                    "total_tokens": 7867
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:01:08.603101",
+                    "end_time": "2026-10-27T03:01:23.136665",
+                    "execution_time_sec": 14.5335
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "6d6e6b18-c671-45fd-8d2a-1a8b53cc1bfa"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 27,
+            "step_median": 27,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 27,
+            "step_max": 27,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 6,
+            "step_error_distribution": {
+                "6": 1
+            },
+            "gt_failure_case": "1",
+            "gt_step_number": 21,
+            "gt_failure_description": "The assistant after step 21, realised that it cannot exchange items in a pending order and tried to recover by asking the user to modify the items in the order instead which corresponds to the ground truth. However, the user agent then asked to cancel the order instead of modifying it which led to incorrect final outcome."
+        },
+        {
+            "task_id": "79",
+            "failures": [
+                {
+                    "task_id": "79",
+                    "failure_case": 10,
+                    "description": "No supported failure; the requested modification was completed consistently with the provided policy. No separate ground-truth action sequence was supplied.",
+                    "step_number": -1,
+                    "checklist_reasoning": "No unresolved failure is demonstrated. The agent authenticated the user, checked order statuses, offered modification instead of an ineligible exchange, verified replacement availability, and obtained explicit confirmation before updating the order. The user's confirmation approved the disclosed refund method and confirmed that all requested item changes were included. The tool verified successful modification."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 26,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7542,
+                    "output_tokens": 211,
+                    "total_tokens": 7754
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:01:23.137803",
+                    "end_time": "2026-10-27T03:01:40.824843",
+                    "execution_time_sec": 17.687
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "f23a5b11-4833-4f19-91aa-04a5508ccf94"
+            },
+            "frequency": {
+                "10": 1
+            },
+            "most_common_failure": "10",
+            "modes": [
+                "10"
+            ],
+            "mean": 10,
+            "median": 10,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 10,
+            "max": 10,
+            "proportions": {
+                "10": 1.0
+            },
+            "step_mean": -1,
+            "step_median": -1,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": -1,
+            "step_max": -1,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 21,
+            "step_error_distribution": {
+                "21": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 20,
+            "gt_failure_description": "The assistant was not able to recover as it modified the wrong item in the order due to ambiguity in the task instruction."
+        },
+        {
+            "task_id": "80",
+            "failures": [
+                {
+                    "task_id": "80",
+                    "failure_case": 2,
+                    "description": "The agent presented unsupported details about the exchange email and replacement-shipping sequence as established procedures. The user then relied on that explanation when authorizing the exchange, and no subsequent correction resolved it.",
+                    "step_number": 25,
+                    "checklist_reasoning": "Category 2 applies: the agent introduced email contents and fulfillment procedures not supported by the policy or tool outputs. The policy establishes only that an email will explain how to return the items; it does not establish a shipping label, completion timeline, or when the replacement ships."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 26,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 6342,
+                    "output_tokens": 210,
+                    "total_tokens": 6553
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:01:40.826166",
+                    "end_time": "2026-10-27T03:01:55.152020",
+                    "execution_time_sec": 14.3258
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "157c0c14-3f7d-4912-b304-8af437d1701c"
+            },
+            "frequency": {
+                "2": 1
+            },
+            "most_common_failure": "2",
+            "modes": [
+                "2"
+            ],
+            "mean": 2,
+            "median": 2,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 2,
+            "max": 2,
+            "proportions": {
+                "2": 1.0
+            },
+            "step_mean": 25,
+            "step_median": 25,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 25,
+            "step_max": 25,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 1,
+            "step_error_distribution": {
+                "1": 1
+            },
+            "gt_failure_case": "9",
+            "gt_step_number": 26,
+            "gt_failure_description": "The assistant's execution was interrupted due to an unexpected system error."
+        },
+        {
+            "task_id": "82",
+            "failures": [
+                {
+                    "task_id": "82",
+                    "failure_case": 10,
+                    "description": "The trajectory shows successful completion of the user's revised request. Both tool results confirm the correct tablet return and gift-card refund destination. No contradictory ground-truth action sequence was supplied.",
+                    "step_number": -1,
+                    "checklist_reasoning": "No categories 1\u20139 establish an unresolved failure. The agent authenticated the user, checked order ownership and delivered status, correctly compared tablet prices, explained the refund restriction, obtained explicit confirmation for the revised request, and successfully requested both returns to an existing gift card. Category 10 custom label: No demonstrated failure."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 28,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 7285,
+                    "output_tokens": 201,
+                    "total_tokens": 7486
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:01:55.152685",
+                    "end_time": "2026-10-27T03:02:09.369120",
+                    "execution_time_sec": 14.2164
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "c37bafc2-8150-4878-b032-88f5e43f0190"
+            },
+            "frequency": {
+                "10": 1
+            },
+            "most_common_failure": "10",
+            "modes": [
+                "10"
+            ],
+            "mean": 10,
+            "median": 10,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 10,
+            "max": 10,
+            "proportions": {
+                "10": 1.0
+            },
+            "step_mean": -1,
+            "step_median": -1,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": -1,
+            "step_max": -1,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 21,
+            "step_error_distribution": {
+                "21": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 20,
+            "gt_failure_description": "The user agent's request led to wrong tool call arguments and led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "87",
+            "failures": [
+                {
+                    "task_id": "87",
+                    "failure_case": 4,
+                    "description": "The agent failed to reconcile all discovered orders with the user's request to update every pending order. It updated #W2166301, #W2466703, and the default address, but left #W6832752 at its Indianapolis address and incorrectly reported full completion.",
+                    "step_number": 15,
+                    "checklist_reasoning": "Category 4 applies: the agent treated partial order lookups as a complete inventory. Step 10 listed five orders, but the agent inspected only two before claiming there were exactly two pending orders. Step 24 subsequently revealed a third pending order, #W6832752, yet the agent never incorporated it into the updates. The mistaken Dallas destination was corrected; the pending-order omission was not."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 38,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8221,
+                    "output_tokens": 256,
+                    "total_tokens": 8478
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:02:09.369712",
+                    "end_time": "2026-10-27T03:02:21.543182",
+                    "execution_time_sec": 12.1734
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "4ed0a077-17c0-429d-a887-66617d0c36f7"
+            },
+            "frequency": {
+                "4": 1
+            },
+            "most_common_failure": "4",
+            "modes": [
+                "4"
+            ],
+            "mean": 4,
+            "median": 4,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 4,
+            "max": 4,
+            "proportions": {
+                "4": 1.0
+            },
+            "step_mean": 15,
+            "step_median": 15,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 15,
+            "step_max": 15,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 22,
+            "step_error_distribution": {
+                "22": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 37,
+            "gt_failure_description": "Since the assistant only modified the first two pending order addresses and claimed completion, it led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "91",
+            "failures": [
+                {
+                    "task_id": "91",
+                    "failure_case": 1,
+                    "description": "The agent promised to exchange the e-reader for the identical model and options instead of explaining that this exchange was outside its permitted actions and transferring the unsupported request to a human agent.",
+                    "step_number": 21,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the user's exchange request, but the policy explicitly permits exchanges only for a different product option. The purchased e-reader's exact options were already known, so no additional information was needed to recognize this restriction. The agent nevertheless offered a same-option exchange, and this violation was never corrected."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 40,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 9730,
+                    "output_tokens": 250,
+                    "total_tokens": 9980
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:02:21.543820",
+                    "end_time": "2026-10-27T03:02:32.069051",
+                    "execution_time_sec": 10.5252
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "d418b212-ac7d-4134-86ef-815e22b64f95"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 21,
+            "step_median": 21,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 21,
+            "step_max": 21,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 13,
+            "step_error_distribution": {
+                "13": 1
+            },
+            "gt_failure_case": "6",
+            "gt_step_number": 34,
+            "gt_failure_description": "The user agent's request led to wrong tool call arguments and led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "98",
+            "failures": [
+                {
+                    "task_id": "98",
+                    "failure_case": 1,
+                    "description": "The assistant called modify_pending_order_items on #W6750959 before completing the explicitly requested shipping-address change. Policy states that item modification prevents subsequent modifications or cancellation. The customer never withdrew the address request or knowingly accepted losing that capability. The resulting lock blocked both the address update and the later cancellation; escalation did not establish that either was completed.",
+                    "step_number": 21,
+                    "checklist_reasoning": "Category 1 applies: the assistant understood both requests and had the necessary order status, destination address, and policy. It nevertheless performed the irreversible item modification before the address update. The opening omission was remedied at steps 14 and 18, and the failed delivered-order exchange was corrected by switching to pending-order modification. Neither explains the persistent failure."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 38,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 8988,
+                    "output_tokens": 320,
+                    "total_tokens": 9308
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:02:32.070371",
+                    "end_time": "2026-10-27T03:02:45.916835",
+                    "execution_time_sec": 13.8464
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "b58b3947-5b02-4bef-8eab-32601a7057d5"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 21,
+            "step_median": 21,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 21,
+            "step_max": 21,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 0,
+            "step_error_distribution": {
+                "0": 1
+            },
+            "gt_failure_case": "5",
+            "gt_step_number": 21,
+            "gt_failure_description": "Even thought the user agent clearly specified the request to modify the items and the address at the same time, the assistant first modified the items in the pending orders before modifying the addresses. This led to the order being locked and producing an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "99",
+            "failures": [
+                {
+                    "task_id": "99",
+                    "failure_case": 1,
+                    "description": "The agent executed the bicycle and puzzle exchange without ever reminding the customer to confirm the complete exchange-item list. User approval of the listed replacements did not satisfy this separate mandatory reminder. No later step corrected the omission.",
+                    "step_number": 29,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the exchange request and had the necessary order details and confirmation, but skipped the policy-required reminder to confirm that all items to be exchanged had been provided before the one-time exchange action."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 46,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 12882,
+                    "output_tokens": 201,
+                    "total_tokens": 13083
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:02:45.918150",
+                    "end_time": "2026-10-27T03:02:58.375295",
+                    "execution_time_sec": 12.4571
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "5ef27956-e577-4293-be63-a9a7c9c75c0c"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 29,
+            "step_median": 29,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 29,
+            "step_max": 29,
+            "failure_case_accuracy": 1.0,
+            "step_mae": 6,
+            "step_error_distribution": {
+                "6": 1
+            },
+            "gt_failure_case": "1",
+            "gt_step_number": 35,
+            "gt_failure_description": "Since the assistant used the incorrect credit card while exchanging the delivered order items, it led to an incorrect final outcome as compared to ground truth actions."
+        },
+        {
+            "task_id": "104",
+            "failures": [
+                {
+                    "task_id": "104",
+                    "failure_case": 1,
+                    "description": "The agent requested confirmation without reminding the user to confirm the complete list of item modifications before the one-time modification action. This omission remained unresolved when the tool was called at step 53, after which further modifications or cancellation were prohibited.",
+                    "step_number": 51,
+                    "checklist_reasoning": "Category 1 applies: the agent understood the requested modification and had the necessary order and product information, but skipped the policy-required reminder to confirm that all items to be modified had been provided. Ordinary approval of the proposed replacement did not explicitly address this completeness requirement."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 58,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 10491,
+                    "output_tokens": 263,
+                    "total_tokens": 10754
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:02:58.376719",
+                    "end_time": "2026-10-27T03:03:11.725316",
+                    "execution_time_sec": 13.3485
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "e5c26547-7e8c-4763-ab14-fadbc1f9110b"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 51,
+            "step_median": 51,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 51,
+            "step_max": 51,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 6,
+            "step_error_distribution": {
+                "6": 1
+            },
+            "gt_failure_case": "4",
+            "gt_step_number": 57,
+            "gt_failure_description": "The assistant did not provide the tracking number of the cancelled order #W1154986 due to misinterpretation of tool output."
+        },
+        {
+            "task_id": "105",
+            "failures": [
+                {
+                    "task_id": "105",
+                    "failure_case": 1,
+                    "description": "The agent combined the user-facing message 'I can assist with that. Let me first check your orders...' with a get_order_details tool call, violating the required separation between responses and tool calls. No subsequent step resolves this violation.",
+                    "step_number": 23,
+                    "checklist_reasoning": "The agent understood the user's return request and had sufficient information to continue locating the order. However, the policy explicitly prohibited responding to the user and making a tool call in the same turn. At step 23, the agent did both. This is a procedural instruction violation, not an unsupported claim, malformed invocation, or tool-output misunderstanding."
+                }
+            ],
+            "num_judges": 1,
+            "trajectory_length": 48,
+            "llm_call_telemetry": {
+                "tokens": {
+                    "prompt_tokens": 10241,
+                    "output_tokens": 231,
+                    "total_tokens": 10472
+                },
+                "time": {
+                    "start_time": "2026-10-27T03:03:11.726685",
+                    "end_time": "2026-10-27T03:03:22.282836",
+                    "execution_time_sec": 10.5622
+                },
+                "model_name": "copilot-cli",
+                "instance": "copilot-cli",
+                "llm_call_id": "bfbabf67-596c-464e-b6ec-0c1fd7acc2d7"
+            },
+            "frequency": {
+                "1": 1
+            },
+            "most_common_failure": "1",
+            "modes": [
+                "1"
+            ],
+            "mean": 1,
+            "median": 1,
+            "std_dev": 0.0,
+            "variance": 0.0,
+            "min": 1,
+            "max": 1,
+            "proportions": {
+                "1": 1.0
+            },
+            "step_mean": 23,
+            "step_median": 23,
+            "step_std_dev": 0.0,
+            "step_variance": 0.0,
+            "step_min": 23,
+            "step_max": 23,
+            "failure_case_accuracy": 0.0,
+            "step_mae": 20,
+            "step_error_distribution": {
+                "20": 1
+            },
+            "gt_failure_case": "7",
+            "gt_step_number": 43,
+            "gt_failure_description": "Since the assistant tried to modify the address after modifying the pending order items, which is not supported by the domain policy, it led to an incorrect final outcome as compared to ground truth actions."
+        }
+    ]
+}

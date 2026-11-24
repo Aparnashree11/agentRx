@@ -10,14 +10,11 @@ original folders being present.
 ## Baseline releases
 
 - `tau_retail/baseline/v1.0.0/manifest.json`
-- `magentic_one/baseline/v1.0.0/manifest.json`
 
 Each manifest records the original project paths, the copied artifact paths,
 trajectory IDs, row counts, and SHA-256 checksums. Tau Retail freezes the 29
-failed trajectories and their 29 labels. Magentic-One freezes all 58 trajectory
-files and the existing 44 labels; only those 44 annotated IDs have benchmark
-labels. The Tau release is scoped to the 29 failed trajectories and does not
-include the broader 100-row Tau pool.
+failed trajectories and their 29 labels. The Tau release is scoped to the 29
+failed trajectories and does not include the broader 100-row Tau pool.
 
 ## Adding reworded datasets
 
