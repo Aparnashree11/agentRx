@@ -1,0 +1,55 @@
+{
+  "label_join": {
+    "tau": {
+      "traces": 29,
+      "labels": 29,
+      "matched": 29,
+      "labels_without_trace": 0,
+      "traces_without_label": 0
+    }
+  },
+  "labels_tau": {
+    "trajectories": 29,
+    "failure_entries": 39,
+    "max_failures_in_one": 4,
+    "duplicate_entries": 0,
+    "root_cause_id_type_mismatch": 0,
+    "root_cause_not_earliest_failure": 2,
+    "category_name_variants": {
+      "Instruction Adherence Failure": 6,
+      "Misinterpretation of Tool Output": 8,
+      "Invalid Invocation": 4,
+      "Underspecified User Intent": 10,
+      "Intent Plan Misalignment": 8,
+      "Intent Not Supported": 2,
+      "System Failure": 1
+    },
+    "agent_name_variants": {
+      "Assistant": 29,
+      "User": 10
+    }
+  },
+  "adapter_round_trip": {
+    "tau": {
+      "checked": 29,
+      "raw_messages": 1064,
+      "ir_substeps": 1064,
+      "content_mismatches_after_json_canonicalization": 0,
+      "tool_call_names_missing": 0,
+      "role_mismatches": 0,
+      "trajectories_with_loss": [],
+      "note": "Raw and IR content compared after parsing JSON tool outputs (the IR pretty-prints them)."
+    }
+  },
+  "privacy_scan": {
+    "tau": {
+      "email_matches": 65,
+      "email_domains": {
+        "example.com": 63,
+        "gmail.com": 2
+      },
+      "phone_like_matches": 0,
+      "trajectories_with_hits": 28
+    }
+  }
+}
