@@ -1,0 +1,3418 @@
+{
+  "2": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 5,
+          "source_end": 6,
+          "find": "9523456873",
+          "replace_with": "9523456783",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 5,
+          "source_end": 6,
+          "insert_after_step": 6
+        }
+      ],
+      "rationale": "The red herring places a visible tool error (a transposed T-Shirt product ID, 9523456783) directly before the correct get_product_details lookup, so the trajectory appears to contain a failed lookup just before the count. The noise replays the same read-only product details lookup right after the tool result and before the answer, adding a second copy of the variant list for the evaluator to sort through. Neither changes the data the agent sees, so the miscount at step 7 remains the only error in the answer.",
+      "distinguishing_evidence": "Step 6 still contains the full variant list for product 9523456873, with 12 variants of which 2 have available: false (5047954489 and 3542102174) and 10 have available: true. Step 7 states 11, which does not match that list, so the miscount at step 7 is the root cause."
+    },
+    "generation": {
+      "session_id": "b8860320-5834-4d2b-a703-f24e8baac911",
+      "num_turns": 2,
+      "duration_ms": 11700,
+      "total_cost_usd": 0.00633335,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17224,
+          "outputTokens": 2401,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 17015,
+          "webSearchRequests": 0,
+          "costUSD": 0.00633335,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1912,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17015,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 7,
+      "6": 8,
+      "7": 11,
+      "8": 12,
+      "9": 13,
+      "10": 14,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 4,
+        "steps": [
+          5,
+          6
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 6,
+        "steps": [
+          9,
+          10
+        ]
+      }
+    ],
+    "inserted_steps": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "original_root": 7
+  },
+  "3": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 5,
+          "source_end": 6,
+          "find": "9523456873",
+          "replace_with": "9523456783",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 3,
+          "source_end": 4,
+          "insert_after_step": 6
+        }
+      ],
+      "rationale": "The annotated failure is a miscount at step 7: the get_product_details result at step 6 lists 12 variants, of which two (5047954489 and 3542102174) are unavailable, so 10 are available, but the agent said 11. The red herring is a transposed-digit product ID on the step 5 lookup that returns a plain not-found error before the correct retry, which adds a visible error right before the evidence and makes the product lookup look shaky, pulling attention toward the tool-call stage rather than the count. The noise replays the harmless product-type listing right between the product details result and the final answer, lengthening the output the evaluator must sift through before the miscount.",
+      "distinguishing_evidence": "Step 6's variants dict is the root evidence: 12 variants with \"available\": false only for 5047954489 and 3542102174, giving 10 available T-shirts, not the 11 claimed at step 7. The product ID 9523456873 used in steps 5, 6 and 27-28 is consistent and matches the T-Shirt product type in step 4."
+    },
+    "generation": {
+      "session_id": "3e8f37b4-2373-48ef-825a-25dd75be0ce8",
+      "num_turns": 2,
+      "duration_ms": 15150,
+      "total_cost_usd": 0.0066865499999999994,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17408,
+          "outputTokens": 2997,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 17199,
+          "webSearchRequests": 0,
+          "costUSD": 0.0066865499999999994,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2429,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17199,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 7,
+      "6": 8,
+      "7": 11,
+      "8": 12,
+      "9": 13,
+      "10": 14,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 4,
+        "steps": [
+          5,
+          6
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 6,
+        "steps": [
+          9,
+          10
+        ]
+      }
+    ],
+    "inserted_steps": [
+      5,
+      6,
+      9,
+      10
+    ],
+    "original_root": 7
+  },
+  "4": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "9523456873",
+          "replace_with": "9523456837",
+          "response": "Error: product not found",
+          "insert_after_step": 12
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 14
+        }
+      ],
+      "rationale": "The red herring adds a visible failed product lookup just before the real product-details call, so the evaluator sees a lookup error and a successful retry near the miscount, which may distract from the actual counting error. The noise replays the read-only product-type listing between the product output and the count, adding unrelated tool output right before the failure without changing any state. Neither decoy alters the product data that step 14 returns, so the count error at step 15 remains the only mistake.",
+      "distinguishing_evidence": "Step 14's get_product_details output lists 12 T-shirt variants, of which 2 (5047954489 and 3542102174) have available: false, so 10 are available. The assistant's step 15 claim of 11 contradicts this output, and step 14 is the only source of the variant data needed to make the count."
+    },
+    "generation": {
+      "session_id": "4f53aa7f-f9d2-4565-a072-576b9494ca70",
+      "num_turns": 2,
+      "duration_ms": 10589,
+      "total_cost_usd": 0.00726725,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20571,
+          "outputTokens": 2261,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20361,
+          "webSearchRequests": 0,
+          "costUSD": 0.00726725,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1767,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20361,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 14,
+        "steps": [
+          17,
+          18
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      17,
+      18
+    ],
+    "original_root": 15
+  },
+  "12": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W5490111",
+          "replace_with": "#W5490101",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "The red herring adds a visible, harmless lookup failure on the order ID before the agent correctly fetches #W5490111 for the first time, which makes the order-lookup phase look like the place where things went wrong. The noise replays the read-only profile lookup right after the user says to cancel or return everything, so the assistant appears to be re-checking account details before acting. Both are plausible, read-only, and leave the state unchanged, so they draw attention away from the return at step 19 without altering it.",
+      "distinguishing_evidence": "Step 16 (user: \"All of them. Cancel or return everything\") and step 19 (return_delivered_order_items issued with no confirmation step and no payment method confirmed by the user) still establish the failure. The user never gave a yes to a listed return or chose a payment method before the call, and the policy requires both before a database write."
+    },
+    "generation": {
+      "session_id": "3f3c9b28-9480-4f1c-a457-c553665610ff",
+      "num_turns": 2,
+      "duration_ms": 10159,
+      "total_cost_usd": 0.00505845,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13188,
+          "outputTokens": 2272,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 12981,
+          "webSearchRequests": 0,
+          "costUSD": 0.00505845,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1766,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 12981,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      19,
+      20
+    ],
+    "original_root": 19
+  },
+  "20": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "#W9911714",
+          "replace_with": "#W9911741",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W5733668",
+          "replace_with": "#W5733686",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 20
+        }
+      ],
+      "rationale": "Two order-ID slips (a transposed digit in #W9911714 and #W5733668) return \"order not found\" just before the successful lookups, so the trajectory shows visible lookup errors in the same stretch where the order statuses are being gathered. The noise replay of get_user_details sits between the user's upgrade request and the failing reply, adding a read-only exchange that lengthens the gap between the status evidence at step 18/19 and the misreading at step 21. Together these make an evaluator more likely to attribute the trouble to a lookup error or to the profile read rather than to the status misreading.",
+      "distinguishing_evidence": "Step 19 correctly lists #W4967593 and #W5733668 as \"Processed\" and #W9911714 as \"Pending\", based on the order-detail outputs at steps 14, 16 and 18, all showing status \"processed\" or \"pending\". The step 21 claim that #W4967593 and #W5733668 are delivered contradicts those outputs, so the misreading at step 21 is the root cause. The later exchange errors (\"non-delivered order cannot be exchanged\") confirm that the orders were not delivered."
+    },
+    "generation": {
+      "session_id": "e5bd02f2-63f6-4433-9ffd-8a21e6972933",
+      "num_turns": 2,
+      "duration_ms": 16859,
+      "total_cost_usd": 0.011026049999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 31100,
+          "outputTokens": 3460,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 30893,
+          "webSearchRequests": 0,
+          "costUSD": 0.011026049999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2791,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 30893,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34,
+      "29": 35,
+      "30": 36,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46,
+      "41": 47,
+      "42": 48,
+      "43": 49,
+      "44": 50,
+      "45": 51,
+      "46": 52,
+      "47": 53,
+      "48": 54,
+      "49": 55,
+      "50": 56,
+      "51": 57,
+      "52": 58,
+      "53": 59,
+      "54": 60,
+      "55": 61,
+      "56": 62,
+      "57": 63,
+      "58": 64,
+      "59": 65,
+      "60": 66,
+      "61": 67,
+      "62": 68
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          15,
+          16
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 20,
+        "steps": [
+          25,
+          26
+        ]
+      }
+    ],
+    "inserted_steps": [
+      15,
+      16,
+      19,
+      20,
+      25,
+      26
+    ],
+    "original_root": 21
+  },
+  "21": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "\"order_id\": \"#W9911714\"",
+          "replace_with": "\"order_id\": \"#W9911741\"",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 23,
+          "source_end": 24,
+          "insert_after_step": 26
+        }
+      ],
+      "rationale": "The red herring adds a visible, self-corrected lookup failure on the order ID before the order is found. A reader scanning for errors may fixate on it as the source of the confusion, when the retry succeeds and changes nothing. The noise replays a read-only product lookup for the shoes right after the user's \"I still need to exchange them\" message, which adds output between the user's pushback and the assistant's refusal. Both draw attention away from step 28, where the user rejects the valid modify option.",
+      "distinguishing_evidence": "Step 17 and step 27 establish that order #W9911714 is pending and that exchanges require delivered orders. Step 19 and step 21 confirm there are no fulfillment details. Step 40 and step 41 show the user approved a modify, and step 43 shows the modification was processed. The user's rejection at step 28 of the offered modify path, which was the valid route, is the root cause."
+    },
+    "generation": {
+      "session_id": "58886091-a716-42ce-b377-126fb16de940",
+      "num_turns": 2,
+      "duration_ms": 11325,
+      "total_cost_usd": 0.007092250000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19765,
+          "outputTokens": 2397,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19549,
+          "webSearchRequests": 0,
+          "costUSD": 0.007092250000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1850,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19549,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 26,
+        "steps": [
+          29,
+          30
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      29,
+      30
+    ],
+    "original_root": 28
+  },
+  "28": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W2575533",
+          "replace_with": "#W2575553",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 32
+        }
+      ],
+      "rationale": "The red herring adds a visible \"order not found\" error for a transposed order ID shortly before the agent looks up #W2575533 again. The retry succeeds and shows the pending order, so the error looks like a lookup problem, not a policy issue, and draws attention to order-ID handling rather than to the cancellation scope. The noise re-reads order #W7181492, which contains a different garden hose (item 5753502325, not the one in #W2575533). Its unchanged contents add a second hose and a second order to compare right before the cancel call, which can make the agent think the hose is separable from its order.",
+      "distinguishing_evidence": "Step 30 shows the user asking to cancel only the garden hose. Step 31 says the order is pending and asks for confirmation. Step 33 calls cancel_pending_order with the whole order ID #W2575533 and no item list, which is the root failure. Step 34 shows every item in #W2575533 set to cancelled and the full $1619.34 refunded, and step 37 confirms the entire order was cancelled. The policy has no partial cancel, so the cancel tool can only act on the whole order."
+    },
+    "generation": {
+      "session_id": "90839047-d157-4d45-a46b-8e9db354260d",
+      "num_turns": 2,
+      "duration_ms": 13023,
+      "total_cost_usd": 0.00691715,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 18704,
+          "outputTokens": 2681,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 18494,
+          "webSearchRequests": 0,
+          "costUSD": 0.00691715,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2083,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 18494,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "reject",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): stale: step 25 `return_delivered_order_items` on the same entity"
+    }
+  },
+  "31": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 27,
+          "source_end": 28,
+          "find": "#W5481803",
+          "replace_with": "#W5481830",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 27,
+          "source_end": 28,
+          "insert_after_step": 30
+        }
+      ],
+      "rationale": "The red herring is a transposed order ID on the read-only lookup of the boot order, answered by a not-found error. It looks like a trouble spot in the boot-cancellation flow but is harmless, so it draws attention to order-ID handling rather than to the cancel call. The noise decoy re-reads the same boot order (#W5481803) between the user's confirmation and the cancel call. It is a state-free read whose result is unchanged, and it lengthens the stretch of output the evaluator must sift through before the wrong cancel_pending_order call at step 31.",
+      "distinguishing_evidence": "Step 28 shows order #W5481803 is pending and contains two items (Electric Kettle and Hiking Boots), so a whole-order cancel is the only available action. The user asked only to cancel the boot (step 26 and step 30). Step 29 shows the assistant offered to cancel the whole order and described only the hiking boots. Step 31 then calls cancel_pending_order on the full order, and step 32 shows both the kettle and the boots cancelled and refunded. That gap between the request and the executed call is the root cause, and none of the decoys changes it."
+    },
+    "generation": {
+      "session_id": "baf5b11c-ee09-4782-906a-ff81e10fe126",
+      "num_turns": 2,
+      "duration_ms": 12804,
+      "total_cost_usd": 0.006235849999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16716,
+          "outputTokens": 2510,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16509,
+          "webSearchRequests": 0,
+          "costUSD": 0.006235849999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1898,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16509,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 26,
+        "steps": [
+          27,
+          28
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          33,
+          34
+        ]
+      }
+    ],
+    "inserted_steps": [
+      27,
+      28,
+      33,
+      34
+    ],
+    "original_root": 31
+  },
+  "32": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 9,
+          "source_end": 10,
+          "find": "#W7449508",
+          "replace_with": "#W7494508",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 10
+        }
+      ],
+      "rationale": "The red herring adds a visible \"order not found\" error for a transposed order ID just before the agent reads the correct order #W7449508, so the agent appears to be retrying a failed lookup and the error draws attention to order-ID handling rather than to the content of the tool output. The noise replays the read-only get_user_details call right after the order details, lengthening the trajectory between the evidence and the answer at step 11 without changing any state or result.",
+      "distinguishing_evidence": "Step 10 still shows the order #W7449508 contains only the Espresso Machine and Sneakers with fulfillment tracking 194496721133, with no tablet, so the tracking number given at step 11 belongs to an order that does not contain the tablet. The tablet appears only in order #W2692684 (step 20 in the original trajectory), which the agent does not check until later."
+    },
+    "generation": {
+      "session_id": "afdb30a3-000c-44db-88fe-cb7d8ab37d48",
+      "num_turns": 2,
+      "duration_ms": 15033,
+      "total_cost_usd": 0.00640005,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16415,
+          "outputTokens": 3019,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16208,
+          "webSearchRequests": 0,
+          "costUSD": 0.00640005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2512,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16208,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 11,
+      "10": 12,
+      "11": 15,
+      "12": 16,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 8,
+        "steps": [
+          9,
+          10
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 10,
+        "steps": [
+          13,
+          14
+        ]
+      }
+    ],
+    "inserted_steps": [
+      9,
+      10,
+      13,
+      14
+    ],
+    "original_root": 11
+  },
+  "34": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W1845024",
+          "replace_with": "#W1845042",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "The red herring adds an early, harmless lookup failure on a transposed order ID, which draws attention to order-ID handling and makes the assistant look error-prone before the real problem. The noise replays the read-only order lookup right after the user's confirmation, so the order's item list appears again between the user's yes and the faulty modify call, pulling focus toward item details rather than the malformed argument lists. Neither decoy changes state or alters the later steps.",
+      "distinguishing_evidence": "Step 17 is still the root cause: it sends item_ids with three entries but new_item_ids as an empty list, so the item counts do not match. Step 15 and the user's confirmation at step 16 show the intended removal, and step 18's error \"the number of items to be exchanged should match\" ties the failure to that argument mismatch. Step 12 confirms order #W1845024 is pending with the five items, so the order lookups are valid."
+    },
+    "generation": {
+      "session_id": "7da93827-25a8-45e2-9343-a1d7584369cb",
+      "num_turns": 2,
+      "duration_ms": 12318,
+      "total_cost_usd": 0.00593335,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15278,
+          "outputTokens": 2769,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15068,
+          "webSearchRequests": 0,
+          "costUSD": 0.00593335,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2240,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15068,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      19,
+      20
+    ],
+    "original_root": 17
+  },
+  "38": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 27,
+          "source_end": 28,
+          "find": "9743693396",
+          "replace_with": "9743693369",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 25,
+          "source_end": 26,
+          "insert_after_step": 34
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 36
+        }
+      ],
+      "rationale": "The annotated failure is the choice of the 285.66 umbrella (item 3111466194, unavailable) as the cheapest umbrella at step 37. The red herring is a failed lookup of the Patio Umbrella product with a transposed digit in its product ID, which produces an error right before the correct umbrella lookup. It draws attention to the umbrella product data and makes the umbrella step look like the point where the agent struggled. The noise replays re-read the Action Camera product details (between the umbrella data and the calculation) and the order details (just before the calculation). These are read-only, return identical results, and add output between the umbrella evidence and the failing calculation, diluting attention on the umbrella step.",
+      "distinguishing_evidence": "Step 28 shows the umbrella variants, including 3111466194 (7 ft, red, polyester, manual tilt) with available: false at price 285.66, and 9879255677 (green, auto tilt) available: true at 288.82. Step 37 then uses 285.66 for the umbrella anyway, and step 38 returns the resulting total of 1127.69. The annotated root cause is therefore established by steps 28 and 37 together."
+    },
+    "generation": {
+      "session_id": "5937dd80-dade-411e-9ac7-90346e723c5f",
+      "num_turns": 2,
+      "duration_ms": 15036,
+      "total_cost_usd": 0.007786049999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20390,
+          "outputTokens": 3408,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20178,
+          "webSearchRequests": 0,
+          "costUSD": 0.007786049999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2760,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20178,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 39,
+      "36": 40,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46,
+      "41": 47,
+      "42": 48,
+      "43": 49,
+      "44": 50,
+      "45": 51,
+      "46": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 26,
+        "steps": [
+          27,
+          28
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 34,
+        "steps": [
+          37,
+          38
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 36,
+        "steps": [
+          41,
+          42
+        ]
+      }
+    ],
+    "inserted_steps": [
+      27,
+      28,
+      37,
+      38,
+      41,
+      42
+    ],
+    "original_root": 37
+  },
+  "39": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "fatima_taylor_3452",
+          "replace_with": "fatima_taylor_3425",
+          "response": "Error: user not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "The red herring adds a visible \"user not found\" error for a read-only profile lookup just before the successful retry, which draws attention to account-lookup problems instead of the order-details check. The noise replay re-reads the user profile right after the customer says the new address may be in their order, so the agent's attention is spread over profile data it already has, close to the step where it wrongly decides the order details are unusable. Neither decoy changes the state or the authentication outcome, and the successful retry and all later steps stay as in the original.",
+      "distinguishing_evidence": "Step 16 asks the agent to pick up the new address from the order details. Step 17 claims get_order_details cannot provide it, but the agent never calls get_order_details, which is the step that would have been needed to check the order's address. The original step 12 (get_user_details) only shows the old default address, so the claim that orders only reflect the current default address is unsupported by any tool result. The user's request in steps 14 and 16 and the absence of any get_order_details call before step 17 establish the annotated cause."
+    },
+    "generation": {
+      "session_id": "d3745c32-94db-4c9e-bc53-d35850b863c4",
+      "num_turns": 2,
+      "duration_ms": 17387,
+      "total_cost_usd": 0.005967350000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13847,
+          "outputTokens": 3696,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13636,
+          "webSearchRequests": 0,
+          "costUSD": 0.005967350000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 3119,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13636,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      19,
+      20
+    ],
+    "original_root": 17
+  },
+  "41": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W4082615",
+          "replace_with": "#W4082651",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 7,
+          "source_end": 8,
+          "insert_after_step": 16
+        }
+      ],
+      "rationale": "The red herring makes a read-only order lookup fail with a transposed digit in the order ID just before the agent looks up the same order correctly, which draws attention to order-ID handling rather than to sequencing. The noise replays the read-only user profile lookup right after the user's address correction request, so the address discussion is followed by extra profile output that still shows the old address and no sign of the ordering problem. Together they put distracting, harmless output between the user's address request and the item modification at step 17.",
+      "distinguishing_evidence": "The user's request at step 16 to fix the address, the item modification at step 17 that changes the order to 'pending (item modified)', and the failed address update at steps 19-20 with \"Error: non-pending order cannot be modified\" still establish that the modify-items call locked the order before the address was corrected. The original order detail and profile lookups confirm the address was wrong and the order was pending before step 17."
+    },
+    "generation": {
+      "session_id": "b663584a-1c2e-46f8-8bb0-4b3c1c2a5dd7",
+      "num_turns": 2,
+      "duration_ms": 11203,
+      "total_cost_usd": 0.00573025,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15623,
+          "outputTokens": 2153,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15420,
+          "webSearchRequests": 0,
+          "costUSD": 0.00573025,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1623,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15420,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      19,
+      20
+    ],
+    "original_root": 17
+  },
+  "47": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W9502127",
+          "replace_with": "#W9502172",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "The red herring is a mistyped order ID lookup (#W9502172) that fails with \"order not found\" just before the agent correctly looks up #W9502127, which makes the early lookup phase look like the place where things went wrong and draws attention to order identification. The noise replays the read-only order lookup for #W9502127 right after the user's escalation request, so the agent appears to be re-checking the order, while the actual premature transfer at step 19 still follows.",
+      "distinguishing_evidence": "Step 15 and 17 show the agent listing the return details and stating that refunds to PayPal take 5-7 business days and cannot be expedited to 3 days; the policy has no way to expedite refunds, and the agent should have called return_delivered_order_items after user confirmation (step 16 gave \"yes, please proceed\") before transferring. Step 19 is the transfer call, which the policy only permits when the request is out of scope, and the return itself was still in scope."
+    },
+    "generation": {
+      "session_id": "b73e9148-6b23-4f2f-aa30-39fee4fadb8e",
+      "num_turns": 2,
+      "duration_ms": 10649,
+      "total_cost_usd": 0.00497215,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 12570,
+          "outputTokens": 2469,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 12366,
+          "webSearchRequests": 0,
+          "costUSD": 0.00497215,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1930,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 12366,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      21,
+      22
+    ],
+    "original_root": 19
+  },
+  "55": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "#W4597054",
+          "replace_with": "#W4579054",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 17,
+          "source_end": 18,
+          "insert_after_step": 30
+        }
+      ],
+      "rationale": "The red herring adds a visible failed order lookup (a transposed digit in #W4597054) followed by a successful retry, which draws attention to order #W4597054 early and makes the agent's handling of that order look error-prone. The noise replays the read-only get_order_details for #W4597054 just before the user's final return request, placing the water bottle line item in view again while the user is still deciding. Neither decoy changes the order state or the user's later message, so the annotated omission of the water bottle from the return request stays the root cause.",
+      "distinguishing_evidence": "Step 18 shows order #W4597054 contains four items, including the Water Bottle (item 6777246137), with status delivered. Step 26 shows the user naming only the Air Purifier, Smart Watch, and Coffee Maker from that order, with the Water Bottle never mentioned. Step 32 then repeats the same three items, so the user's partial item list is the root cause at the annotated step."
+    },
+    "generation": {
+      "session_id": "0512d351-8f02-478c-b675-16061a478869",
+      "num_turns": 2,
+      "duration_ms": 11204,
+      "total_cost_usd": 0.00702475,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19660,
+          "outputTokens": 2325,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19444,
+          "webSearchRequests": 0,
+          "costUSD": 0.00702475,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1788,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19444,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          33,
+          34
+        ]
+      }
+    ],
+    "inserted_steps": [
+      17,
+      18,
+      33,
+      34
+    ],
+    "original_root": 32
+  },
+  "59": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 7,
+          "source_end": 8,
+          "find": "#W2702727",
+          "replace_with": "#W2702772",
+          "response": "Error: order not found",
+          "insert_after_step": 6
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 12
+        }
+      ],
+      "rationale": "The red herring adds an early, self-corrected lookup error on the older order ID, a visible error that looks like trouble before the agent reads the real order details. The noise replays the read-only lookup of order #W8268610 between the user's refund question and the agent's reply, so the two orders' details sit side by side just before the user's cancellation request at step 14. Neither decoy changes any state or alters the order data that follows.",
+      "distinguishing_evidence": "Step 13 shows the assistant stating it cannot confirm the 5-day processing timeline and has no fulfillment or chronology data. Steps 8 and 10 show the two orders with no placement dates, so the user's claim that #W2702727 is \"older\" has no support in the tool outputs. The user still chooses to cancel at step 14 despite that, which is the annotated root failure."
+    },
+    "generation": {
+      "session_id": "25d2944f-a4aa-4526-a992-07a278effb1e",
+      "num_turns": 2,
+      "duration_ms": 10162,
+      "total_cost_usd": 0.005000350000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13306,
+          "outputTokens": 2087,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13094,
+          "webSearchRequests": 0,
+          "costUSD": 0.005000350000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1574,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13094,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 9,
+      "8": 10,
+      "9": 11,
+      "10": 12,
+      "11": 13,
+      "12": 14,
+      "13": 17,
+      "14": 18,
+      "15": 19,
+      "16": 20,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 6,
+        "steps": [
+          7,
+          8
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 12,
+        "steps": [
+          15,
+          16
+        ]
+      }
+    ],
+    "inserted_steps": [
+      7,
+      8,
+      15,
+      16
+    ],
+    "original_root": 14
+  },
+  "63": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W5061109",
+          "replace_with": "#W5061190",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 15,
+          "source_end": 16,
+          "insert_after_step": 30
+        }
+      ],
+      "rationale": "The red herring adds an early visible lookup failure on the order ID, which looks like a data problem that the agent later resolves, pulling attention toward order-lookup errors rather than the user's request at step 32. The noise decoy replays the read-only product lookup right after the user asks to add the cheaper speaker, so extra tool output sits between the request and the assistant's reply, lengthening the trajectory and diluting focus on the user's decision to keep the expensive speaker and add the cheaper one instead of replacing it.",
+      "distinguishing_evidence": "Step 30 shows the user explicitly asking to add the cheapest blue speaker, and step 31 shows the assistant proposing a replacement that the user rejects at step 32 with \"just add the cheaper speaker, and I'll handle the expensive one later.\" The task instruction asked for replacement of the >$300 speaker, which the user's step 32 contradicts. Step 14 confirms order #W5061109 contains the $302.67 speaker, and step 16 confirms the blue 20-hour speaker at $271.89 exists, so the cause remains the user's step 32 choice."
+    },
+    "generation": {
+      "session_id": "a7a9dc20-8479-44a8-938f-437ecc53ded9",
+      "num_turns": 2,
+      "duration_ms": 12482,
+      "total_cost_usd": 0.0057957500000000006,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 14920,
+          "outputTokens": 2707,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 14714,
+          "webSearchRequests": 0,
+          "costUSD": 0.0057957500000000006,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2108,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 14714,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          33,
+          34
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      33,
+      34
+    ],
+    "original_root": 32
+  },
+  "71": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 19,
+          "source_end": 20,
+          "find": "6817146515",
+          "replace_with": "6817146551",
+          "response": "Error: product not found",
+          "insert_after_step": 18
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 22
+        }
+      ],
+      "rationale": "The red herring makes the agent mistype the desk lamp product ID (a transposed digit) on the lookup that starts the lamp change, which the system rejects with a \"product not found\" error before the correct lookup succeeds. That early visible error in the lamp-modification flow can draw attention toward the product lookup rather than the later user choice. The noise replays the read-only profile lookup right after the agent's \"think\" step and before it lists the black lamp options, adding output between the evidence and the failure without changing state. Neither decoy alters the options the agent presents or what the user later picks.",
+      "distinguishing_evidence": "Step 20 shows the full desk lamp variant list, including the four black options (high/AC, medium/AC, medium/USB, low/USB), and step 23 shows the agent presenting those options to the user. The user's step 24 choice of the medium-brightness AC-adapter option is the ambiguity: the user never specified brightness or power source earlier, which makes this step the underspecified-intent root cause."
+    },
+    "generation": {
+      "session_id": "55a9661c-b5ef-49ad-94fb-c85df3372443",
+      "num_turns": 2,
+      "duration_ms": 13083,
+      "total_cost_usd": 0.00644115,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 17235,
+          "outputTokens": 2610,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 17026,
+          "webSearchRequests": 0,
+          "costUSD": 0.00644115,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2039,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17026,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 18,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 22,
+        "steps": [
+          25,
+          26
+        ]
+      }
+    ],
+    "inserted_steps": [
+      19,
+      20,
+      25,
+      26
+    ],
+    "original_root": 24
+  },
+  "72": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "6817146515",
+          "replace_with": "6817164515",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 15,
+          "source_end": 16,
+          "insert_after_step": 18
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "The red herring is a failed lookup of the desk lamp product with a transposed digit in its product ID, which is harmless because it only reads data and the correct retry follows immediately, so it looks like a routine retry rather than a mistake. The two noise replays re-read the backpack product details and the order details between the last lookup and the think step. Both are read-only and return the same results, so they add output between the agent's evidence and the modify_pending_order_items call without changing any state. These spread attention across many lookups and make the address-first requirement look less central.",
+      "distinguishing_evidence": "Step 12 shows order #W5270061 in \"pending\" status with the original Washington DC address, and step 13 shows the agent planned to update the address. Nothing modifies the address before step 21. Step 21 calls modify_pending_order_items, and step 22 changes the status to \"pending (item modified)\" with the address still in DC. Step 23 then admits the address can no longer be updated, so the item modification at step 21 is the cause because it was done before the address change."
+    },
+    "generation": {
+      "session_id": "f64650cb-40c4-4ea9-bd2c-3ccd8c25f7cf",
+      "num_turns": 2,
+      "duration_ms": 13148,
+      "total_cost_usd": 0.00603975,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15821,
+          "outputTokens": 2654,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15616,
+          "webSearchRequests": 0,
+          "costUSD": 0.00603975,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2053,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15616,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 19,
+      "18": 20,
+      "19": 25,
+      "20": 26,
+      "21": 27,
+      "22": 28,
+      "23": 29,
+      "24": 30,
+      "25": 31,
+      "26": 32,
+      "27": 33,
+      "28": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      17,
+      18,
+      21,
+      22,
+      23,
+      24
+    ],
+    "original_root": 21
+  },
+  "74": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 11,
+          "source_end": 12,
+          "find": "#W5166363",
+          "replace_with": "#W5166336",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "The red herring adds an earlier \"order not found\" error from a transposed order ID on a read-only lookup, which the agent then corrects by retrying the correct ID. This draws attention to order-lookup errors and makes the order-ID handling look like the source of trouble, while the actual problem (exchanging a pending order) is not touched. The noise replays the read-only product-details lookup between the user's answers and the confirmation, lengthening the trajectory with unchanged output before the confirmation and the failing call.",
+      "distinguishing_evidence": "Step 12 still shows the order #W5166363 with status \"pending\", and the agent never checks that status before step 21. Step 22 then returns \"Error: non-delivered order cannot be exchanged\", and step 23 confirms the order is still pending. Together these establish that the agent called the exchange tool on a pending order at step 21, which is invalid under the policy, and that the failure at step 21 is the root cause."
+    },
+    "generation": {
+      "session_id": "88736eb9-7648-47f0-bf73-2814be211d83",
+      "num_turns": 2,
+      "duration_ms": 11808,
+      "total_cost_usd": 0.0056815500000000005,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15228,
+          "outputTokens": 2295,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15019,
+          "webSearchRequests": 0,
+          "costUSD": 0.0056815500000000005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1753,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15019,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 13,
+      "12": 14,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 10,
+        "steps": [
+          11,
+          12
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      11,
+      12,
+      21,
+      22
+    ],
+    "original_root": 21
+  },
+  "79": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "8310926033",
+          "replace_with": "8310926303",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "The red herring makes the first product lookup look like a failed call: the agent mistypes the water bottle product ID, gets a not-found error, and then retries with the correct ID. This adds a visible error just before the agent lists the replacement options, which can draw attention to the lookup and away from the choice at step 20. The noise replays the agent's read of order #W9284598 right after the product details. That order contains the 1000ml red glass bottle and other items, so the evaluator sees more 1000ml bottle data and more chances to mistake the red and black variants.",
+      "distinguishing_evidence": "Step 18 lists the 1000ml stainless steel variants in both red (2439754078, available) and black (7661609223, available), and step 19 offers both. The user's choice of black at step 20, with no color given, is the root cause. Step 22 confirms the black choice, and step 23 applies it. The decoy events only add a failed lookup and a repeated read, and change no state, so the order and the cause remain the same."
+    },
+    "generation": {
+      "session_id": "20c8a1c6-89f7-4e8e-b455-1e8ede1cca45",
+      "num_turns": 2,
+      "duration_ms": 12284,
+      "total_cost_usd": 0.0059466499999999995,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15792,
+          "outputTokens": 2486,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15585,
+          "webSearchRequests": 0,
+          "costUSD": 0.0059466499999999995,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1928,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15585,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          17,
+          18
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      17,
+      18,
+      21,
+      22
+    ],
+    "original_root": 20
+  },
+  "80": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W7209932",
+          "replace_with": "#W7290932",
+          "response": "Error: order not found",
+          "insert_after_step": 12
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 24
+        }
+      ],
+      "rationale": "The red herring makes the early order lookup look like a failed step: the user is unsure of the order ID, so a transposed-digit lookup returning \"order not found\" appears as a visible error before the agent retries and gets the correct order. The noise replays the read-only order lookup right after the user's email question, adding another order-detail exchange between the user's final confirmation request and the annotated step. Neither decoy changes the order state, so the trajectory continues unchanged.",
+      "distinguishing_evidence": "The original step 13-14 retry still returns the correct order #W7209932 with the blue S polyester v-neck item and delivered status, and the user confirmed the gift card and red XXL cotton crew neck selection at step 18. The annotated failure at step 26 is the point where the user asks for finalization and the assistant never calls the exchange tool, so the trajectory ends without the exchange being executed."
+    },
+    "generation": {
+      "session_id": "d543ad0b-e8b1-4ec3-b1ea-4db298c7edeb",
+      "num_turns": 2,
+      "duration_ms": 11057,
+      "total_cost_usd": 0.00514005,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 13701,
+          "outputTokens": 2127,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 13495,
+          "webSearchRequests": 0,
+          "costUSD": 0.00514005,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1598,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 13495,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 29,
+      "26": 30
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 24,
+        "steps": [
+          27,
+          28
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      27,
+      28
+    ],
+    "original_root": 26
+  },
+  "82": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "#W8171054",
+          "replace_with": "#W8171045",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 18
+        }
+      ],
+      "rationale": "The annotated failure is the user's step 20, where they ask to return the tablets from both orders instead of all items from one order. The red herring is a mistyped order lookup before the order #W8171054 check: it fails with a plausible \"order not found\" error, then the same lookup succeeds, adding a visible error just before the user's confusing request. The noise replays the earlier read of order #W3069600 between the order checks and the assistant's summary, lengthening the trajectory with harmless read-only output. Neither decoy changes any state or alters what follows.",
+      "distinguishing_evidence": "Step 2 states the user received two tablets and only needs one, and wants the pricier one refunded to a credit card. Step 18 and step 19 establish that the pricier tablet is in order #W9571698 (128GB gold, $989.70) and that its refund would go to the gift card. Step 20 is the user's request to return both tablets from both orders, which departs from the single-order return the task describes."
+    },
+    "generation": {
+      "session_id": "ab0b361b-8285-428e-b82e-649a00c3cdeb",
+      "num_turns": 3,
+      "duration_ms": 11833,
+      "total_cost_usd": 0.006492,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 15558,
+          "outputTokens": 2634,
+          "cacheReadInputTokens": 16840,
+          "cacheCreationInputTokens": 17254,
+          "webSearchRequests": 0,
+          "costUSD": 0.006492,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 1557,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 17254,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          15,
+          16
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 18,
+        "steps": [
+          21,
+          22
+        ]
+      }
+    ],
+    "inserted_steps": [
+      15,
+      16,
+      21,
+      22
+    ],
+    "original_root": 20
+  },
+  "87": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 23,
+          "source_end": 24,
+          "find": "#W6832752",
+          "replace_with": "#W6832725",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 25,
+          "source_end": 26,
+          "insert_after_step": 34
+        }
+      ],
+      "rationale": "The first decoy inserts a failed lookup of the pending order #W6832752 with a transposed digit, answered by an error, just before the successful retrieval of that same order. This makes the third pending order look like a lookup problem the agent resolved, pulling attention toward the order-retrieval steps rather than the missing modification. The second decoy replays the read-only lookup of delivered order #W7739115 between the two modifications and the default-address update, adding output between the evidence and the failure without changing any state. Both give the evaluator plausible-looking trouble that is not the cause.",
+      "distinguishing_evidence": "Original steps 23-24 show #W6832752 is pending at 366 Maple Drive, which is the third pending order. Steps 31-34 modify only #W2166301 and #W2466703, and no call ever targets #W6832752. Step 37 then claims all pending orders were updated, which is false. The cause is the assistant's incomplete plan at step 37, not any lookup error."
+    },
+    "generation": {
+      "session_id": "f76be358-00ba-4e23-b324-e0ba39b1e70e",
+      "num_turns": 2,
+      "duration_ms": 14527,
+      "total_cost_usd": 0.006454349999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16290,
+          "outputTokens": 3203,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 16082,
+          "webSearchRequests": 0,
+          "costUSD": 0.006454349999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2649,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 16082,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 22,
+        "steps": [
+          23,
+          24
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 34,
+        "steps": [
+          37,
+          38
+        ]
+      }
+    ],
+    "inserted_steps": [
+      23,
+      24,
+      37,
+      38
+    ],
+    "original_root": 37
+  },
+  "91": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 13,
+          "source_end": 14,
+          "find": "#W3239882",
+          "replace_with": "#W3239828",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "red_herring",
+          "source_start": 17,
+          "source_end": 18,
+          "find": "3801771308",
+          "replace_with": "3801771380",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 30
+        }
+      ],
+      "rationale": "The first red herring makes the agent's lookup of order #W3239882 fail on a transposed digit just before the user's return request is discussed, so the order lookup appears to have gone wrong. The second is a failed product lookup for the e-reader's product ID, which puts a visible error right before the user's exchange discussion. The noise decoy re-reads order #W7553978 just before the user asks to recheck recent orders, adding an extra read-only exchange between the user's request and the assistant's listing. All three are read-only and harmless, and they make the trajectory look like it has multiple lookup problems, which could pull an evaluator away from the user's unsupported request for the tablet return at step 34.",
+      "distinguishing_evidence": "Step 12 asks only to add 'another item' without naming one, and step 15 and step 16 show the user chose the e-reader, not the tablet. Step 33 lists the tablet only as one of several candidates. The user's own words at step 34 ('Ah, it's the tablet...') are the first mention of the tablet, which the task instruction never asked for. The task instruction names only the two skateboards, the smart watch, and the e-reader, so the tablet return is the unsupported addition and step 34 remains the root cause."
+    },
+    "generation": {
+      "session_id": "187617ff-80cb-4294-87da-50e9c69e7a5a",
+      "num_turns": 2,
+      "duration_ms": 14596,
+      "total_cost_usd": 0.007275950000000001,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 19313,
+          "outputTokens": 3032,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 19106,
+          "webSearchRequests": 0,
+          "costUSD": 0.007275950000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2335,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 19106,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 15,
+      "14": 16,
+      "15": 17,
+      "16": 18,
+      "17": 21,
+      "18": 22,
+      "19": 23,
+      "20": 24,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 37,
+      "32": 38,
+      "33": 39,
+      "34": 40,
+      "35": 41,
+      "36": 42,
+      "37": 43,
+      "38": 44,
+      "39": 45,
+      "40": 46
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 12,
+        "steps": [
+          13,
+          14
+        ]
+      },
+      {
+        "kind": "red_herring",
+        "after_original_step": 16,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 30,
+        "steps": [
+          35,
+          36
+        ]
+      }
+    ],
+    "inserted_steps": [
+      13,
+      14,
+      19,
+      20,
+      35,
+      36
+    ],
+    "original_root": 34
+  },
+  "98": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 19,
+          "source_end": 20,
+          "find": "#W3407479",
+          "replace_with": "#W3407497",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 20
+        }
+      ],
+      "rationale": "The red herring makes the agent's lookup of the NYC order fail on a transposed digit right before the address lookup, so the user's address-update request seems to be the troubled part and draws attention to the address workflow. The noise replays the pending LA order's details (#W6750959, still pending and unchanged) just before the item modification, adding a reassuring status check that makes the modify call look correct and lengthens the span between the evidence and the failure.",
+      "distinguishing_evidence": "Step 18 shows the user asking for both the speaker change and the address update, with the address request still outstanding. Step 17 and 18 confirm the order is pending. Step 21 then calls modify_pending_order_items on #W6750959 before any address change, and step 24 shows the address modification failing because the order is no longer pending, which establishes that the items change locked the order and that the address change should have come first."
+    },
+    "generation": {
+      "session_id": "a9062490-fff1-42b7-a461-0870855f62d1",
+      "num_turns": 2,
+      "duration_ms": 12606,
+      "total_cost_usd": 0.00616755,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 16071,
+          "outputTokens": 2762,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 15860,
+          "webSearchRequests": 0,
+          "costUSD": 0.00616755,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2250,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 15860,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 21,
+      "20": 22,
+      "21": 25,
+      "22": 26,
+      "23": 27,
+      "24": 28,
+      "25": 29,
+      "26": 30,
+      "27": 31,
+      "28": 32,
+      "29": 33,
+      "30": 34,
+      "31": 35,
+      "32": 36,
+      "33": 37,
+      "34": 38,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 18,
+        "steps": [
+          19,
+          20
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 20,
+        "steps": [
+          23,
+          24
+        ]
+      }
+    ],
+    "inserted_steps": [
+      19,
+      20,
+      23,
+      24
+    ],
+    "original_root": 21
+  },
+  "99": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 31,
+          "source_end": 32,
+          "find": "8940227892",
+          "replace_with": "8940227829",
+          "response": "Error: product not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 11,
+          "source_end": 12,
+          "insert_after_step": 34
+        }
+      ],
+      "rationale": "The red herring adds a visible \"product not found\" error from a camera product lookup shortly before the failure, which looks like the camera exchange is going wrong when it is just a self-corrected lookup slip. The noise replays the read-only order lookup for #W4689314 right after the user's refund request, so the exchange-order details sit between the user's payment instruction and the failing exchange call, diluting attention on the payment_method_id choice at step 35.",
+      "distinguishing_evidence": "Step 34 still shows the user asking for the refund to go to the other card on file, and step 33 shows the agent asking for a payment method only generically, which together establish that the step 35 call with credit_card_8105988 ignored the instruction. The retried camera lookup at step 32 is a read-only product fetch that changes nothing, and the order details for #W4689314 are unchanged by the earlier exchange on #W3916020."
+    },
+    "generation": {
+      "session_id": "7cec9d04-90a7-4300-8ca6-fc409d93b611",
+      "num_turns": 2,
+      "duration_ms": 15535,
+      "total_cost_usd": 0.00853895,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 23520,
+          "outputTokens": 3035,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 23310,
+          "webSearchRequests": 0,
+          "costUSD": 0.00853895,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2508,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 23310,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 27,
+      "28": 28,
+      "29": 29,
+      "30": 30,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 39,
+      "36": 40,
+      "37": 41,
+      "38": 42,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 30,
+        "steps": [
+          31,
+          32
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 34,
+        "steps": [
+          37,
+          38
+        ]
+      }
+    ],
+    "inserted_steps": [
+      31,
+      32,
+      37,
+      38
+    ],
+    "original_root": 35
+  },
+  "104": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 15,
+          "source_end": 16,
+          "find": "#W1154986",
+          "replace_with": "#W1154896",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 13,
+          "source_end": 14,
+          "insert_after_step": 38
+        }
+      ],
+      "rationale": "The red herring makes the cancelled order #W1154986 look like a failed lookup early on, so the later tracking question seems to involve a suspect or unreliable record, which could make the evaluator doubt the successful tool output at step 16. The noise replay of the delivered order #W8660475 (unchanged, so the same result) adds an extra order-detail exchange between the evidence and the failure, lengthening the trajectory without changing any state.",
+      "distinguishing_evidence": "Step 16 is the successful get_order_details response for #W1154986 with status \"cancelled\" and fulfillments containing tracking_id [\"286422338955\"]. Step 57 states that the order has no tracking number, which contradicts that output. The decoys do not alter this record, and the retry in the red herring returns the same successful output at step 16."
+    },
+    "generation": {
+      "session_id": "8fade835-f8f3-4964-9582-68c2263c7e3f",
+      "num_turns": 2,
+      "duration_ms": 13838,
+      "total_cost_usd": 0.00768195,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 21064,
+          "outputTokens": 2795,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20853,
+          "webSearchRequests": 0,
+          "costUSD": 0.00768195,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2300,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20853,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): decoys fail or replay read-only lookups with Tau-format errors; no stale or misplaced decoys found"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 17,
+      "16": 18,
+      "17": 19,
+      "18": 20,
+      "19": 21,
+      "20": 22,
+      "21": 23,
+      "22": 24,
+      "23": 25,
+      "24": 26,
+      "25": 27,
+      "26": 28,
+      "27": 29,
+      "28": 30,
+      "29": 31,
+      "30": 32,
+      "31": 33,
+      "32": 34,
+      "33": 35,
+      "34": 36,
+      "35": 37,
+      "36": 38,
+      "37": 39,
+      "38": 40,
+      "39": 43,
+      "40": 44,
+      "41": 45,
+      "42": 46,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52,
+      "49": 53,
+      "50": 54,
+      "51": 55,
+      "52": 56,
+      "53": 57,
+      "54": 58,
+      "55": 59,
+      "56": 60,
+      "57": 61,
+      "58": 62
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 14,
+        "steps": [
+          15,
+          16
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 38,
+        "steps": [
+          41,
+          42
+        ]
+      }
+    ],
+    "inserted_steps": [
+      15,
+      16,
+      41,
+      42
+    ],
+    "original_root": 57
+  },
+  "105": {
+    "proposal": {
+      "decision": "INSERT",
+      "insertions": [
+        {
+          "kind": "red_herring",
+          "source_start": 33,
+          "source_end": 34,
+          "find": "#W4860251",
+          "replace_with": "#W4860521",
+          "response": "Error: order not found"
+        },
+        {
+          "kind": "noise",
+          "source_start": 9,
+          "source_end": 10,
+          "insert_after_step": 42
+        }
+      ],
+      "rationale": "The red herring adds a visible \"order not found\" failure right before the pending-order lookup, a transposed-digit slip that the assistant corrects on retry. It makes the order ID look like an early source of trouble for the later pending-order work, which is a distraction from the real problem. The noise replays the read-only profile lookup (get_user_details) between the user's address request and the failing address call. It returns the same profile, so it adds output between the item modification and the address attempt without changing any state. Neither decoy changes the order state or the sequence that follows.",
+      "distinguishing_evidence": "Step 39 shows modify_pending_order_items already succeeded and set the order to 'pending (item modified)' (step 40). Step 41 confirms that change to the user. The address modification at step 43 is the first attempt to change this order after that point, and the tool returns 'non-pending order cannot be modified' at step 44. The policy allows only one item modification, and it locks the order from further modification or cancellation, so the address change cannot be made after it."
+    },
+    "generation": {
+      "session_id": "374e500c-1c0f-40b5-b652-803456daa2ca",
+      "num_turns": 2,
+      "duration_ms": 15787,
+      "total_cost_usd": 0.007671849999999999,
+      "model_usage": {
+        "claude-haiku-5-5": {
+          "inputTokens": 20710,
+          "outputTokens": 2986,
+          "cacheReadInputTokens": 745,
+          "cacheCreationInputTokens": 20502,
+          "webSearchRequests": 0,
+          "costUSD": 0.007671849999999999,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 2428,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationEphemeral1hInputTokens": 20502,
+          "canonicalModel": "claude-haiku-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "claude_version": "2.1.327 (Claude Code)",
+      "generator_sha256": "df81594040058d7ae5f182096e1b86edaf2687b6c1f169dc6e538510fa2be861"
+    },
+    "review": {
+      "decision": "accept",
+      "reviewer": "Aparna Shree",
+      "reason": "Review-sheet suggestion adopted (runs/decoy/tau/haiku-medium/review_sheet.md): checked: step 39 modify_pending_order_items charged credit_card_2112420; the replayed profile shows only that card's brand and last four (no balance) and its order list is unchanged, so the replay is current"
+    },
+    "original_to_variant": {
+      "1": 1,
+      "2": 2,
+      "3": 3,
+      "4": 4,
+      "5": 5,
+      "6": 6,
+      "7": 7,
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 11,
+      "12": 12,
+      "13": 13,
+      "14": 14,
+      "15": 15,
+      "16": 16,
+      "17": 17,
+      "18": 18,
+      "19": 19,
+      "20": 20,
+      "21": 21,
+      "22": 22,
+      "23": 23,
+      "24": 24,
+      "25": 25,
+      "26": 26,
+      "27": 27,
+      "28": 28,
+      "29": 29,
+      "30": 30,
+      "31": 31,
+      "32": 32,
+      "33": 35,
+      "34": 36,
+      "35": 37,
+      "36": 38,
+      "37": 39,
+      "38": 40,
+      "39": 41,
+      "40": 42,
+      "41": 43,
+      "42": 44,
+      "43": 47,
+      "44": 48,
+      "45": 49,
+      "46": 50,
+      "47": 51,
+      "48": 52
+    },
+    "insertions": [
+      {
+        "kind": "red_herring",
+        "after_original_step": 32,
+        "steps": [
+          33,
+          34
+        ]
+      },
+      {
+        "kind": "noise",
+        "after_original_step": 42,
+        "steps": [
+          45,
+          46
+        ]
+      }
+    ],
+    "inserted_steps": [
+      33,
+      34,
+      45,
+      46
+    ],
+    "original_root": 43
+  }
+}

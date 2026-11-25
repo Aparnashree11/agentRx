@@ -53,17 +53,17 @@
       "sha256": "58067689b2ec42f9cbfec2a84ec08d39cea4d8270617b55d0185862753642d16",
       "bytes": 33335
     },
-    "results/track_a/baseline/artifacts/tau_sol_r1.json": {
+    "results/baseline/artifacts/tau_sol_r1.json": {
       "role": "run_artifact_r1",
       "sha256": "83c7eee97015df2ad919cacf24adfb49502d5faa8115dd3d95e1ec0c922494f6",
       "bytes": 75920
     },
-    "results/track_a/baseline/artifacts/tau_sol_r2.json": {
+    "results/baseline/artifacts/tau_sol_r2.json": {
       "role": "run_artifact_r2",
       "sha256": "73b586d18910f024e7454c43937c1ba16a9056712035b5b59da2e43f31af439e",
       "bytes": 74929
     },
-    "results/track_a/baseline/artifacts/tau_sol_r3.json": {
+    "results/baseline/artifacts/tau_sol_r3.json": {
       "role": "run_artifact_r3",
       "sha256": "e739c140800660633a698229d2db9a76ea87ee093e9fb2ee7d47f8299111181a",
       "bytes": 76105

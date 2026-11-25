@@ -1,0 +1,369 @@
+[
+  {
+    "trajectory_id": 2,
+    "failures": [
+      {
+        "failure_id": 1,
+        "step_number": 3,
+        "step_reason": "At step 3, the assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+        "failure_category": "Instruction Adherence Failure",
+        "category_reason": "The assistant agent did not follow the expected policy of authenticating user information before providing product details.",
+        "failed_agent": "Assistant",
+        "original_step_number": 3
+      },
+      {
+        "failure_id": 2,
+        "step_number": 8,
+        "step_reason": "At step 7, the agent did not correctly count the number of available t-shirts from the tool call result.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+        "failed_agent": "Assistant",
+        "original_step_number": 7
+      }
+    ],
+    "root_cause": {
+      "failure_id": 2,
+      "reason_for_root_cause": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+    },
+    "failure_summary": "The agent did not correctly count the number of available t-shirts from the tool call result."
+  },
+  {
+    "trajectory_id": 3,
+    "failures": [
+      {
+        "failure_id": 3,
+        "step_number": 3,
+        "step_reason": "At step 3, The assistant agent did not authenticate user information before proceeding to provide information about available t-shirts",
+        "failure_category": "Instruction Adherence Failure",
+        "category_reason": "The assistant agent did not follow the expected policy of authenticating user information before providing product details.",
+        "failed_agent": "Assistant",
+        "original_step_number": 3
+      },
+      {
+        "failure_id": 4,
+        "step_number": 8,
+        "step_reason": "At step 7, the agent did not correctly count the number of available t-shirts from the tool call result.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+        "failed_agent": "Assistant",
+        "original_step_number": 7
+      }
+    ],
+    "root_cause": {
+      "failure_id": 4,
+      "reason_for_root_cause": "The assistant finally did authenticate before providing user specific information. The incorrect count does not correspond with ground truth output."
+    },
+    "failure_summary": "The assistant did not correctly count the number of available t-shirts from the tool call result."
+  },
+  {
+    "trajectory_id": 4,
+    "failures": [
+      {
+        "failure_id": 5,
+        "step_number": 16,
+        "step_reason": "At step 15, the assistant agent incorrectly counted the number of available t-shirts.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect count of available t-shirts.",
+        "failed_agent": "Assistant",
+        "original_step_number": 15
+      }
+    ],
+    "root_cause": {
+      "failure_id": 5,
+      "reason_for_root_cause": "The incorrect count does not correspond with ground truth output."
+    },
+    "failure_summary": "Assistant misinterpreted the tool output and incorrectly counted the number of available t-shirts."
+  },
+  {
+    "trajectory_id": 20,
+    "failures": [
+      {
+        "failure_id": 7,
+        "step_number": 22,
+        "step_reason": "At step 21, the assistant mistook two of the orders which were processed as delivered",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect understanding of the order statuses.",
+        "failed_agent": "Assistant",
+        "original_step_number": 21
+      },
+      {
+        "failure_id": 8,
+        "step_number": 43,
+        "step_reason": "At step 41, the assistant mistook the replacement item as available while it was actually out of stock.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output from the tool call, leading to an incorrect understanding of the item availability.",
+        "failed_agent": "Assistant",
+        "original_step_number": 41
+      },
+      {
+        "failure_id": 9,
+        "step_number": 51,
+        "step_reason": "At step 49, the assistant tried to exchange delivered items for a order that is in processed status which is invalid.",
+        "failure_category": "Invalid Invocation",
+        "category_reason": "The assistant called a tool with invalid arguments which led to an execution error.",
+        "failed_agent": "Assistant",
+        "original_step_number": 49
+      },
+      {
+        "failure_id": 10,
+        "step_number": 63,
+        "step_reason": "At step 61, the assistant again tried to exchange delivered items for a order that is in processed status which is invalid.",
+        "failure_category": "Invalid Invocation",
+        "category_reason": "The assistant called a tool with invalid arguments which led to an execution error.",
+        "failed_agent": "Assistant",
+        "original_step_number": 61
+      }
+    ],
+    "root_cause": {
+      "failure_id": 7,
+      "reason_for_root_cause": "The assistant did not recover from misinterpretation error, which led to subsequent failures in the trajectory."
+    },
+    "failure_summary": "Assistant mistook two of the orders that were processed as delivered."
+  },
+  {
+    "trajectory_id": 21,
+    "failures": [
+      {
+        "failure_id": 11,
+        "step_number": 28,
+        "step_reason": "At step 28, the user agent insisted on exchange of an item in 'pending' status which is not valid according to domain policy, when assistant asked if it could instead modify (corresponds to the ground truth), the user agent said no.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The user agent's intent was wrong in the preceding steps, leading to an invalid request.",
+        "failed_agent": "User",
+        "original_step_number": 28
+      },
+      {
+        "failure_id": 12,
+        "step_number": 42,
+        "step_reason": "At step 41, the assistant did not explicitly ask for payment method from the user when modifying a pending order",
+        "failure_category": "Instruction Adherence Failure",
+        "category_reason": "The domain policy clearly states that before calling modify order on a pending order, the assistant must confirm payment method from the user.",
+        "failed_agent": "Assistant",
+        "original_step_number": 41
+      }
+    ],
+    "root_cause": {
+      "failure_id": 11,
+      "reason_for_root_cause": "The item should have been modified and not exchanged and exchange was not possible because of the order status. The agent did not recover from this error."
+    },
+    "failure_summary": "The User agent insisted for exchange of item on 'pending' item which is not valid, when assistant asked if it could instead modify (corresponds to the ground truth), the user agent said no."
+  },
+  {
+    "trajectory_id": 32,
+    "failures": [
+      {
+        "failure_id": 15,
+        "step_number": 11,
+        "step_reason": "At step 11, the assistant mistakenly provided tracking number of wrong order which did not even contain the tablet.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The items in the output of get_order_details were misinterpreted believing that tablet was one of them, leading it to providing incorrect tracking number.",
+        "failed_agent": "Assistant",
+        "original_step_number": 11
+      }
+    ],
+    "root_cause": {
+      "failure_id": 15,
+      "reason_for_root_cause": "The wrong tracking number mismatched with the actual ground truth tracking number."
+    },
+    "failure_summary": "The assistant only partially went through the user's orders and prematurely provided tracking number of a wrong order which did not even contain the tablet."
+  },
+  {
+    "trajectory_id": 39,
+    "failures": [
+      {
+        "failure_id": 20,
+        "step_number": 18,
+        "step_reason": "At step 17, the assistant agent believes that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+        "failure_category": "Intent Plan Misalignment",
+        "category_reason": "The assistant wrongly reasons that it cannot find the latest address from the current orders using get_order_details and hence is unable to modify the existing user address in an order to the latest one.",
+        "failed_agent": "Assistant",
+        "original_step_number": 17
+      }
+    ],
+    "root_cause": {
+      "failure_id": 20,
+      "reason_for_root_cause": "Since the assistant was not able to update the address, it led to incorrect final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "Assistant believed it could not find the latest address using get_order_details and thus failed to modify the user address to the latest one."
+  },
+  {
+    "trajectory_id": 55,
+    "failures": [
+      {
+        "failure_id": 23,
+        "step_number": 34,
+        "step_reason": "The user asked the assistant to return the air purifier, smart watch, and coffee maker while it should have also asked it to return the water bottle from the order according to the task instruction.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The user agent only partially specified the items to be returned contrary to the task instruction which asks the user agent to return all the items.",
+        "failed_agent": "User",
+        "original_step_number": 32
+      }
+    ],
+    "root_cause": {
+      "failure_id": 23,
+      "reason_for_root_cause": "Due to underspecification from the user agent, the assistant omitted one of the items to be returned leading to incorrect tool call arguments and hence, final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "Assistant while returning items omitted water bottle and only returned 3 of the 4 items due to underspecification from the user agent."
+  },
+  {
+    "trajectory_id": 59,
+    "failures": [
+      {
+        "failure_id": 24,
+        "step_number": 14,
+        "step_reason": "The user agent incorrectly assumed that one order was older than the other even when the assistant specifically mentioned that it did not have the chronological information regarding the orders' placement date. It led to the incorrect order being cancelled compared to ground truth actions.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The user agent made an assumption that was not supported by the information provided by the assistant which led to incorrect outcome.",
+        "failed_agent": "User",
+        "original_step_number": 14
+      }
+    ],
+    "root_cause": {
+      "failure_id": 24,
+      "reason_for_root_cause": "User agent made an assumption that was not supported by the information provided by the assistant which led to incorrect action being performed by the assistant as compared to ground truth action."
+    },
+    "failure_summary": "User agent incorrectly assumed that one order was older than the other even when the assistant did not tell it do so."
+  },
+  {
+    "trajectory_id": 63,
+    "failures": [
+      {
+        "failure_id": 25,
+        "step_number": 33,
+        "step_reason": "In step 32, the user agent asked the assistant to add an item to a pending order instead of replacing it with the cheaper item. This is because of unclear original task instruction.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The task instruction is underspecified which leads to uncertainity in user agent's actions.",
+        "failed_agent": "User",
+        "original_step_number": 32
+      }
+    ],
+    "root_cause": {
+      "failure_id": 25,
+      "reason_for_root_cause": "Failure led to incorrect final outcome."
+    },
+    "failure_summary": "User agent asked the assistant to add an item to a pending order instead of replacing it with the cheaper item. This is because of unclear/underspecified in the original task instruction."
+  },
+  {
+    "trajectory_id": 71,
+    "failures": [
+      {
+        "failure_id": 26,
+        "step_number": 25,
+        "step_reason": "At step 24, the task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The task instruction is underspecified regarding the type of black lamp to be added to the cart.",
+        "failed_agent": "User",
+        "original_step_number": 24
+      },
+      {
+        "failure_id": 27,
+        "step_number": 29,
+        "step_reason": "Assistant prematurely called modify items tool on a pending order which locked the order and the user later on wasn't able to change the backpack that he wanted.",
+        "failure_category": "Intent Plan Misalignment",
+        "category_reason": "Here, the plan generated by the assistant is incorrect, it should not have prematurely called modify items tool on a pending order before finalizing all the items to be modified in the user's order.",
+        "failed_agent": "Assistant",
+        "original_step_number": 27
+      }
+    ],
+    "root_cause": {
+      "failure_id": 26,
+      "reason_for_root_cause": "The task instruction did not specify the type of black lamp and since there are multiple black lamps available, it led to incorrect matching of the ground truth actions. Did not recover from the error."
+    },
+    "failure_summary": "The task instruction did not specify the type of black lamp and since there are multiple black lamps available, it wont be possible to match the ground truth actions."
+  },
+  {
+    "trajectory_id": 79,
+    "failures": [
+      {
+        "failure_id": 31,
+        "step_number": 21,
+        "step_reason": "The task instruction did not specify the color of the 1000ml bottle to be exchanged whether it was red or black. Because of this ambiguity, the user agent picked the black bottle whereas the ground truth as the red variant which did not correspond with the ground truth actions. The red variant instead matched the ground truth.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The task instruction is underspecified with regards to the color of the 1000ml bottle to be exchanged.",
+        "failed_agent": "User",
+        "original_step_number": 20
+      }
+    ],
+    "root_cause": {
+      "failure_id": 31,
+      "reason_for_root_cause": "The assistant was not able to recover as it modified the wrong item in the order due to ambiguity in the task instruction."
+    },
+    "failure_summary": "The task instruction was ambiguous with regards to the color of the 1000ml bottle to be exchanged which led to incorrect matching with ground truth actions."
+  },
+  {
+    "trajectory_id": 82,
+    "failures": [
+      {
+        "failure_id": 33,
+        "step_number": 21,
+        "step_reason": "At step 20, the user agent asked the assistant to the return the tablets from both the orders, however, it was supposed to ask to return all the items from a single order, hence, did not follow the task instruction",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The user agent's request did not align with the task instruction.",
+        "failed_agent": "User",
+        "original_step_number": 20
+      }
+    ],
+    "root_cause": {
+      "failure_id": 33,
+      "reason_for_root_cause": "The user agent's request led to wrong tool call arguments and led to an incorrect final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "The user agent's request was ambiguous and did not align with the task instruction."
+  },
+  {
+    "trajectory_id": 87,
+    "failures": [
+      {
+        "failure_id": 34,
+        "step_number": 37,
+        "step_reason": "The assistant agent should have modified all the three pending order addresses but it only modified the first two pending order addresses and claimed that it completed all the updates.",
+        "failure_category": "Intent Plan Misalignment",
+        "category_reason": "The assistant's plan was incorrect, it should have modified all the three pending order addresses as per the user request.",
+        "failed_agent": "Assistant",
+        "original_step_number": 37
+      }
+    ],
+    "root_cause": {
+      "failure_id": 34,
+      "reason_for_root_cause": "Since the assistant only modified the first two pending order addresses and claimed completion, it led to an incorrect final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "The assitant came up with an incorrect plan and only modified two of the three pending order addresses as per the user request."
+  },
+  {
+    "trajectory_id": 91,
+    "failures": [
+      {
+        "failure_id": 35,
+        "step_number": 35,
+        "step_reason": "The user agent asked the assistant to also return the tablet from order #W3239882, however, this was not specified in the original task instruction.",
+        "failure_category": "Underspecified User Intent",
+        "category_reason": "The user agent's request did not align with the task instruction.",
+        "failed_agent": "User",
+        "original_step_number": 34
+      }
+    ],
+    "root_cause": {
+      "failure_id": 35,
+      "reason_for_root_cause": "The user agent's request led to wrong tool call arguments and led to an incorrect final outcome as compared to ground truth actions."
+    },
+    "failure_summary": "The user agent's request was hallucinated as the returning of the tablet clearly did not align with the task instruction."
+  },
+  {
+    "trajectory_id": 104,
+    "failures": [
+      {
+        "failure_id": 38,
+        "step_number": 58,
+        "step_reason": "The assistant mentioned to the user that the cancelled order #W1154986 did not have a tracking number. However, this is not true as in the tool output of get_order_details for order #W1154986, a tracking number is clearly present.",
+        "failure_category": "Misinterpretation of Tool Output",
+        "category_reason": "The assistant misinterpreted the output of get_order_details tool call, leading to an incorrect assumption about the tracking number not being present in a cancelled order.",
+        "failed_agent": "Assistant",
+        "original_step_number": 57
+      }
+    ],
+    "root_cause": {
+      "failure_id": 38,
+      "reason_for_root_cause": "The assistant did not provide the tracking number of the cancelled order #W1154986 due to misinterpretation of tool output."
+    },
+    "failure_summary": "The assistant misinterpreted the tool output, assumed or misinterpreted the fact that cancelled order did not have a tracking number fiels and hence did not provide the tracking number of the cancelled order #W1154986 back to the user."
+  }
+]

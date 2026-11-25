@@ -216,13 +216,15 @@ def _flatten_messages(messages: List[Dict[str, str]]) -> str:
 
 COPILOT_TIMEOUT = int(os.getenv("AGENT_VERIFY_COPILOT_TIMEOUT", "600"))
 # Model selection for Copilot CLI. Prefers AGENT_VERIFY_COPILOT_MODEL (standard naming),
-# falls back to COPILOT_MODEL for backward compat. See `copilot --help` for supported
-# models (e.g. claude-opus-4.6, claude-sonnet-4.5, gpt-5, gpt-5-mini).
+# falls back to COPILOT_MODEL for backward compat. The judge model is gpt-6.1-sol, the
+# model of the project baseline.
 COPILOT_MODEL = (
     os.getenv("AGENT_VERIFY_COPILOT_MODEL")
     or os.getenv("COPILOT_MODEL")
-    or "claude-opus-4.6"
+    or "gpt-6.1-sol"
 )
+# Reasoning effort passed as --reasoning-effort (empty string: the model's own default).
+COPILOT_REASONING_EFFORT = os.getenv("AGENT_VERIFY_COPILOT_REASONING_EFFORT", "medium").strip()
 
 
 # Max characters safe for the -p flag on Windows (WinError 206 above this).
@@ -247,6 +249,8 @@ def _call_cli(prompt: str, timeout: int = None) -> str:
            "--output-format", "text"]
     if COPILOT_MODEL:
         cmd.extend(["--model", COPILOT_MODEL])
+    if COPILOT_REASONING_EFFORT:
+        cmd.extend(["--reasoning-effort", COPILOT_REASONING_EFFORT])
 
     try:
         result = subprocess.run(

@@ -10,15 +10,18 @@ Sections follow Mitchell et al. (2019), Section 4. Evaluation type: exploratory 
 - **Commits:**
   - Stability runs: [`ac01913`](https://github.com/Aparnashree11/agentRx/commit/ac019130950b52ac99d233b628a5965eef241e44), "Add Track-A tau-bench baseline results (sol + luna)", branch `baseline-results`, November 19, 2026.
   - Reference run and all reworded releases: `presentation-change-v2@2b7df0c`, November 23–24, 2026.
-  - 
+  - Framework: branch `framework-development`, which merges the three rewording branches and `baseline-results` and runs the chosen generators through the GitHub Copilot CLI. Not yet tagged; the `week11-release` tag will record its commit.
 - **Model type:** AgentRx (Barke et al., 2026, arXiv 2602.02475), used unmodified as a gray-box system. It synthesizes constraints from a failed agent trajectory, then an LLM judge names (1) the critical failure step and (2) one of nine failure categories, or returns "inconclusive." No model is trained by our team.
-- **Configuration:** one-shot constraint synthesis, single judge, all-at-once, full pipeline. Command, identical for every run in this card: `run.py --domain tau --endpoint copilot --dynamic-mode oneshot`.
+- **Configuration:** one-shot constraint synthesis, single judge, all-at-once, full pipeline. Command, identical for every run in this card: `run.py --domain tau --endpoint copilot --dynamic-mode oneshot`. Every run in this card used the judge model's default reasoning effort. The framework now pins medium effort (`AGENT_VERIFY_COPILOT_REASONING_EFFORT=medium`), so the clean baseline must be rerun with that setting before it is compared with any new release.
 - **Judges:** reached through the GitHub Copilot API, not Azure OpenAI as in the paper.
   - gpt-6.1-sol: primary judge. Four one-shot runs on the original trajectories (three stability runs and one reference run) and one run on each reworded release. Every run in this card is one-shot.
   - gpt-6-luna: comparison judge, one run.
-- **Rewording generators:** Claude Haiku 5.5, Sonnet 5.5 and Opus 5.5 through Claude Code, medium effort, isolated (no tools, empty working directory, structured output). Each rewording passes automated structural checks and a signed human review before release. All three were run on τ-bench; the framework freezes one per rewording: `claude-haiku-5-5` for step decomposition, `claude-sonnet-5-5` for step decoy and `claude-opus-5-5` for presentation change.
-- **Frozen versions:** "gpt-6.1-sol" is the name Copilot exposes, not a pinned model version, so the provider can change the model behind it without notice. the exact judge version string is recorded in the run logs Every run logs the version; a change stops the run and the τ-bench baseline is rerun before any comparison (RELEASE_PLAN.md §1).
-- **Scorer:** `baselines/score_runs.py` (stability runs) and the evaluation report generator (reference run and releases). Category labels are matched by number or keyword.
+- **Rewording generators:**
+  - *Model-comparison study (every release in this card):* Claude Haiku 5.5, Sonnet 5.5 and Opus 5.5 (`claude-*-5-5`) through Claude Code, medium effort, isolated (no tools, empty working directory, structured output). All three were run on every rewording.
+  - *Framework (from now on):* one finalized model per rewording, through the GitHub Copilot CLI, the same route as the judge: `claude-haiku-5.5` for step decomposition, `claude-sonnet-5.5` for step decoy and `claude-opus-5.5` for presentation change, all at medium effort. Each is set by its own environment variable (`STEP_DECOMPOSITION_COPILOT_MODEL`, `STEP_DECOY_COPILOT_MODEL`, `PRESENTATION_CHANGE_COPILOT_MODEL`), with no command-line override. Calls are isolated (no tools, no MCP servers, no custom instructions, empty working directory), and a call is refused if the session reports a different model or effort.
+  - Each variant passes automated structural checks and a signed human review before release.
+- **Frozen versions:** "gpt-6.1-sol" is the name Copilot exposes, not a pinned model version, so the provider can change the model behind it without notice. The exact judge version string is recorded in the run logs. Every run logs the version; a change stops the run and the τ-bench baseline is rerun before any comparison (RELEASE_PLAN.md §1).
+- **Scorer:** `baselines/score_runs.py` for the stability runs, and the evaluation report generator for the reference run and releases. The evaluation report generator is not committed. Category labels are matched by number or keyword.
 - **Reproduction:** `bash scripts/reproduce_baseline.sh` checks the SHA-256 of five pinned inputs and re-scores the three stability runs without credentials, network access or LLM calls. New judge runs need Copilot credentials and vary between runs.
 
 ### How the judge was chosen
@@ -87,9 +90,9 @@ Type codes: G = groups of people, I = instrumentation, E = environment.
 
 - **Development set:** 29 failed τ-bench retail trajectories, all of them human-labeled, from `microsoft/AgentRx` on Hugging Face (CC BY 4.0, gated), retrieved October 27, 2026. Frozen as `data/benchmark_versions/tau_retail/baseline/v1.0.0/` and pinned by SHA-256. The labeled set is used whole. Prompts were tuned and generators chosen on it.
 - **Held-out test:** Magentic-One (44 labeled traces), to be run once with the frozen framework: the merged code, the three chosen generators and the frozen judge. Not reported in this card.
-- **Reworded releases:** `data/benchmark_versions/tau_retail/<rewording>/<model>/v0.1.0/`, each with its own remapped labels. Each release keeps only the variants that passed checks and review (15–29 of 29).
+- **Reworded releases:** `data/benchmark_versions/tau_retail/<rewording>/<model>/v0.1.0/` (the model-comparison study), each with its own remapped labels. Each release keeps only the variants that passed checks and review (15–29 of 29). Framework releases are written to `data/benchmark_versions/<domain>/<rewording>/vX.Y.Z/` from v0.2.0, with the generator model and effort in the manifest.
 - **Preprocessing:** none. Ground-truth labels are used as released. An adapter converts raw messages to sub-steps without loss (1,064 = 1,064).
-- **Label audit (`results/track_a/data_checks.json`):** 29 traces and 29 labels, all matched. 39 failure entries, at most 4 per trajectory. In 2 trajectories the labeled root cause is not the earliest failure. Category names are spelled inconsistently in the dataset; the scorer matches categories by number or keyword.
+- **Label audit (`results/data_checks.json`):** 29 traces and 29 labels, all matched. 39 failure entries, at most 4 per trajectory. In 2 trajectories the labeled root cause is not the earliest failure. Category names are spelled inconsistently in the dataset; the scorer matches categories by number or keyword.
 - **Known limit:** τ-bench uses an LLM-simulated customer and a single assistant, so sub-agent misattribution can't be studied on this split.
 
 ## 4.6 Training data
@@ -177,16 +180,23 @@ Across the four sol runs, step accuracy did not move (12/29 each) and category a
 - **Step accuracy definition.** The stability runs' step figure (12/29) is taken as within ±2, as the baseline results report states.
 - **Step accuracy can hide decoy and decomposition effects.** A judge that lands on an adjacent decoy or split step counts as correct within ±2. The paired rates from each rewording's `compare()` check the exact step and are not yet reported.
 - **Small and uneven releases.** Decomposition keeps 15–16 of 29 trajectories and none of the bare-tool-call ones, so its results cover a narrower set than the baseline. Tasks 2, 3 and 4 are the same mistake.
-- **Known tells in the releases:** 100 of 122 decoy red herrings use error strings that never occur in the real data; 16–27% of presentation formatting edits are erased by AgentRx's converter before the judge reads them; consecutive messages from the same actor appear only in decomposition variants; no check flags IDs a decomposed step didn't contain. These are not fixed before the Magentic-One run and will be disclosed in its report, because changing the framework after seeing held-out results would undo the hold-out.
-- **Changes made after seeing results:** the generator-choice rule; dropping the proposal's reproduction gate.
+- **Known tells in the releases:** 100 of 122 decoy red herrings use error strings that never occur in the real data. AgentRx's converter erases 16–27% of all presentation-change edits before the judge reads them: every layout-only reformatting of a JSON tool response, which is 30–47% of the formatting edits (Opus, the chosen generator: 39 of 131). Other tells: consecutive messages from the same actor appear only in decomposition variants; no check flags IDs a decomposed step didn't contain. These are not fixed before the Magentic-One run and will be disclosed in its report, because changing the framework after seeing held-out results would undo the hold-out.
+- **Changes made after seeing results:** the generator-choice rule; dropping the proposal's reproduction gate. For the framework, also after the τ-bench results:
+  - the generators moved from Claude Code to the GitHub Copilot CLI;
+  - presentation change no longer regenerates rejected or invalid cases (one attempt per case; failures are excluded with their reason);
+  - the judge's reasoning effort is pinned to medium.
+
+  None of these has been run on τ-bench yet.
 - **Reproducibility gaps:**
   - The baseline manifest's `git_commit` (`d6d41c6…`) does not exist in this repository.
   - `baselines/gen_manifest.py` and `scripts/run_tau_sol.sh` are referenced but not committed.
-  - Judge outputs for the reference run and the nine releases are local and not committed.
+  - Judge outputs for the reference run and the nine releases are local and not committed; only the three stability runs' outputs are (`results/baseline/artifacts/`).
+  - The evaluation report generator that scored the reference run and the releases is not committed.
   - The reproducer hides scorer errors and prints a hard-coded headline.
 - **Not measurable yet:** failed sub-agent (τ-bench is single-agent); trajectory length.
 - **The 0/8 result is not model-dependent.** Both judges score 0/8. With the same AgentRx prompts and constraints for both, it is equally consistent with a prompt or taxonomy problem, or with a contested label boundary. The τ-bench labels have no agreement statistic.
 - **Judge selection on single runs:** sol was chosen over luna on one run each. The step gap (12 vs. 8 of 29) has overlapping intervals.
+- **Generator-route difference:** every release in this card was generated through Claude Code. Framework releases are generated through the GitHub Copilot CLI with the same model families. Whether Copilot-served models produce the same kind of rewordings is untested.
 - **Judge-route difference and model drift:** Copilot-hosted judges, not the paper's GPT-5 on Azure. The model name is not a pinned version; a silent update between the τ-bench and Magentic-One runs would look like a rewording effect. The exact version strings must be recorded before the held-out run.
 - **Single judge run on the held-out set.** Each Magentic-One release will be judged once, so its own spread will be unknown; the τ-bench baseline spread (4 runs) is the only reference.
 - **Recommendation:** don't use a category verdict to decide whether a user or the agent was at fault, and don't treat a step verdict as stable if the log's format may have changed. Treat every committed verdict as a lead to verify.
