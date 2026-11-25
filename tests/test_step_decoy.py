@@ -1,5 +1,6 @@
 """Exercise layouts, generation, review and comparison on the frozen baselines."""
 import json
+import os
 import re
 import tempfile
 import unittest
@@ -28,21 +29,38 @@ PROPOSAL = dict(decision="INSERT", insertions=[HERRING, NOISE],
                 distinguishing_evidence="Step 14 lists the variants the assistant then miscounts.")
 
 
-def fake_claude(proposal, model="claude-haiku-5-5"):
-    """Stand in for the Claude Code CLI: answer --version and each -p generation call."""
+MODEL = "claude-sonnet-5.5"
+
+
+def setUpModule():
+    """Pin this rewording's model and effort, so a local .env cannot change the tests."""
+    global _env
+    _env = patch.dict(os.environ, {"STEP_DECOY_COPILOT_MODEL": MODEL, "STEP_DECOY_COPILOT_REASONING_EFFORT": "medium"})
+    _env.start()
+
+
+def tearDownModule():
+    _env.stop()
+
+
+
+def fake_copilot(proposal, model=MODEL, effort="medium"):
+    """Stand in for the GitHub Copilot CLI: answer --version and each generation call
+    with the JSON-lines events copilot.ask() reads."""
     def run(cmd, **kwargs):
         if cmd[1:] == ["--version"]:
-            return SimpleNamespace(returncode=0, stdout="9.9.9 (Claude Code)\n", stderr="")
-        envelope = dict(type="result", is_error=False, num_turns=2, session_id="s", duration_ms=1,
-                        total_cost_usd=0.01, structured_output=proposal, result=json.dumps(proposal),
-                        modelUsage={model: {"outputTokens": 1}})
-        return SimpleNamespace(returncode=0, stdout=json.dumps(envelope), stderr="")
+            return SimpleNamespace(returncode=0, stdout="GitHub Copilot CLI 9.9.9.\n", stderr="")
+        events = [dict(type="session.start", data=dict(sessionId="s", selectedModel=model, reasoningEffort=effort)),
+                  dict(type="assistant.message", data=dict(content=json.dumps(proposal))),
+                  dict(type="result", sessionId="s", exitCode=0,
+                       usage=dict(premiumRequests=1, sessionDurationMs=1, totalApiDurationMs=1))]
+        return SimpleNamespace(returncode=0, stdout="\n".join(map(json.dumps, events)), stderr="")
     return run
 
 
 def generate_args(work, **overrides):
     return Namespace(**{**dict(domain="tau", trajectories=TAU, ground_truth=TAU_GT, policy=None, work=work,
-                               ids=["4"], model="haiku", effort="medium", claude_bin="claude", timeout=10),
+                               ids=["4"], copilot_bin="copilot", timeout=10),
                         **overrides})
 
 
@@ -94,21 +112,21 @@ class TauDecoyTest(unittest.TestCase):
     def test_reviewed_decoys_map_annotations_and_predictions(self):
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(decoy.subprocess, "run", side_effect=fake_claude(PROPOSAL)) as cli:
+            with patch.object(decoy.subprocess, "run", side_effect=fake_copilot(PROPOSAL)) as cli:
                 decoy.propose(generate_args(work))
-                generations = [c for c in cli.call_args_list if "-p" in c.args[0]]
+                generations = [c for c in cli.call_args_list if "--model" in c.args[0]]
                 self.assertEqual(len(generations), 1)
                 cmd = generations[0].args[0]
-                self.assertEqual(cmd[cmd.index("--model") + 1], "claude-haiku-5-5")
-                self.assertEqual(cmd[cmd.index("--effort") + 1], "medium")
-                self.assertEqual(cmd[cmd.index("--tools") + 1], "")
+                self.assertEqual(cmd[cmd.index("--model") + 1], MODEL)
+                self.assertEqual(cmd[cmd.index("--reasoning-effort") + 1], "medium")
+                self.assertEqual(cmd[-1], "--available-tools")  # an empty tool list: no tools
                 message = generations[0].kwargs["input"]
                 self.assertNotRegex(message, r"<<[A-Z_]+>>")
                 self.assertIn("**Domain:** tau", message)
                 self.assertIn("assistant+calls -> tool", message)
                 self.assertIn('"content": "Error: user not found"', message)
                 self.assertIn("You are Yusuf Rossi in 19122", message)
-            self.assertEqual(decoy.read(work / "4/generation.json")["claude_version"], "9.9.9 (Claude Code)")
+            self.assertEqual(decoy.read(work / "4/generation.json")["copilot_version"], "GitHub Copilot CLI 9.9.9.")
             decoy.write(work / "reviews.json", {"4": dict(decision="accept", reviewer="fixture",
                                                           reason="Synthetic review for regression test")})
             args = Namespace(work=work, reviews=work / "reviews.json", version="v0.1.0", out=None)
@@ -116,7 +134,7 @@ class TauDecoyTest(unittest.TestCase):
                 decoy.release(args)
                 with self.assertRaises(ValueError):
                     decoy.release(args)
-            target = Path(tmp) / "tau_retail/step_decoy/haiku/v0.1.0"
+            target = Path(tmp) / "tau_retail/step_decoy/v0.1.0"
             original_row = next(r for r in json.loads(TAU.read_text()) if r["task_id"] == 4)
             released, = decoy.read(target / "trajectories/tau_dataset_failed.json")
             self.assertEqual(set(released), set(original_row))  # same wrapper layout
@@ -143,7 +161,8 @@ class TauDecoyTest(unittest.TestCase):
             root = decoy.root_failure(decoy.read(target / "ground_truth.json")[0])
             self.assertEqual((root["step_number"], root["original_step_number"]), (19, 15))
             manifest = decoy.read(target / "manifest.json")
-            self.assertEqual((manifest["domain"], manifest["generator"]["model_id"]), ("tau", "claude-haiku-5-5"))
+            self.assertEqual((manifest["domain"], manifest["generator"]["model"]), ("tau", MODEL))
+            self.assertEqual((manifest["generator"]["provider"], manifest["total_premium_requests"]), ("copilot-cli", 1))
             self.assertIn("trajectories/tau_dataset_failed.json", manifest["artifact_sha256"])
             audit_path = target / "audit.json"
             record = decoy.read(audit_path)["4"]
@@ -174,7 +193,7 @@ class TauDecoyTest(unittest.TestCase):
         bad = dict(PROPOSAL, insertions=[dict(HERRING, replace_with="yusuf_rossi_9620")])
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(decoy.subprocess, "run", side_effect=fake_claude(bad)):
+            with patch.object(decoy.subprocess, "run", side_effect=fake_copilot(bad)):
                 decoy.propose(generate_args(work))
             self.assertIn("appears in the trajectory", decoy.read(work / "4/invalid.json")["error"])
             self.assertFalse((work / "4/events.json").exists())
@@ -221,6 +240,7 @@ class TauDecoyTest(unittest.TestCase):
                 decoy.materialize(case, label, dict(PROPOSAL, insertions=replays + herrings + [extra]), allowed)
 
 
+@unittest.skipUnless(MAGENTIC.exists(), "Magentic-One baseline is not on this branch")
 class MagenticDecoyTest(unittest.TestCase):
     """The same code on a multi-agent domain with a folder of bare event lists and no tool calls."""
 

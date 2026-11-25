@@ -56,43 +56,44 @@ truth. The model proposes only the text of the smaller steps; Python replaces th
 step, keeps the same actor and renumbers the trajectory. No IR conversion is
 involved.
 
-From the project root, activate the AgentRx environment and sign in to Claude
-Code. Each generator model gets its own work directory and release line:
-
-| `--model` | Model ID | Release path |
-|---|---|---|
-| `haiku` | `claude-haiku-5-5` | `<dataset>/step_decomposition/haiku/vX.Y.Z` |
-| `sonnet` | `claude-sonnet-5-5` | `<dataset>/step_decomposition/sonnet/vX.Y.Z` |
-| `opus` | `claude-opus-5-5` | `<dataset>/step_decomposition/opus/vX.Y.Z` |
+From the project root, activate the AgentRx environment and sign in to the
+GitHub Copilot CLI (`copilot login`), the same CLI AgentRx's judge uses. The
+generator model is `STEP_DECOMPOSITION_COPILOT_MODEL` (default
+`claude-haiku-5.5`) and the effort `STEP_DECOMPOSITION_COPILOT_REASONING_EFFORT`
+(default `medium`), the finalized setting, read from the environment (`.env`,
+see `.env.example`) like the judge's settings; there is no command-line
+override. The model must be enabled for your Copilot account. A release is
+written to `<dataset>/step_decomposition/vX.Y.Z`, and its manifest records the
+model and effort. The existing `haiku/`, `sonnet/` and `opus/` v0.1.0 releases
+come from the earlier model-comparison study (Claude Code) and are kept
+unchanged; start new releases at v0.2.0.
 
 ```bash
-# If `claude` is not on PATH, point at the binary (e.g. the VS Code extension's copy)
-export CLAUDE_BIN=~/.vscode/extensions/anthropic.claude-code-<version>/resources/native-binary/claude
 base=data/benchmark_versions/tau_retail/baseline/v1.0.0
-for m in haiku sonnet opus; do
-  python -m agentrx.rewordings.step_decomposition generate --domain tau \
-    --trajectories "$base/tau_dataset_failed.json" --ground-truth "$base/tau_ground_truth.json" \
-    --model "$m" --effort medium --work "runs/decomp/tau/$m-medium" &
-done; wait
+python -m agentrx.rewordings.step_decomposition generate --domain tau \
+  --trajectories "$base/tau_dataset_failed.json" --ground-truth "$base/tau_ground_truth.json" \
+  --work runs/decomp/tau
 ```
 
 For Magentic-One use `--domain magentic`, the
 `magentic_one/baseline/v1.0.0/trajectories` folder and its ground truth; only
 labeled trajectories are attempted. A domain without a default policy needs
-`--policy`. Add `--ids 4` for a single-trajectory pilot. `--effort` is optional.
-An interrupted batch resumes with the same command.
+`--policy`. Add `--ids 4` for a single-trajectory pilot. An interrupted batch
+resumes with the same command.
 
-Each labeled trajectory takes one tool-free Claude Code call (`--safe-mode`, no
-tools, no MCP, no CLAUDE.md, empty working directory) whose answer is checked
-against a JSON schema. The
+Each labeled trajectory takes one isolated Copilot CLI call: no tools, no
+built-in or user MCP servers, no custom instructions, and an empty working
+directory. The output schema is appended to the prompt and the JSON answer is
+checked against it; the call is refused unless the session used the requested
+model and effort. The
 [prompt](../../agentrx/rewordings/step_decomposition_prompt.txt) follows the
 invariant prompts: generic instructions with `<<PLACEHOLDER>>` slots for the
 domain policy, tool descriptions, task instruction, root failure, numbered
 events, the exact step to decompose, and the role transitions seen in the
-dataset. These inputs are sent to Anthropic. A work directory is locked to its
-domain, model, effort, prompt, policy and input checksums; each case's
-`generation.json` records the model that answered, the Claude Code version, cost
-and generator code hash.
+dataset. These inputs are sent to GitHub Copilot and its model provider. A work
+directory is locked to its domain, model, effort, prompt, policy and input
+checksums; each case's `generation.json` records the model and effort, the
+Copilot CLI version, premium requests, and the generator and helper code hashes.
 
 Python enforces what it can learn from the input itself:
 
@@ -100,7 +101,7 @@ Python enforces what it can learn from the input itself:
   dataset (so the step is not detached from the turn before or after it); the
   internal same-actor boundaries are inherent to splitting one turn;
 - the smaller steps keep the actor of the original step, and any tool call stays
-  on the first of them so one step still performs it;
+  on the last of them, so the tool result still follows the call;
 - integer fields that count events in order (such as Tau's `index`) are
   renumbered across the variant;
 - every event except the decomposed step is unchanged.
@@ -124,12 +125,12 @@ soften or add to the failure. Then write a review for **each candidate**:
 Release each model's reviewed work directory with a fresh version:
 
 ```bash
-python -m agentrx.rewordings.step_decomposition release --work runs/decomp/tau/sonnet-medium \
-  --reviews runs/decomp/tau/sonnet-medium/reviews.json --version v0.1.0
+python -m agentrx.rewordings.step_decomposition release --work runs/decomp/tau \
+  --reviews runs/decomp/tau/reviews.json --version v0.2.0
 
-release_dir=data/benchmark_versions/tau_retail/step_decomposition/sonnet/v0.1.0
+release_dir=data/benchmark_versions/tau_retail/step_decomposition/v0.2.0
 python run.py "$release_dir/trajectories" --domain tau \
-  --ground-truth "$release_dir/ground_truth.json" --run-name tau_decomp_sonnet
+  --ground-truth "$release_dir/ground_truth.json" --run-name tau_decomp_haiku
 ```
 
 `trajectories/` mirrors the input files in their own layout, keeping only
@@ -141,7 +142,7 @@ carries the mistake, because free-text reasons keep the annotators' numbering.
 `audit.json` records proposals, generation metadata, reviews, skips, invalid
 proposals, the decomposed and error step positions, and the original-to-variant
 map. The manifest records the parent inputs and checksums, generator
-configuration, code hashes, Claude Code versions, total generation cost and
+configuration, code hashes, Copilot CLI versions, total premium requests and
 artifact checksums.
 
 To measure localization shifts, use clean and variant reports from the same
@@ -150,7 +151,7 @@ judge configuration, each containing a single decision per case.
 ```bash
 python -m agentrx.rewordings.step_decomposition compare --audit "$release_dir/audit.json" \
   --clean runs/tau_baseline_v1/judge_output/runs/run1.json \
-  --variant runs/tau_decomp_sonnet/judge_output/runs/run1.json
+  --variant runs/tau_decomp_haiku/judge_output/runs/run1.json
 ```
 
 The decomposition evasion rate is the fraction of paired, originally correct

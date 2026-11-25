@@ -18,7 +18,6 @@ Labels number steps by 1-based event position, as in the AgentRx baselines.
 import argparse
 import hashlib
 import json
-import os
 import random
 import re
 import string
@@ -29,6 +28,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from agentrx.invariants.domain_registry import get_domain_config, list_domains
+from agentrx.rewordings import copilot
 
 ROOT = Path(__file__).resolve().parents[2]
 VERSIONS = ROOT / "data/benchmark_versions"
@@ -43,16 +43,17 @@ ROLE_KEYS = ("role", "source", "speaker", "agent", "name")
 CONTENT_KEYS = ("content", "message", "text", "output")
 CALL_ID_KEYS = ("id", "tool_call_id", "call_id")  # links a tool call to its result in chat formats
 ERROR_TEXT = re.compile(r"\b(error|exception|traceback|not found|failed|denied|invalid|404)\b", re.I)
-# Full IDs, not aliases: an alias can silently move to a newer model.
-MODELS = {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5", "opus": "claude-opus-5-5"}
-PROVIDER = "claude-code-cli"
+# The generator model comes from $STEP_DECOY_COPILOT_MODEL (default claude-sonnet-5.5)
+# and is run through the GitHub Copilot CLI, as AgentRx's judge is; see copilot.py.
+VARIANT = "step_decoy"
+PROVIDER = copilot.PROVIDER
 MAX_PER_KIND = 3  # decoys of each kind per trajectory
 MAX_SPAN = 3  # consecutive events one decoy copies
 # The template carries the instructions and <<PLACEHOLDER>> slots for domain data.
 SYSTEM = ("You design step decoys for evaluating root-cause localization in agent trajectories. "
           "Follow the instructions in the user message and answer only through the structured output.")
-# Claude Code rejects anyOf at the top level, so the schema is flat and Python
-# checks which fields each decision and decoy kind requires.
+# The schema is flat (no top-level anyOf), so copilot.check_schema() checks only types
+# and enums; Python checks which fields each decision and decoy kind requires.
 DECOY = {"type": "object", "additionalProperties": False, "required": ["kind"], "properties": {
     "kind": {"type": "string", "enum": ["noise", "red_herring"]},
     "source_start": {"type": "integer"}, "source_end": {"type": "integer"},
@@ -404,38 +405,18 @@ def render(template, **values):
     return re.sub(r"<<([A-Z_]+)>>", fill, template)
 
 
-def claude_version(binary):
-    try:
-        result = subprocess.run([binary, "--version"], capture_output=True, text=True, timeout=60)
-    except FileNotFoundError:
-        raise ValueError(f"Claude Code not found at {binary!r}. Pass --claude-bin or set CLAUDE_BIN.")
-    if result.returncode:
-        raise ValueError(f"{binary} --version failed: {result.stderr.strip()[:500]}")
-    return result.stdout.strip()
+def generator_settings(variant):
+    """The generation settings shared by every rewording: provider, and the rewording's
+    own model and effort from copilot.model_for / effort_for."""
+    return dict(variant=variant, provider=PROVIDER, model=copilot.model_for(variant),
+                effort=copilot.effort_for(variant))
 
 
-def ask_claude(binary, model, effort, message, timeout):
-    """Run one tool-free Claude Code turn and return the structured proposal and run metadata."""
-    # --safe-mode drops CLAUDE.md, memory, skills, hooks, plugins and MCP but keeps the
-    # normal login (--bare would require an API key). The empty cwd hides this repo.
-    with tempfile.TemporaryDirectory() as cwd:
-        result = subprocess.run([binary, "-p", "--model", model, "--safe-mode", "--tools", "",
-                                 "--strict-mcp-config", "--disable-slash-commands",
-                                 "--no-session-persistence", "--system-prompt", SYSTEM,
-                                 "--output-format", "json", "--json-schema", json.dumps(SCHEMA)]
-                                + (["--effort", effort] if effort else []),
-                                cwd=cwd, input=message, capture_output=True, text=True, timeout=timeout)
-    try:
-        envelope = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        raise ValueError(f"Claude Code returned no JSON: {(result.stderr or result.stdout).strip()[:500]}")
-    if result.returncode or envelope.get("is_error") or not isinstance(envelope.get("structured_output"), dict):
-        raise ValueError(f"Claude Code failed: {str(envelope.get('result'))[:500]}")
-    usage = envelope.get("modelUsage") or {}
-    if model not in usage:
-        raise ValueError(f"Requested {model} but the run used {sorted(usage)}")
-    meta = {k: envelope.get(k) for k in ("session_id", "num_turns", "duration_ms", "total_cost_usd")}
-    return envelope["structured_output"], {**meta, "model_usage": usage}
+def check_generator(config, variant):
+    """Refuse a work directory made by another rewording or by the old Claude Code generator."""
+    if config.get("provider") != PROVIDER or config.get("variant", variant) != variant or not config.get("model"):
+        raise ValueError(f"Work directory was not generated by the Copilot {variant} generator "
+                         f"(provider {config.get('provider')!r}); generate it again in a fresh --work")
 
 
 # ---------- Commands ----------
@@ -456,13 +437,13 @@ def propose(args):
         raise ValueError("Select unique trajectory IDs that exist in the input and have labels")
     if len({safe_name(t) for t in ids}) != len(ids):
         raise ValueError("Trajectory IDs collide as folder names")
-    model = MODELS[args.model]
+    generator = generator_settings(VARIANT)
     policy, tools = domain_inputs(args.domain, args.policy)
     prompt = TEMPLATE.read_text(encoding="utf-8")
     # Everything that changes what the model sees. The generator code hash and the
-    # Claude Code version are recorded per case instead, so a code fix does not
+    # Copilot CLI version are recorded per case instead, so a code fix does not
     # discard paid generations; release rebuilds each accepted case and refuses drift.
-    settings = dict(provider=PROVIDER, model=args.model, model_id=model, effort=args.effort, domain=args.domain,
+    settings = dict(**generator, domain=args.domain,
                     trajectories=stored(args.trajectories), ground_truth=stored(args.ground_truth), inputs=hashes,
                     policy=stored(ROOT / (args.policy or get_domain_config(args.domain).default_policy_path)),
                     policy_sha256=digest(policy.encode()), prompt_sha256=digest((SYSTEM + "\n" + prompt).encode()),
@@ -475,8 +456,9 @@ def propose(args):
     if not config.exists():
         write(config, settings)
     allowed, errors = transitions(cases), error_examples(cases)
-    print(f"{len(cases)} trajectories, {len(labeled)} labeled, {len(ids)} selected", flush=True)
-    version = None
+    print(f"{len(cases)} trajectories, {len(labeled)} labeled, {len(ids)} selected "
+          f"(model {settings['model']}, effort {settings['effort']})", flush=True)
+    version = binary = None
     for tid in ids:
         case_dir = args.work / safe_name(tid)
         if case_dir.exists():
@@ -494,12 +476,16 @@ def propose(args):
                              TRAJECTORY=lines({"step": n, "event": e} for n, e in enumerate(case["events"], 1)),
                              ROLE_TRANSITIONS=lines(f"{a} -> {b}" for a, b in sorted(allowed)),
                              ERROR_EXAMPLES=lines(errors))
-            version = version or claude_version(args.claude_bin)
+            binary = binary or copilot.binary(args.copilot_bin)
+            version = version or copilot.version(binary)
             try:
-                proposal, meta = ask_claude(args.claude_bin, model, args.effort, message, args.timeout)
+                proposal, meta = copilot.ask(binary, settings["model"], settings["effort"], SYSTEM, SCHEMA,
+                                             message, args.timeout)
             except ValueError as exc:
                 raise ValueError(f"Trajectory {tid}: {exc}")
-            generation = dict(meta, claude_version=version, generator_sha256=digest(Path(__file__).read_bytes()))
+            # generator_sha256 hashes this file; helpers_sha256 the copilot code it uses.
+            generation = dict(meta, copilot_version=version, generator_sha256=digest(Path(__file__).read_bytes()),
+                              helpers_sha256=digest(Path(copilot.__file__).read_bytes()))
         with tempfile.TemporaryDirectory(dir=args.work) as tmp:
             staging = Path(tmp) / case_dir.name
             staging.mkdir()
@@ -525,16 +511,15 @@ def propose(args):
 
 def release(args):
     config = read(args.work / "config.json")
-    if config.get("provider") != PROVIDER or MODELS.get(config.get("model")) != config.get("model_id"):
-        raise ValueError("Work directory was not generated by the Claude Code step-decoy generator")
+    check_generator(config, VARIANT)
     sources, cases, labels, hashes = load_dataset(ROOT / config["trajectories"], ROOT / config["ground_truth"])
     if hashes != config["inputs"]:
         raise ValueError("Input trajectories or labels changed since generation")
     if not re.fullmatch(r"v\d+\.\d+\.\d+", args.version):
         raise ValueError("Expected a version such as v1.0.0")
-    out = args.out or VERSIONS / DATASETS.get(config["domain"], config["domain"]) / "step_decoy"
-    # One release line per generator model: <dataset>/step_decoy/<haiku|sonnet|opus>/vX.Y.Z
-    target = Path(out) / config["model"] / args.version
+    out = args.out or VERSIONS / DATASETS.get(config["domain"], config["domain"]) / VARIANT
+    # <dataset>/step_decoy/vX.Y.Z; the model is recorded in the manifest.
+    target = Path(out) / args.version
     if target.exists():
         raise ValueError(f"Release already exists: {target}")
     allowed, reviews = transitions(cases), read(args.reviews)
@@ -585,8 +570,9 @@ def release(args):
             parent=dict(trajectories=config["trajectories"], ground_truth=config["ground_truth"], sha256=hashes),
             generator=config, artifact_sha256=artifacts,
             generator_sha256=sorted({r["generator_sha256"] for r in runs}),
-            claude_versions=sorted({r["claude_version"] for r in runs}),
-            total_cost_usd=round(sum(r.get("total_cost_usd") or 0 for r in runs), 6),
+            helpers_sha256=sorted({r["helpers_sha256"] for r in runs}),
+            copilot_versions=sorted({r["copilot_version"] for r in runs}),
+            total_premium_requests=sum(r.get("premium_requests") or 0 for r in runs),
             accepted_ids=list(replaced), attempted_count=len(audit)))
         staging.rename(target)
     print(target)
@@ -642,13 +628,7 @@ def main():
     gen.add_argument("--policy", help="Policy file (default: the domain's policy)")
     gen.add_argument("--work", type=Path, required=True)
     gen.add_argument("--ids", nargs="+", help="Trajectory IDs (default: every labeled trajectory)")
-    gen.add_argument("--model", required=True, choices=MODELS,
-                     help="Generator model: " + ", ".join(f"{k}={v}" for k, v in MODELS.items()))
-    gen.add_argument("--effort", choices=["low", "medium", "high", "xhigh", "max"],
-                     help="Claude Code effort level (default: the model's own default)")
-    gen.add_argument("--claude-bin", default=os.getenv("CLAUDE_BIN", "claude"),
-                     help="Claude Code executable (default: $CLAUDE_BIN or claude)")
-    gen.add_argument("--timeout", type=int, default=600)
+    copilot.add_model_arguments(gen, VARIANT)
     pub = cmds.add_parser("release", help="Freeze reviewed candidates with remapped labels")
     pub.add_argument("--work", type=Path, required=True)
     pub.add_argument("--reviews", type=Path, required=True)

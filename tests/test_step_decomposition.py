@@ -1,5 +1,6 @@
 """Exercise layouts, generation, review and comparison on the frozen baselines."""
 import json
+import os
 import tempfile
 import unittest
 from argparse import Namespace
@@ -31,21 +32,38 @@ PROPOSAL = dict(
     distinguishing_evidence="The third smaller step still says 11, the miscount from the tool output.")
 
 
-def fake_claude(proposal, model="claude-haiku-5-5"):
-    """Stand in for the Claude Code CLI: answer --version and each -p generation call."""
+MODEL = "claude-haiku-5.5"
+
+
+def setUpModule():
+    """Pin this rewording's model and effort, so a local .env cannot change the tests."""
+    global _env
+    _env = patch.dict(os.environ, {"STEP_DECOMPOSITION_COPILOT_MODEL": MODEL, "STEP_DECOMPOSITION_COPILOT_REASONING_EFFORT": "medium"})
+    _env.start()
+
+
+def tearDownModule():
+    _env.stop()
+
+
+
+def fake_copilot(proposal, model=MODEL, effort="medium"):
+    """Stand in for the GitHub Copilot CLI: answer --version and each generation call
+    with the JSON-lines events copilot.ask() reads."""
     def run(cmd, **kwargs):
         if cmd[1:] == ["--version"]:
-            return SimpleNamespace(returncode=0, stdout="9.9.9 (Claude Code)\n", stderr="")
-        envelope = dict(type="result", is_error=False, num_turns=2, session_id="s", duration_ms=1,
-                        total_cost_usd=0.01, structured_output=proposal, result=json.dumps(proposal),
-                        modelUsage={model: {"outputTokens": 1}})
-        return SimpleNamespace(returncode=0, stdout=json.dumps(envelope), stderr="")
+            return SimpleNamespace(returncode=0, stdout="GitHub Copilot CLI 9.9.9.\n", stderr="")
+        events = [dict(type="session.start", data=dict(sessionId="s", selectedModel=model, reasoningEffort=effort)),
+                  dict(type="assistant.message", data=dict(content=json.dumps(proposal))),
+                  dict(type="result", sessionId="s", exitCode=0,
+                       usage=dict(premiumRequests=1, sessionDurationMs=1, totalApiDurationMs=1))]
+        return SimpleNamespace(returncode=0, stdout="\n".join(map(json.dumps, events)), stderr="")
     return run
 
 
 def generate_args(work, **overrides):
     return Namespace(**{**dict(domain="tau", trajectories=TAU, ground_truth=TAU_GT, policy=None, work=work,
-                               ids=["4"], model="haiku", effort="medium", claude_bin="claude", timeout=10),
+                               ids=["4"], copilot_bin="copilot", timeout=10),
                         **overrides})
 
 
@@ -85,19 +103,20 @@ class TauDecompositionTest(unittest.TestCase):
     def test_reviewed_decomposition_maps_annotations_and_predictions(self):
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(decomp.subprocess, "run", side_effect=fake_claude(PROPOSAL)) as cli:
+            with patch.object(decomp.subprocess, "run", side_effect=fake_copilot(PROPOSAL)) as cli:
                 decomp.propose(generate_args(work))
-                generations = [c for c in cli.call_args_list if "-p" in c.args[0]]
+                generations = [c for c in cli.call_args_list if "--model" in c.args[0]]
                 self.assertEqual(len(generations), 1)
                 cmd = generations[0].args[0]
-                self.assertEqual(cmd[cmd.index("--model") + 1], "claude-haiku-5-5")
-                self.assertEqual(cmd[cmd.index("--tools") + 1], "")
+                self.assertEqual(cmd[cmd.index("--model") + 1], MODEL)
+                self.assertEqual(cmd[cmd.index("--reasoning-effort") + 1], "medium")
+                self.assertEqual(cmd[-1], "--available-tools")  # an empty tool list: no tools
                 message = generations[0].kwargs["input"]
                 self.assertNotRegex(message, r"<<[A-Z_]+>>")
                 self.assertIn("**Domain:** tau", message)
                 self.assertIn("The step to decompose", message)
                 self.assertIn("You are Yusuf Rossi in 19122", message)
-            self.assertEqual(decomp.read(work / "4/generation.json")["claude_version"], "9.9.9 (Claude Code)")
+            self.assertEqual(decomp.read(work / "4/generation.json")["copilot_version"], "GitHub Copilot CLI 9.9.9.")
             decomp.write(work / "reviews.json", {"4": dict(decision="accept", reviewer="fixture",
                                                            reason="Synthetic review for regression test")})
             args = Namespace(work=work, reviews=work / "reviews.json", version="v0.1.0", out=None)
@@ -105,7 +124,7 @@ class TauDecompositionTest(unittest.TestCase):
                 decomp.release(args)
                 with self.assertRaises(ValueError):  # a release cannot be overwritten
                     decomp.release(args)
-            target = Path(tmp) / "tau_retail/step_decomposition/haiku/v0.1.0"
+            target = Path(tmp) / "tau_retail/step_decomposition/v0.1.0"
             original_row = next(r for r in json.loads(TAU.read_text()) if r["task_id"] == 4)
             released, = decomp.read(target / "trajectories/tau_dataset_failed.json")
             self.assertEqual(set(released), set(original_row))  # same wrapper layout
@@ -121,6 +140,7 @@ class TauDecompositionTest(unittest.TestCase):
             self.assertEqual((root["step_number"], root["original_step_number"]), (17, 15))
             manifest = decomp.read(target / "manifest.json")
             self.assertEqual((manifest["domain"], manifest["variant"]), ("tau", "step_decomposition"))
+            self.assertEqual((manifest["generator"]["model"], manifest["generator"]["provider"]), (MODEL, "copilot-cli"))
             self.assertIn("trajectories/tau_dataset_failed.json", manifest["artifact_sha256"])
             record = decomp.read(target / "audit.json")["4"]
             self.assertEqual((record["decomposed_steps"], record["error_steps"]), ([15, 16, 17], [17]))
@@ -147,7 +167,7 @@ class TauDecompositionTest(unittest.TestCase):
         bad = dict(PROPOSAL, error_substeps=[9])  # out of range for three smaller steps
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(decomp.subprocess, "run", side_effect=fake_claude(bad)):
+            with patch.object(decomp.subprocess, "run", side_effect=fake_copilot(bad)):
                 decomp.propose(generate_args(work))
             self.assertIn("1-based positions", decomp.read(work / "4/invalid.json")["error"])
             self.assertFalse((work / "4/events.json").exists())
@@ -196,6 +216,7 @@ class TauDecompositionTest(unittest.TestCase):
         self.assertEqual(decomp.root_failure(mapped)["step_number"], 17)
 
 
+@unittest.skipUnless(MAGENTIC.exists(), "Magentic-One baseline is not on this branch")
 class MagenticDecompositionTest(unittest.TestCase):
     """The same code on a multi-agent domain: a folder of bare event lists, no tool calls."""
 

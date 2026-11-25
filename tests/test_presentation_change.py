@@ -1,8 +1,9 @@
 """Exercise presentation-change editing, generation, review gates, release and comparison
-on the frozen Tau baseline. Mirrors tests/test_step_decoy.py: the Claude Code CLI is
-replaced by a fake subprocess.run, so no model is called and the real ask_claude
-(isolation flags, envelope and model checks) is exercised too."""
+on the frozen Tau baseline. Mirrors tests/test_step_decoy.py: the GitHub Copilot CLI is
+replaced by a fake subprocess.run, so no model is called and the real copilot.ask()
+(isolation flags, event parsing, schema and model checks) is exercised too."""
 import json
+import os
 import shutil
 import tempfile
 import unittest
@@ -14,13 +15,26 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from agentrx.rewordings import copilot
 from agentrx.rewordings import presentation_change as pc
 from agentrx.rewordings import step_decoy
 
 DATA = pc.ROOT / "data/benchmark_versions"
 TAU = DATA / "tau_retail/baseline/v1.0.0/tau_dataset_failed.json"
 TAU_GT = DATA / "tau_retail/baseline/v1.0.0/tau_ground_truth.json"
-MODEL = "claude-sonnet-5-5"
+MODEL = "claude-opus-5.5"
+
+
+def setUpModule():
+    """Pin this rewording's model and effort, so a local .env cannot change the tests."""
+    global _env
+    _env = patch.dict(os.environ, {"PRESENTATION_CHANGE_COPILOT_MODEL": MODEL, "PRESENTATION_CHANGE_COPILOT_REASONING_EFFORT": "medium"})
+    _env.start()
+
+
+def tearDownModule():
+    _env.stop()
+
 
 _, CASES, LABELS, _ = pc.load_dataset(TAU, TAU_GT)
 TAU_ROLES = pc.resolve_roles("tau")  # assistant prose, system policy
@@ -39,24 +53,26 @@ PROPOSAL = dict(decision="EDIT", edits=[WORDING, EMPHASIS, FORMAT_RESULT, FORMAT
                 preservation_evidence="Step 3 still looks up products first; step 7 still says 11.")
 
 
-def fake_claude(answer, model=MODEL):
-    """Stand in for the Claude Code CLI: answer --version and each -p generation call.
-    `answer` is a proposal, or a function from the prompt to a proposal."""
+def fake_copilot(answer, model=MODEL, effort="medium"):
+    """Stand in for the GitHub Copilot CLI: answer --version and each generation call with
+    the JSON-lines events copilot.ask() reads. `answer` is a proposal, or a function from
+    the prompt to a proposal."""
     def run(cmd, **kwargs):
         if cmd[1:] == ["--version"]:
-            return SimpleNamespace(returncode=0, stdout="9.9.9 (Claude Code)\n", stderr="")
+            return SimpleNamespace(returncode=0, stdout="GitHub Copilot CLI 9.9.9.\n", stderr="")
         proposal = answer(kwargs["input"]) if callable(answer) else answer
-        envelope = dict(type="result", is_error=False, num_turns=1, session_id="s", duration_ms=1,
-                        total_cost_usd=0.01, structured_output=proposal, result=json.dumps(proposal),
-                        modelUsage={model: {"outputTokens": 1}})
-        return SimpleNamespace(returncode=0, stdout=json.dumps(envelope), stderr="")
+        events = [dict(type="session.start", data=dict(sessionId="s", selectedModel=model, reasoningEffort=effort)),
+                  dict(type="assistant.message", data=dict(content=json.dumps(proposal))),
+                  dict(type="result", sessionId="s", exitCode=0,
+                       usage=dict(premiumRequests=1, sessionDurationMs=1, totalApiDurationMs=1))]
+        return SimpleNamespace(returncode=0, stdout="\n".join(map(json.dumps, events)), stderr="")
     return run
 
 
 def generate_args(work, **overrides):
     return Namespace(**{**dict(domain="tau", trajectories=TAU, ground_truth=TAU_GT, policy=None, work=work,
-                               ids=["2"], model="sonnet", effort="medium", claude_bin="claude", timeout=10,
-                               regenerate=None, max_attempts=3, prose_roles=None, policy_roles=None),
+                               ids=["2"], copilot_bin="copilot", timeout=10,
+                               prose_roles=None, policy_roles=None),
                          **overrides})
 
 
@@ -273,6 +289,7 @@ class DomainGenericTest(unittest.TestCase):
                 violations = pc.check_preserved(original, tampered, {4, 5}, OTHER_ROLES)
                 self.assertTrue(any(label in v for v in violations), violations)
 
+    @unittest.skipUnless(MAGENTIC.exists(), "Magentic-One baseline is not on this branch")
     def test_magentic_with_chosen_prose_roles(self):
         _, cases, labels, _ = pc.load_dataset(MAGENTIC / "trajectories", MAGENTIC / "magentic_one_ground_truth.json")
         roles = pc.resolve_roles("magentic", ["Orchestrator (thought)"])
@@ -303,12 +320,14 @@ class DomainGenericTest(unittest.TestCase):
         self.assertIn("Paraphrase the natural-language content of an assistant message.", filled)
         self.assertIn("the arguments of the tool calls an assistant message makes.", filled)
         self.assertTrue(pc.digest((pc.SYSTEM + "\n" + filled).encode()).startswith("5fd8b3fb1768"))
-        _, cases, _, _ = pc.load_dataset(MAGENTIC / "trajectories", MAGENTIC / "magentic_one_ground_truth.json")
-        slots = pc.role_slots(cases, pc.resolve_roles("magentic", ["Orchestrator (thought)", "Assistant"]))
-        self.assertEqual(slots["PROSE_MESSAGE"], "an Assistant or Orchestrator (thought) message")
-        self.assertEqual(slots["TOOL_CALL_MESSAGE"], "a message")        # Magentic makes no tool calls
-        self.assertTrue(slots["LOCKED_STEPS"].startswith("ComputerTerminal, FileSurfer, "))
-        self.assertTrue(slots["LOCKED_STEPS"].endswith("WebSurfer and human messages and tool responses that are not JSON"))
+        if MAGENTIC.exists():  # the Magentic-One baseline is not on every branch
+            _, cases, _, _ = pc.load_dataset(MAGENTIC / "trajectories", MAGENTIC / "magentic_one_ground_truth.json")
+            slots = pc.role_slots(cases, pc.resolve_roles("magentic", ["Orchestrator (thought)", "Assistant"]))
+            self.assertEqual(slots["PROSE_MESSAGE"], "an Assistant or Orchestrator (thought) message")
+            self.assertEqual(slots["TOOL_CALL_MESSAGE"], "a message")        # Magentic makes no tool calls
+            self.assertTrue(slots["LOCKED_STEPS"].startswith("ComputerTerminal, FileSurfer, "))
+            self.assertTrue(slots["LOCKED_STEPS"].endswith(
+                "WebSurfer and human messages and tool responses that are not JSON"))
         self.assertEqual(pc.role_slots({"x": OTHER_LAYOUT}, OTHER_ROLES), dict(
             PROSE_MESSAGE="an agent message", TOOL_CALL_MESSAGE="an agent message",
             LOCKED_STEPS="planner messages (the policy), client messages and tool responses that are not JSON"))
@@ -320,7 +339,7 @@ class DomainGenericTest(unittest.TestCase):
     def test_generate_locks_roles_in_config(self):
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch("subprocess.run", fake_claude(PROPOSAL)), redirect_stdout(StringIO()):
+            with patch("subprocess.run", fake_copilot(PROPOSAL)), redirect_stdout(StringIO()):
                 pc.generate(generate_args(work))
                 config = pc.read(work / "config.json")
                 self.assertEqual((config["prose_roles"], config["policy_roles"]), (["assistant"], ["system"]))
@@ -338,22 +357,21 @@ class GenerateTest(unittest.TestCase):
     def test_generate_isolates_the_call_and_records_the_model(self):
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(pc.subprocess, "run", side_effect=fake_claude(PROPOSAL)) as cli:
+            with patch.object(pc.subprocess, "run", side_effect=fake_copilot(PROPOSAL)) as cli:
                 pc.generate(generate_args(work))
-                calls = [c for c in cli.call_args_list if "-p" in c.args[0]]
+                calls = [c for c in cli.call_args_list if "--model" in c.args[0]]
                 self.assertEqual(len(calls), 1)
                 cmd, kwargs = calls[0].args[0], calls[0].kwargs
-                self.assertEqual(cmd[cmd.index("--model") + 1], MODEL)        # full ID, not the alias
-                self.assertEqual(cmd[cmd.index("--effort") + 1], "medium")
-                self.assertEqual(cmd[cmd.index("--tools") + 1], "")
-                for flag in ("--safe-mode", "--strict-mcp-config", "--disable-slash-commands",
-                             "--no-session-persistence"):
+                self.assertEqual(cmd[cmd.index("--model") + 1], MODEL)
+                self.assertEqual(cmd[cmd.index("--reasoning-effort") + 1], "medium")
+                self.assertEqual(cmd[-1], "--available-tools")               # an empty tool list: no tools
+                for flag in ("--no-custom-instructions", "--disable-builtin-mcps", "--no-ask-user"):
                     self.assertIn(flag, cmd)
                 self.assertEqual(cmd[cmd.index("--output-format") + 1], "json")
-                self.assertEqual(json.loads(cmd[cmd.index("--json-schema") + 1]), pc.SCHEMA)
-                self.assertEqual(cmd[cmd.index("--system-prompt") + 1], pc.SYSTEM)
                 self.assertNotEqual(Path(kwargs["cwd"]).resolve(), pc.ROOT)  # an empty temp dir, not the repo
                 message = kwargs["input"]
+                self.assertTrue(message.startswith(pc.SYSTEM))
+                self.assertEqual(json.loads(message.split(copilot.ANSWER_FORMAT)[1]), pc.SCHEMA)
                 self.assertNotRegex(message, r"<<[A-Z_]+>>")
                 self.assertIn("**Domain:** tau", message)
                 self.assertIn("You are Yusuf Rossi in 19122", message)
@@ -361,17 +379,19 @@ class GenerateTest(unittest.TestCase):
                 self.assertIn('"step_number": 3', message.split("**Other Annotated Failures**")[1][:600])
                 self.assertIn('{"step": 7, "role": "assistant", "kinds": ["wording", "emphasis"]}', message)
             generation = pc.read(work / "2/generation.json")
-            self.assertEqual(generation["claude_version"], "9.9.9 (Claude Code)")
-            self.assertIn(MODEL, generation["model_usage"])
-            self.assertEqual(generation["helpers_sha256"], pc.digest(Path(step_decoy.__file__).read_bytes()))
+            self.assertEqual(generation["copilot_version"], "GitHub Copilot CLI 9.9.9.")
+            self.assertEqual((generation["model"], generation["effort"], generation["premium_requests"]),
+                             (MODEL, "medium", 1))
+            self.assertEqual(generation["helpers_sha256"], pc.digest(Path(step_decoy.__file__).read_bytes()
+                                                                     + Path(copilot.__file__).read_bytes()))
             validation = pc.read(work / "2/validation.json")
             self.assertEqual(validation["events_sha256"], pc.digest((work / "2/events.json").read_bytes()))
             self.assertEqual(pc.read(work / "config.json")["variant"], "presentation_change")
 
     def test_answer_from_another_model_is_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
-            with patch.object(pc.subprocess, "run", side_effect=fake_claude(PROPOSAL, model="claude-haiku-5-5")):
-                with self.assertRaisesRegex(ValueError, "Requested claude-sonnet-5-5"):
+            with patch.object(pc.subprocess, "run", side_effect=fake_copilot(PROPOSAL, model="claude-haiku-5.5")):
+                with self.assertRaisesRegex(ValueError, "Requested claude-opus-5.5"):
                     pc.generate(generate_args(Path(tmp) / "work"))
 
     def test_label_without_root_cause_skips_the_model(self):
@@ -383,28 +403,20 @@ class GenerateTest(unittest.TestCase):
                 cli.assert_not_called()
             self.assertEqual(pc.read(Path(tmp) / "work/2/proposal.json")["decision"], "NO_VALID_EDIT")
 
-    def test_invalid_proposal_is_kept_then_regenerated_up_to_the_cap(self):
+    def test_invalid_proposal_is_kept_and_never_retried(self):
         bad = edit(step=2, kind="wording", text="How many tees?")
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
-            with patch.object(pc.subprocess, "run", side_effect=fake_claude(bad)) as cli:
+            with patch.object(pc.subprocess, "run", side_effect=fake_copilot(bad)) as cli:
                 pc.generate(generate_args(work))
                 self.assertIn("not editable", pc.read(work / "2/invalid.json")["error"])
                 self.assertFalse((work / "2/events.json").exists())
                 calls = len(cli.call_args_list)
                 pc.generate(generate_args(work))                       # resume: nothing redone
                 self.assertEqual(len(cli.call_args_list), calls)
-                pc.generate(generate_args(work, regenerate=["2"]))     # attempt 2
-                pc.generate(generate_args(work, regenerate=["2"]))     # attempt 3
-                self.assertEqual(sorted(p.name for p in (work / pc.SUPERSEDED / "2").iterdir()), ["1", "2"])
-                self.assertEqual(pc.attempts_used(work, "2"), 3)
-                with self.assertRaisesRegex(ValueError, "Attempt cap reached"):
-                    pc.generate(generate_args(work, regenerate=["2"]))
-                self.assertTrue((work / "2/invalid.json").exists())    # nothing moved by the refusal
-            with self.assertRaisesRegex(ValueError, "different configuration"):
-                pc.generate(generate_args(work, max_attempts=10))      # the cap is locked
-            with self.assertRaisesRegex(ValueError, "IDs this run covers"):
-                pc.generate(generate_args(work, regenerate=["3"]))
+            config = pc.read(work / "config.json")
+            self.assertNotIn("max_attempts", config)                   # one attempt per case
+            self.assertEqual(sorted(p.name for p in work.iterdir()), ["2", "config.json"])
 
 
 class ReleaseTest(unittest.TestCase):
@@ -414,7 +426,7 @@ class ReleaseTest(unittest.TestCase):
     def setUpClass(cls):
         cls.tmp = tempfile.TemporaryDirectory()
         cls.work = Path(cls.tmp.name) / "work"
-        with patch.object(pc.subprocess, "run", side_effect=fake_claude(lambda p: valid_proposal_for(case_of(p)))), \
+        with patch.object(pc.subprocess, "run", side_effect=fake_copilot(lambda p: valid_proposal_for(case_of(p)))), \
                 redirect_stdout(StringIO()):
             pc.generate(generate_args(cls.work, ids=None))
 
@@ -430,30 +442,24 @@ class ReleaseTest(unittest.TestCase):
     def release(self, work, reviews, out, version="v0.1.0"):
         with redirect_stdout(StringIO()):
             pc.release(Namespace(work=work, reviews=reviews, version=version, out=out))
-        return out / "sonnet" / version
+        return out / version
 
     def test_every_case_was_generated_validly(self):
         self.assertEqual(sorted(p.name for p in self.work.iterdir() if (p / "events.json").exists()),
                          sorted(pc.safe_name(t) for t in CASES))
 
-    def test_release_refuses_until_all_cases_are_accepted(self):
+    def test_release_refuses_until_every_case_is_generated_and_reviewed(self):
         out = Path(self.tmp.name) / "refused"
 
         def refused(work, reviews, message):
             with self.assertRaisesRegex(ValueError, message):
                 self.release(work, reviews, out)
-            self.assertFalse((out / "sonnet/v0.1.0").exists())
+            self.assertFalse((out / "v0.1.0").exists())
 
         with self.subTest("missing case"):
             work = self.copy("missing")
             shutil.rmtree(work / "12")
             refused(work, accept_all(work), r"12: not generated yet")
-        with self.subTest("invalid case"):
-            work = self.copy("invalid")
-            for name in ("events.json", "validation.json"):
-                (work / "31" / name).unlink()
-            pc.write(work / "31/invalid.json", {"error": "Step 2 is not editable", "violations": []})
-            refused(work, accept_all(work), r"31: failed validation: Step 2.*--regenerate 31; attempt 1 of 3")
         with self.subTest("stale review"):
             refused(self.work, accept_all(self.work, Path(self.tmp.name) / "stale.json",
                                           **{"4": {"events_sha256": "0" * 64}}), r"4: the review approves different events")
@@ -463,9 +469,6 @@ class ReleaseTest(unittest.TestCase):
         with self.subTest("unsigned review"):
             refused(self.work, accept_all(self.work, Path(self.tmp.name) / "unsigned.json", **{"20": {"reviewer": ""}}),
                     r"20: needs a signed review")
-        with self.subTest("rejected"):
-            refused(self.work, accept_all(self.work, Path(self.tmp.name) / "rejected.json",
-                                          **{"21": {"decision": "reject"}}), r"21: rejected by fixture")
         with self.subTest("events edited after generation"):
             work = self.copy("drift")
             events = pc.read(work / "28/events.json")
@@ -478,30 +481,26 @@ class ReleaseTest(unittest.TestCase):
             refused(work, reviews, r"28: candidate changed since generation")
         with self.subTest("incomplete: a pilot work directory (1 of 29)"):
             pilot = Path(self.tmp.name) / "pilot"
-            with patch.object(pc.subprocess, "run", side_effect=fake_claude(PROPOSAL)), redirect_stdout(StringIO()):
+            with patch.object(pc.subprocess, "run", side_effect=fake_copilot(PROPOSAL)), redirect_stdout(StringIO()):
                 pc.generate(generate_args(pilot))
             refused(pilot, accept_all(pilot), r"covers 1 of 29")
 
-    def capped(self, name, tid):
-        """A copy of the work directory where `tid` has used all 3 attempts."""
-        work = self.copy(name)
-        for n in ("1", "2"):
-            shutil.copytree(work / tid, work / pc.SUPERSEDED / tid / n)
-        return work
-
-    def test_capped_cases_are_excluded_with_their_reason(self):
-        work = self.capped("capped", "28")
+    def test_invalid_no_edit_and_rejected_cases_are_excluded_with_their_reason(self):
+        invalid = self.copy("invalid")
         for name in ("events.json", "validation.json"):
-            (work / "28" / name).unlink()
-        pc.write(work / "28/invalid.json", {"error": "Step 33 is not editable", "violations": []})
-        work_rejected = self.capped("capped-rejected", "21")
+            (invalid / "28" / name).unlink()
+        pc.write(invalid / "28/invalid.json", {"error": "Step 33 is not editable", "violations": []})
+        no_edit = self.copy("no-edit")
+        for name in ("events.json", "validation.json"):
+            (no_edit / "12" / name).unlink()
+        pc.write(no_edit / "12/proposal.json", {"decision": "NO_VALID_EDIT", "reason": "nothing to change"})
         out = Path(self.tmp.name) / "excluded"
         for label, w, reviews, tid, reason in [
-                ("invalid at the cap", work, accept_all(work), "28",
-                 "attempt cap reached (3 of 3); final attempt failed validation: Step 33 is not editable"),
-                ("rejected at the cap", work_rejected,
-                 accept_all(work_rejected, **{"21": {"decision": "reject", "reason": "too loose"}}), "21",
-                 "attempt cap reached (3 of 3); final attempt rejected by fixture: too loose")]:
+                ("invalid", invalid, accept_all(invalid), "28", "failed validation: Step 33 is not editable"),
+                ("no edit", no_edit, accept_all(no_edit), "12", "returned NO_VALID_EDIT: nothing to change"),
+                ("rejected", self.work, accept_all(self.work, Path(self.tmp.name) / "rejected.json",
+                                                   **{"21": {"decision": "reject", "reason": "too loose"}}),
+                 "21", "rejected by fixture: too loose")]:
             with self.subTest(label):
                 target = self.release(w, reviews, out / tid)
                 manifest = pc.read(target / "manifest.json")
@@ -510,27 +509,10 @@ class ReleaseTest(unittest.TestCase):
                 self.assertEqual(manifest["attempted_count"], 29)            # every case, as step_decoy
                 self.assertEqual(len(manifest["accepted_ids"]), 28)
                 self.assertNotIn(tid, manifest["accepted_ids"])
-                self.assertEqual(manifest["regenerated"], {tid: 2})
                 ids = {str(r["task_id"]) for r in pc.read(target / "trajectories/tau_dataset_failed.json")}
                 self.assertEqual(ids, set(CASES) - {tid})
                 self.assertEqual({str(l["trajectory_id"]) for l in pc.read(target / "ground_truth.json")}, ids)
-                audit = pc.read(target / "audit.json")
-                self.assertEqual(audit[tid]["excluded"], reason)
-                self.assertEqual(len(audit[tid]["superseded"]), 2)         # every attempt documented
-        # Only stuck cases are excluded: at the cap, a missing review or drift still blocks.
-        with self.subTest("missing review at the cap"), self.assertRaisesRegex(ValueError, "21: needs a signed review"):
-            self.release(work_rejected, accept_all(work_rejected, Path(self.tmp.name) / "r.json", **{"21": None}),
-                         out / "blocked")
-        with self.subTest("drift at the cap"), self.assertRaisesRegex(ValueError, "21: candidate changed"):
-            events = pc.read(work_rejected / "21/events.json")
-            events[-1]["content"] += " "
-            pc.write(work_rejected / "21/events.json", events)
-            reviews = accept_all(work_rejected, Path(self.tmp.name) / "d.json")
-            data = pc.read(reviews)
-            data["21"]["events_sha256"] = pc.digest((work_rejected / "21/events.json").read_bytes())
-            pc.write(reviews, data)
-            self.release(work_rejected, reviews, out / "blocked")
-        self.assertFalse((out / "blocked").exists())
+                self.assertEqual(pc.read(target / "audit.json")[tid]["excluded"], reason)
 
     def test_release_of_all_29(self):
         out = Path(self.tmp.name) / "released"
@@ -553,16 +535,17 @@ class ReleaseTest(unittest.TestCase):
             self.assertEqual(label, LABELS[str(label["trajectory_id"])])
         audit = pc.read(target / "audit.json")
         self.assertEqual(audit["2"]["root"], {"step_number": 7, "failure_category": "Misinterpretation of Tool Output"})
-        self.assertEqual(audit["2"]["attempt"], 1)
         manifest = pc.read(target / "manifest.json")
-        self.assertEqual((manifest["variant"], manifest["generator"]["model_id"], manifest["generator"]["max_attempts"]),
-                         ("presentation_change", MODEL, 3))
+        self.assertEqual((manifest["variant"], manifest["generator"]["model"]), ("presentation_change", MODEL))
+        self.assertNotIn("max_attempts", manifest["generator"])
+        self.assertNotIn("regenerated", manifest)
         self.assertEqual((manifest["excluded_ids"], manifest["excluded"], manifest["attempted_count"]), ([], {}, 29))
         self.assertEqual(len(manifest["accepted_ids"]), manifest["attempted_count"])
         self.assertEqual(manifest["parent"]["sha256"]["ground_truth"], pc.digest(TAU_GT.read_bytes()))
         for name, sha in manifest["artifact_sha256"].items():
             self.assertEqual(sha, pc.digest((target / name).read_bytes()))
-        self.assertEqual(manifest["helpers_sha256"], [pc.digest(Path(step_decoy.__file__).read_bytes())])
+        self.assertEqual(manifest["helpers_sha256"], [pc.digest(Path(step_decoy.__file__).read_bytes()
+                                                                + Path(copilot.__file__).read_bytes())])
 
     def test_review_sheet_reports_cases_and_review_state(self):
         work = self.copy("sheet")

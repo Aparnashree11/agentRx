@@ -6,15 +6,15 @@
 
 ## Release candidate
 
-**The rewording framework:** a single tool that takes failed agent trajectories in any layout AgentRx reads, produces three label-preserving rewordings, stores each as a versioned dataset release, re-judges each release with AgentRx, and writes a report.
+**The rewording framework:** a single tool that takes failed agent trajectories in any layout AgentRx reads, produces three label-preserving rewordings, stores each as a versioned dataset release, re-judges each release with AgentRx, and compares each with a clean baseline run (`compare`). The report is assembled from those outputs.
 
 | Rewording | Generator (frozen) | What changes |
 |---|---|---|
-| Step decomposition | `claude-haiku-5-5` | The root-cause step is split into 2–4 smaller steps by the same actor |
-| Step decoy | `claude-sonnet-5-5` | Noise replays and failed-attempt red herrings are inserted before the root cause |
-| Presentation change | `claude-opus-5-5` | Wording, emphasis or JSON layout changes; nothing moves |
+| Step decomposition | `claude-haiku-5.5` | The root-cause step is split into 2–4 smaller steps by the same actor |
+| Step decoy | `claude-sonnet-5.5` | Noise replays and failed-attempt red herrings are inserted before the root cause |
+| Presentation change | `claude-opus-5.5` | Wording, emphasis or JSON layout changes; nothing moves |
 
-- **Commit:** the merge of `step-decomposition`, `presentation-change-v2` (which already contains `step-decoy`) and `baseline-results`, tagged `week11-release` once the branches are merged (tag not yet created). The tag must also contain the judge outputs behind every reported number, including the reference baseline run. None of the three rewording branches contains judge outputs yet.
+- **Commit:** branch `framework-development`, the merge of `step-decomposition`, `presentation-change-v2` (which already contains `step-decoy`) and `baseline-results`, to be tagged `week11-release` (tag not yet created). The tag must also contain the judge outputs behind every reported number, including the reference baseline run. Only the three stability runs' judge outputs are committed so far (`results/baseline/artifacts/`); the reference run's and the releases' are not.
 - **Artifact:** there is no trained model file. The candidate is the framework code (`agentrx/rewordings/`) plus the frozen data releases under `data/benchmark_versions/`.
 - **Fallback:** the Week 8 baseline (Section 4).
 
@@ -34,19 +34,18 @@ This rule was written **after** the τ-bench results were seen. The choices rest
 
 | Component | Frozen version |
 |---|---|
-| AgentRx judge | gpt-6.1-sol via the GitHub Copilot API, one-shot (`--dynamic-mode oneshot`), single judge, all-at-once, full pipeline. The exact model version string is recorded in each run's logged artifacts. |
-| Generators | `claude-haiku-5-5` (decomposition), `claude-sonnet-5-5` (decoy), `claude-opus-5-5` (presentation change); full IDs, not aliases; medium effort; via Claude Code (2.1.327 for step decoy; the version for each generator is recorded in its generation log). A run is refused if `modelUsage` reports a different model. |
-| AgentRx | the upstream commit is recorded in each release manifest |
+| AgentRx judge | gpt-6.1-sol via the GitHub Copilot CLI (`AGENT_VERIFY_COPILOT_MODEL`), medium reasoning effort (`AGENT_VERIFY_COPILOT_REASONING_EFFORT`), one-shot (`--dynamic-mode oneshot`), single judge, all-at-once, full pipeline. The exact model version string is recorded in each run's logged artifacts. The τ-bench runs so far used the model's default effort; the clean baseline is rerun at medium before any new comparison. |
+| Generators | `claude-haiku-5.5` (decomposition), `claude-sonnet-5.5` (decoy), `claude-opus-5.5` (presentation change), each set by its own variable (`STEP_DECOMPOSITION_COPILOT_MODEL`, `STEP_DECOY_COPILOT_MODEL`, `PRESENTATION_CHANGE_COPILOT_MODEL`); medium effort (`*_COPILOT_REASONING_EFFORT`); via the same GitHub Copilot CLI as the judge (the CLI version is recorded in each generation log). A run is refused if the session reports a different model or effort. The τ-bench v0.1.0 releases were generated earlier with Claude Code (`claude-*-5-5` IDs; 2.1.327 for step decoy). |
 | Baseline data | `data/benchmark_versions/tau_retail/baseline/v1.0.0/`, pinned by SHA-256 |
-| Releases | `data/benchmark_versions/<domain>/<rewording>/<model>/vX.Y.Z/`, each with a manifest of SHA-256 values, generator code hash, prompt hash and cost |
+| Releases | `data/benchmark_versions/<domain>/<rewording>/vX.Y.Z/`, from v0.2.0 (the per-model `haiku/`, `sonnet/`, `opus/` v0.1.0 folders hold the model-comparison releases). Each has a manifest recording the generator model and effort, SHA-256 values for every file, generator and helper code hashes, the prompt hash and premium requests used |
 
-**The freezing problem.** "gpt-6.1-sol" is the name Copilot exposes, not a pinned model version. The provider can update the model behind that name without notice, and a silent update between the τ-bench runs and the Magentic-One run would look like a rewording effect. The same applies to Claude Code versions. To freeze:
+**The freezing problem.** "gpt-6.1-sol" is the name Copilot exposes, not a pinned model version. The provider can update the model behind that name without notice, and a silent update between the τ-bench runs and the Magentic-One run would look like a rewording effect. The same applies to the generator models and the Copilot CLI version. To freeze:
 
-1. Record the exact version string the judge reports in the run logs, and the Claude Code version for each generator, in the table above before the Magentic-One run.
+1. Record the exact version string the judge reports in the run logs, and the Copilot CLI version for each generator, in the table above before the Magentic-One run.
 2. Log the version on every run, and compare it with the frozen one before scoring.
 3. If the version changed, stop, record it in the changelog, and rerun the τ-bench reference baseline on the new version before comparing anything.
 
-Generator calls run isolated: `--safe-mode --tools "" --strict-mcp-config --disable-slash-commands --no-session-persistence`, an empty working directory, and structured JSON output.
+Generator calls run isolated: `--available-tools` with an empty list (no tools), `--disable-builtin-mcps` and `--disable-mcp-server` for every user MCP server, `--no-custom-instructions`, `--no-ask-user`, an empty working directory, and a JSON answer checked against the output schema.
 
 ## 2. Stages
 
@@ -54,7 +53,7 @@ Generator calls run isolated: `--safe-mode --tools "" --strict-mcp-config --disa
 |---|---|---|---|
 | **0. τ-bench development, team only** (done) | The three of us | Done by Nov 24 | 29 trajectories × 3 rewordings × 3 generators, each judged once. Released with the chosen generators: decomposition 16, decoy 28, presentation change 29 |
 | **0a. Results presentation** (Nov 24) | Instructor and class | One session | Aggregate τ-bench rates from single runs, labeled preliminary. No trajectories, prompts or generator code. |
-| **1. Merge and freeze, team only** | The three of us | Nov 24 to Nov 30 | Merge the three rewording branches into one framework; freeze the judge and generator versions (Section 1) |
+| **1. Merge and freeze, team only** (in progress) | The three of us | Nov 24 to Nov 30 | Merge the three rewording branches into one framework (done on `framework-development`; generators moved to the Copilot CLI); rerun the clean τ-bench baseline at medium effort; freeze the judge and generator versions (Section 1) |
 | **2. Magentic-One held-out run, team only** | The three of us | Dec 1 to Dec 3 | Up to 44 labeled traces per rewording, chosen generators only, run once. Decomposition will likely keep about half. Then produce the report. |
 | **3. Disclosure** | AgentRx maintainers at Microsoft Research, with instructor approval | From Dec 3, 2026, for 90 days | Aggregate report, plus gated access to variants on request |
 | **4. Class showcase** | Instructor and class | Dec 8 | Aggregate rates only. No trajectories, prompts or generator code. |
@@ -77,7 +76,7 @@ The framework is run on Magentic-One only when every condition below holds, and 
 
 **Same conditions**
 - A clean Magentic-One baseline is run with the same command as every release, and every release is compared with it on the same task IDs.
-- Judge outputs for every run are committed, so the report can be reproduced from the tag.
+- Judge outputs for every run, and the evaluation report generator that scores them, are committed, so the report can be reproduced from the tag.
 
 **Minimum cases**
 - At least 15 kept variants per rewording. A rewording below that is reported as preliminary.
@@ -98,7 +97,7 @@ The framework is run on Magentic-One only when every condition below holds, and 
 
 **Known limits, disclosed rather than fixed**
 - **Decoy:** 100 of 122 τ-bench red herrings use error strings that never appear in the real data. Most swap the last two characters of an ID. Some replays sit directly after the call they copy.
-- **Presentation change:** 16–27% of formatting edits are erased by AgentRx's IR converter before the judge sees them. Some emphasis edits bold the mistake itself.
+- **Presentation change:** AgentRx's IR converter erases 16–27% of all edits before the judge sees them: every layout-only reformatting of a JSON tool response, which is 30–47% of the formatting edits (39 of 131 for Opus). Some emphasis edits bold the mistake itself. Each case is generated once, so a case that fails validation or review is excluded rather than regenerated.
 - **Decomposition:** no check flags IDs the original step didn't contain (task 32 passed review with an added clue). Consecutive messages from the same actor never occur in the original data. Bare-tool-call roots can't be decomposed.
 - **Step accuracy within ±2** can count a judge that lands on an adjacent decoy or split step as correct.
 
@@ -158,8 +157,8 @@ The binding text is Specification §8, which the Development Contract (§2) make
 | Text-only attacks | The framework changes only trajectory text and JSON layout. No code execution, no changes to tools or the environment, and no edits outside the trajectory. |
 | One auditor (AgentRx) | Results are reported for AgentRx only. A second tool requires a new plan and instructor approval. |
 | Three attack classes | The release contains exactly three rewordings: decomposition, decoy and presentation change. A new class needs a plan change. |
-| Sandboxed runs | Every generator call uses the isolation flags in Section 1. A run without them is refused. |
-| Modest compute | Spending is capped per the team's compute budget per rewording per domain. τ-bench cost, generation + judging: decomposition with Haiku $0.16 + $3.88; decoy with Sonnet $2.30 + $2.56; presentation change with Opus $5.10 + $3.16; baseline judging $7.52. |
+| Sandboxed runs | Every generator call uses the isolation flags in Section 1. The generators always pass them; there is no option to turn them off. |
+| Modest compute | Spending is capped per the team's compute budget per rewording per domain. τ-bench cost of the model-comparison study, generation + judging: decomposition with Haiku $0.16 + $3.88; decoy with Sonnet $2.30 + $2.56; presentation change with Opus $5.10 + $3.16; baseline judging $7.52. Through the Copilot CLI, generation is metered in premium requests, which each release manifest totals (`total_premium_requests`), so the budget is tracked in premium requests from now on. |
 | Findings written for the maintainers | The first audience outside the team is the AgentRx maintainers (Stage 3). Nothing is shown publicly before Dec 3, and nothing is published before the window closes. |
 
 **Confidentiality:** the generators, their prompts and the reworded trajectories are confidential and gated. The repository holding them, and the gated τ-bench data, stays private; `Aparnashree11/agentRx` is a private repository. They are deleted when the disclosure window closes (about March 3, 2027), unless the maintainers ask in writing to keep them.
