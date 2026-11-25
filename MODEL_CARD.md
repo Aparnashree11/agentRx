@@ -89,7 +89,7 @@ Type codes: G = groups of people, I = instrumentation, E = environment.
 - **Held-out test:** Magentic-One (44 labeled traces), to be run once with the frozen framework: the merged code, the three chosen generators and the frozen judge. Not reported in this card.
 - **Reworded releases:** `data/benchmark_versions/tau_retail/<rewording>/<model>/v0.1.0/`, each with its own remapped labels. Each release keeps only the variants that passed checks and review (15–29 of 29).
 - **Preprocessing:** none. Ground-truth labels are used as released. An adapter converts raw messages to sub-steps without loss (1,064 = 1,064).
-- **Label audit (`results/track_a/data_checks.json`):** 29 traces and 29 labels, all matched. 39 failure entries, at most 4 per trajectory. In 2 trajectories the labeled root cause is not the earliest failure. Category names are spelled inconsistently in the dataset; the scorer matches categories by number or keyword.
+- **Label audit (`results/data_checks.json`):** 29 traces and 29 labels, all matched. 39 failure entries, at most 4 per trajectory. In 2 trajectories the labeled root cause is not the earliest failure. Category names are spelled inconsistently in the dataset; the scorer matches categories by number or keyword.
 - **Known limit:** τ-bench uses an LLM-simulated customer and a single assistant, so sub-agent misattribution can't be studied on this split.
 
 ## 4.6 Training data

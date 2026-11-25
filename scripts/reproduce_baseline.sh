@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Reproduce the Track-A tau-bench baseline number from committed files ALONE.
 #   - no credentials, no network, no GPU, no package install (stdlib Python only)
-#   - verifies every input's SHA256 against results/track_a/baseline/manifest.json
+#   - verifies every input's SHA256 against results/baseline/manifest.json
 #     BEFORE scoring, so the data version is *checked during the run*
 #   - runs in well under a second
 #
@@ -12,7 +12,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 GT="data/ground_truth/tau_ground_truth.json"
-MANIFEST="results/track_a/baseline/manifest.json"
+MANIFEST="results/baseline/manifest.json"
 PY="${PYTHON:-python3}"
 
 echo "=============================================================="
@@ -42,7 +42,7 @@ echo
 echo "[2/2] Scoring (stdlib only, no credentials) ..."
 printf "    %-12s %-10s %-12s\n" "run" "step_acc" "category_acc"
 for r in r1 r2 r3; do
-    art="results/track_a/baseline/artifacts/tau_sol_${r}.json"
+    art="results/baseline/artifacts/tau_sol_${r}.json"
     out="$("$PY" baselines/score_runs.py --ground-truth "$GT" --out "/tmp/baseline_${r}.json" "$art" >/dev/null 2>&1; \
           "$PY" -c "import json;d=json.load(open('/tmp/baseline_${r}.json'))['summary'];print('%.4f %.4f'%(d['step_accuracy']['rate'],d['category_accuracy']['rate']))")"
     printf "    %-12s %s\n" "tau_sol_${r}" "$(echo "$out" | awk '{printf "%-10s %-12s", $1, $2}')"
