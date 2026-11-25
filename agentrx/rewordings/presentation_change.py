@@ -29,9 +29,9 @@ this file's own ask_claude: the same isolation flags as step_decoy's, but with t
 rewording's system prompt and schema, so step_decoy.py is never modified.
 
 Release follows RELEASE_PLAN.md: all labeled trajectories (29 for Tau) per
-transformation, each one generated, valid and accepted by a signed review. A failed
-or rejected case is regenerated (generate --regenerate ID). Only a case still not
-releasable after the attempt cap is excluded, as step_decoy left out its task 31:
+transformation, each one generated, valid and accepted by a signed review. Each case
+gets a single attempt; there is no regeneration. A case that fails validation, has
+no edit or is rejected in review is excluded, as step_decoy left out its task 31:
 documented with the reason in the audit and the manifest, never silently.
 """
 
@@ -56,17 +56,8 @@ from agentrx.rewordings.step_decoy import (
 # The prompt template, with <<PLACEHOLDER>> slots filled by step_decoy.render().
 TEMPLATE = ROOT / "agentrx/rewordings/presentation_change_prompt.txt"
 VARIANT = "presentation_change"  # release path: <dataset>/presentation_change/<model>/vX.Y.Z
-# Inside a work directory: earlier attempts of regenerated cases, kept (never deleted,
-# since they were paid for) and recorded in the release audit.
-SUPERSEDED = "_superseded"
-# Attempts per case (the first one plus regenerations). Regenerating until a reviewer
-# accepts would bias the release toward easy-to-accept edits, so the number is capped,
-# locked in config.json with the other settings, and recorded in the manifest. A case
-# that reaches the cap without being accepted is excluded from the release with its
-# reason (manifest excluded / excluded_ids), a reportable outcome, not worked around.
-DEFAULT_MAX_ATTEMPTS = 3
-# A review must name the exact events.json it approved, so a review written before a
-# case was regenerated cannot approve the new, unseen content.
+# A review must name the exact events.json it approved, so it cannot approve content
+# the reviewer did not see.
 REVIEW_FIELDS = ("reviewer", "reason", "events_sha256")
 
 # ---------- What the model may propose ----------
@@ -503,13 +494,8 @@ def generate(args):
     ids = args.ids or labeled
     if len(set(ids)) != len(ids) or set(ids) - set(labeled):
         raise ValueError("Select unique trajectory IDs that exist in the input and have labels")
-    if len({safe_name(t) for t in ids}) != len(ids) or SUPERSEDED in {safe_name(t) for t in ids}:
+    if len({safe_name(t) for t in ids}) != len(ids):
         raise ValueError("Trajectory IDs collide as folder names")
-    redo = args.regenerate or []
-    if set(redo) - set(ids):
-        raise ValueError("--regenerate takes IDs this run covers (rerun the same command plus --regenerate)")
-    if type(args.max_attempts) is not int or args.max_attempts < 1:
-        raise ValueError("--max-attempts must be at least 1")
     model = MODELS[args.model]
     roles = resolve_roles(args.domain, args.prose_roles, args.policy_roles)
     policy, tools = domain_inputs(args.domain, args.policy)
@@ -529,7 +515,7 @@ def generate(args):
                     policy_sha256=digest(policy.encode()), prompt_sha256=digest((SYSTEM + "\n" + prompt).encode()),
                     tools_sha256=digest(json.dumps(tools, sort_keys=True).encode()),
                     output_schema_sha256=digest(json.dumps(SCHEMA, sort_keys=True).encode()),
-                    max_attempts=args.max_attempts, ids=ids, **roles)
+                    ids=ids, **roles)
     args.work.mkdir(parents=True, exist_ok=True)
     config = args.work / "config.json"
     # config_roles fills in the roles of a config written before they were recorded.
@@ -537,23 +523,6 @@ def generate(args):
         raise ValueError("Work directory belongs to a different configuration. Choose a fresh --work.")
     if not config.exists():
         write(config, settings)
-    # Regeneration (RELEASE_PLAN: fix a failed or rejected case; only exclude it at the cap). The
-    # settings are unchanged, so the lock above still holds; the old attempt is moved to
-    # _superseded/<id>/<n>/ and the loop below generates the case afresh. Every requested
-    # ID is checked against the attempt cap before anything is moved.
-    capped = [tid for tid in redo if attempts_used(args.work, tid) >= args.max_attempts]
-    if capped:
-        raise ValueError(f"Attempt cap reached ({args.max_attempts} per case, locked in config.json) for "
-                         f"{', '.join(capped)}; these cases cannot be regenerated. Release excludes "
-                         f"them with the reason rather than raising the cap.")
-    for tid in redo:
-        case_dir = args.work / safe_name(tid)
-        if case_dir.exists():
-            history = args.work / SUPERSEDED / safe_name(tid)
-            history.mkdir(parents=True, exist_ok=True)
-            attempt = 1 + max((int(p.name) for p in history.iterdir() if p.name.isdigit()), default=0)
-            case_dir.rename(history / str(attempt))
-            print(f"{tid}: previous attempt kept as {stored(history / str(attempt))}", flush=True)
     print(f"{len(cases)} trajectories, {len(labeled)} labeled, {len(ids)} selected", flush=True)
     version = None
     for tid in ids:
@@ -620,36 +589,14 @@ def generate(args):
         print(f"{tid}: {status}", flush=True)
 
 
-def attempts_used(work, tid):
-    """Finished attempts at a case: the superseded ones plus the current one, if any.
-    (A case folder only exists once its attempt finished; see the atomic rename.)"""
-    history = work / SUPERSEDED / safe_name(tid)
-    earlier = sum(1 for p in history.iterdir() if p.name.isdigit()) if history.is_dir() else 0
-    return earlier + (1 if (work / safe_name(tid)).is_dir() else 0)
-
-
-def superseded(work, tid):
-    """Earlier attempts of a regenerated case, oldest first, for the audit."""
-    history = work / SUPERSEDED / safe_name(tid)
-    attempts = sorted((p for p in history.iterdir() if p.name.isdigit()), key=lambda p: int(p.name)) \
-        if history.is_dir() else []
-    out = []
-    for path in attempts:
-        record = {"attempt": int(path.name)}
-        for name in ("proposal", "generation", "invalid"):
-            if (path / f"{name}.json").exists():
-                record[name] = read(path / f"{name}.json")
-        out.append(record)
-    return out
-
-
 def release(args):
     """Mirror of step_decoy.release, with RELEASE_PLAN's gate: every labeled trajectory
     must be generated, and each one is either accepted (valid, signed accept review,
-    no drift) or, only once it has used every attempt, excluded with its reason, as
-    step_decoy's task 31. Anything else (attempts left, a missing or stale review,
-    drift) blocks the release. All problems are reported together so one pass of
-    regeneration/review can fix them."""
+    no drift) or excluded with its reason, as step_decoy's task 31. A case has a single
+    attempt, so one that failed validation, has no edit, was rejected or no longer
+    passes the current checks is excluded, never regenerated. A missing case, a missing
+    or stale review, or drift blocks the release; all such problems are reported
+    together so one pass of generation/review can fix them."""
     config = read(args.work / "config.json")
     if (config.get("variant") != VARIANT or config.get("provider") != PROVIDER
             or MODELS.get(config.get("model")) != config.get("model_id")):
@@ -671,18 +618,13 @@ def release(args):
         raise ValueError(f"A release needs every labeled trajectory: this work directory covers "
                          f"{len(config['ids'])} of {len(labeled)}. Generate the full set in a fresh --work.")
     reviews, roles = read(args.reviews), config_roles(config)
-    cap = config["max_attempts"]
     problems, replaced, truth, audit, excluded = [], {}, [], {}, {}
 
-    def blocked(tid, used, why):
-        """A case that cannot be released as it stands. With attempts left it blocks the
-        release (regenerate it). At the cap it is excluded, as step_decoy leaves out its
-        task 31 (approved by Aparna): left out of trajectories and ground truth, and
-        recorded with the reason in the audit and in the manifest's excluded list."""
-        if used < cap:
-            problems.append(f"{tid}: {why}; regenerate it (generate ... --regenerate {tid}; attempt {used} of {cap})")
-        else:
-            excluded[tid] = audit[tid]["excluded"] = f"attempt cap reached ({used} of {cap}); final attempt {why}"
+    def exclude(tid, why):
+        """A case whose single attempt cannot be released. It is excluded, as step_decoy
+        leaves out its task 31 (approved by Aparna): left out of trajectories and ground
+        truth, and recorded with the reason in the audit and in the manifest's excluded list."""
+        excluded[tid] = audit[tid]["excluded"] = why
 
     for tid in config["ids"]:
         case_dir = args.work / safe_name(tid)
@@ -693,17 +635,11 @@ def release(args):
         record = audit[tid] = {"proposal": p}
         if (case_dir / "generation.json").exists():
             record["generation"] = read(case_dir / "generation.json")
-        record["superseded"] = superseded(args.work, tid)
-        used = len(record["superseded"]) + 1
-        record["attempt"] = used
-        if used > cap:  # only possible if attempts were moved by hand
-            problems.append(f"{tid}: {used} attempts exceed the cap of {cap}")
-            continue
         if (case_dir / "invalid.json").exists():
-            blocked(tid, used, f"failed validation: {read(case_dir / 'invalid.json')['error']}")
+            exclude(tid, f"failed validation: {read(case_dir / 'invalid.json')['error']}")
             continue
         if p.get("decision") != "EDIT":
-            blocked(tid, used, f"returned {p.get('decision')}: {p.get('reason')}")
+            exclude(tid, f"returned {p.get('decision')}: {p.get('reason')}")
             continue
         events_sha256 = digest((case_dir / "events.json").read_bytes())
         review = reviews.get(tid)
@@ -713,22 +649,23 @@ def release(args):
                             f"{', '.join(REVIEW_FIELDS)}")
             continue
         if review["events_sha256"] != events_sha256:
-            problems.append(f"{tid}: the review approves different events (written before a regeneration?); "
+            problems.append(f"{tid}: the review approves different events; "
                             f"review the current events.json ({events_sha256})")
             continue
         record["review"] = review
         if review["decision"] != "accept":
-            blocked(tid, used, f"rejected by {review['reviewer']}: {review['reason']}")
+            exclude(tid, f"rejected by {review['reviewer']}: {review['reason']}")
             continue
         # Rebuild from the proposal with the current code and refuse any drift.
         try:
             events, changes = apply_edits(cases[tid], labels[tid], p, roles)
         except ValueError as exc:
-            blocked(tid, used, f"no longer valid under the current code: {exc}")
+            exclude(tid, f"no longer valid under the current code: {exc}")
             continue
         if events != read(case_dir / "events.json"):
             # Tampering, not a stuck case: never excluded, always blocks.
-            problems.append(f"{tid}: candidate changed since generation; regenerate it")
+            problems.append(f"{tid}: candidate changed since generation (events.json no longer matches "
+                            f"the proposal)")
             continue
         # The root failure, kept for compare (step_decoy keeps original_root the same way);
         # steps never move here, so it is both the original and the variant step.
@@ -743,7 +680,7 @@ def release(args):
             failure["original_step_number"] = failure["step_number"]
         truth.append(label)
     if problems:
-        raise ValueError(f"Not releasable: every case must be accepted, or excluded at the attempt cap; "
+        raise ValueError(f"Not releasable: every case must be generated and reviewed; "
                          f"{len(problems)} of {len(config['ids'])} need attention:\n  " + "\n  ".join(problems))
     if not replaced:
         raise ValueError("No accepted trajectories to release")
@@ -766,11 +703,9 @@ def release(args):
         for path in sorted(p for p in staging.rglob("*") if p.is_file()):
             artifacts[path.relative_to(staging).as_posix()] = digest(path.read_bytes())
         runs = [r["generation"] for r in audit.values() if "generation" in r]
-        earlier = [s["generation"] for r in audit.values() for s in r["superseded"] if "generation" in s]
         # step_decoy's manifest keys (attempted_count counts every case, excluded ones
         # included, as hers does), plus helpers_sha256 (the shared code this generator
-        # imports), regenerated (attempts per regenerated case) and the excluded cases
-        # with their reasons, so an exclusion is never silent.
+        # imports) and the excluded cases with their reasons, so an exclusion is never silent.
         write(staging / "manifest.json", dict(
             domain=config["domain"], variant=VARIANT, version=args.version,
             parent=dict(trajectories=config["trajectories"], ground_truth=config["ground_truth"], sha256=hashes),
@@ -778,11 +713,9 @@ def release(args):
             generator_sha256=sorted({r["generator_sha256"] for r in runs}),
             helpers_sha256=sorted({r["helpers_sha256"] for r in runs}),
             claude_versions=sorted({r["claude_version"] for r in runs}),
-            # Every paid attempt, superseded ones included.
-            total_cost_usd=round(sum(r.get("total_cost_usd") or 0 for r in runs + earlier), 6),
+            total_cost_usd=round(sum(r.get("total_cost_usd") or 0 for r in runs), 6),
             accepted_ids=list(replaced), attempted_count=len(audit),
-            excluded_ids=list(excluded), excluded=excluded,
-            regenerated={tid: len(r["superseded"]) for tid, r in audit.items() if r["superseded"]}))
+            excluded_ids=list(excluded), excluded=excluded))
         staging.rename(target)
     print(target)
 
@@ -888,7 +821,6 @@ def review_sheet(args):
     _, cases, labels, _ = load_dataset(ROOT / config["trajectories"], ROOT / config["ground_truth"])
     reviews_path = args.reviews or args.work / "reviews.json"
     on_file = read(reviews_path) if reviews_path.exists() else {}
-    cap = config["max_attempts"]
     sections, template, tally = [], {}, {"ready": 0, "invalid": 0, "no edit": 0, "missing": 0}
     review_state = {"current": 0, "stale": 0, "none": 0}
 
@@ -903,17 +835,13 @@ def review_sheet(args):
             tally["missing"] += 1
             continue
         label, events = labels[tid], cases[tid]["events"]
-        used = attempts_used(args.work, tid)
         try:
             root = root_failure(label)
         except (KeyError, StopIteration):
             root = None
-        out.append(f"**Attempt:** {used} of {cap}")
         out.append(f"**Root failure:** {failure_line(root)}" if root else "**Root failure:** none in the label")
         out += [f"**Other failure:** {failure_line(f)}" for f in label["failures"] if f is not root]
-        next_step = (f"regenerate it (`generate ... --regenerate {tid}`)" if used < cap
-                     else "attempt cap reached; it cannot be regenerated, so release will exclude it "
-                          "and record why")
+        next_step = "release will exclude it and record why"
         proposal = read(case_dir / "proposal.json")
         if (case_dir / "invalid.json").exists():
             out.append(f"**Status:** INVALID, not reviewable: {read(case_dir / 'invalid.json')['error']}. "
@@ -952,17 +880,17 @@ def review_sheet(args):
             state = f"current ({review.get('decision') or 'no decision'} by {review.get('reviewer') or '?'})"
             review_state["current"] += 1
         else:
-            state = "**STALE**: written for different events (regenerated since?); review again"
+            state = "**STALE**: written for different events; review again"
             review_state["stale"] += 1
         out += ["", f"**events_sha256:** `{sha}`", f"**Review on file:** {state}"]
         template[tid] = {"decision": "", "reviewer": "", "reason": "", "events_sha256": sha}
 
     header = [
         f"# Review sheet: {stored(args.work)}", "",
-        f"Model `{config['model_id']}`, effort `{config['effort']}`, domain `{config['domain']}`, "
-        f"attempt cap {cap} per case.",
+        f"Model `{config['model_id']}`, effort `{config['effort']}`, domain `{config['domain']}`.",
         f"Cases: {tally['ready']} ready for review, {tally['invalid']} invalid, {tally['no edit']} with no edit, "
-        f"{tally['missing']} not generated (of {len(config['ids'])}; release needs all {len(config['ids'])} accepted).",
+        f"{tally['missing']} not generated (of {len(config['ids'])}; release needs every case generated and reviewed, "
+        f"and excludes any that is not accepted).",
         f"Reviews on file ({stored(reviews_path)}): {review_state['current']} current, "
         f"{review_state['stale']} stale, {review_state['none']} missing.", "",
         "Python has already checked structure: locked steps, tool names, call IDs, JSON values, every digit "
@@ -973,7 +901,7 @@ def review_sheet(args):
         "- emphasis does not make a correct step look doubtful or a wrong step look endorsed.", "",
         "Fill `decision` (accept/reject), `reviewer` and `reason` for every case in `reviews.template.json`, "
         "then save it as `reviews.json`. Keep `events_sha256` as written: it ties your review to these exact "
-        "events. Blanks, stale hashes and rejections are refused at release.",
+        "events. Blanks and stale hashes are refused at release; a rejected case is excluded.",
     ]
     sheet, template_path = args.work / "review_sheet.md", args.work / "reviews.template.json"
     sheet.write_text("\n".join(header) + "\n\n" + "\n\n".join("\n".join(s) for s in sections) + "\n",
@@ -1007,13 +935,7 @@ def main():
     gen.add_argument("--claude-bin", default=os.getenv("CLAUDE_BIN", "claude"),
                      help="Claude Code executable (default: $CLAUDE_BIN or claude)")
     gen.add_argument("--timeout", type=int, default=600)
-    gen.add_argument("--regenerate", nargs="+", metavar="ID",
-                     help="Redo these cases (failed validation or rejected in review); "
-                          "the previous attempt is kept under _superseded/")
-    gen.add_argument("--max-attempts", type=int, default=DEFAULT_MAX_ATTEMPTS,
-                     help=f"Attempts allowed per case, first one included (default {DEFAULT_MAX_ATTEMPTS}); "
-                          "locked in config.json")
-    pub = cmds.add_parser("release", help="Freeze a fully reviewed work directory (all cases accepted)")
+    pub = cmds.add_parser("release", help="Freeze a fully reviewed work directory (unaccepted cases excluded)")
     pub.add_argument("--work", type=Path, required=True)
     pub.add_argument("--reviews", type=Path, required=True)
     pub.add_argument("--version", required=True)

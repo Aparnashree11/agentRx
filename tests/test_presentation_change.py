@@ -7,7 +7,7 @@ import shutil
 import tempfile
 import unittest
 from argparse import Namespace
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from copy import deepcopy
 from io import StringIO
 from pathlib import Path
@@ -56,7 +56,7 @@ def fake_claude(answer, model=MODEL):
 def generate_args(work, **overrides):
     return Namespace(**{**dict(domain="tau", trajectories=TAU, ground_truth=TAU_GT, policy=None, work=work,
                                ids=["2"], model="sonnet", effort="medium", claude_bin="claude", timeout=10,
-                               regenerate=None, max_attempts=3, prose_roles=None, policy_roles=None),
+                               prose_roles=None, policy_roles=None),
                          **overrides})
 
 
@@ -383,7 +383,7 @@ class GenerateTest(unittest.TestCase):
                 cli.assert_not_called()
             self.assertEqual(pc.read(Path(tmp) / "work/2/proposal.json")["decision"], "NO_VALID_EDIT")
 
-    def test_invalid_proposal_is_kept_then_regenerated_up_to_the_cap(self):
+    def test_invalid_proposal_is_kept_and_never_redone(self):
         bad = edit(step=2, kind="wording", text="How many tees?")
         with tempfile.TemporaryDirectory() as tmp:
             work = Path(tmp) / "work"
@@ -392,19 +392,19 @@ class GenerateTest(unittest.TestCase):
                 self.assertIn("not editable", pc.read(work / "2/invalid.json")["error"])
                 self.assertFalse((work / "2/events.json").exists())
                 calls = len(cli.call_args_list)
-                pc.generate(generate_args(work))                       # resume: nothing redone
+                pc.generate(generate_args(work))                       # single attempt: nothing redone
                 self.assertEqual(len(cli.call_args_list), calls)
-                pc.generate(generate_args(work, regenerate=["2"]))     # attempt 2
-                pc.generate(generate_args(work, regenerate=["2"]))     # attempt 3
-                self.assertEqual(sorted(p.name for p in (work / pc.SUPERSEDED / "2").iterdir()), ["1", "2"])
-                self.assertEqual(pc.attempts_used(work, "2"), 3)
-                with self.assertRaisesRegex(ValueError, "Attempt cap reached"):
-                    pc.generate(generate_args(work, regenerate=["2"]))
-                self.assertTrue((work / "2/invalid.json").exists())    # nothing moved by the refusal
-            with self.assertRaisesRegex(ValueError, "different configuration"):
-                pc.generate(generate_args(work, max_attempts=10))      # the cap is locked
-            with self.assertRaisesRegex(ValueError, "IDs this run covers"):
-                pc.generate(generate_args(work, regenerate=["3"]))
+            self.assertEqual(sorted(p.name for p in work.iterdir()), ["2", "config.json"])
+            self.assertNotIn("max_attempts", pc.read(work / "config.json"))
+
+    def test_cli_has_no_regeneration_flags(self):
+        for flag in ("--regenerate", "--max-attempts"):
+            with self.subTest(flag), patch("sys.argv", ["presentation_change", "generate", "--domain", "tau",
+                                                         "--trajectories", "t", "--ground-truth", "g",
+                                                         "--work", "w", "--model", "sonnet", flag, "2"]), \
+                    redirect_stderr(StringIO()), self.assertRaises(SystemExit) as exit_:
+                pc.main()
+            self.assertEqual(exit_.exception.code, 2)                  # argparse: unrecognized argument
 
 
 class ReleaseTest(unittest.TestCase):
@@ -448,12 +448,6 @@ class ReleaseTest(unittest.TestCase):
             work = self.copy("missing")
             shutil.rmtree(work / "12")
             refused(work, accept_all(work), r"12: not generated yet")
-        with self.subTest("invalid case"):
-            work = self.copy("invalid")
-            for name in ("events.json", "validation.json"):
-                (work / "31" / name).unlink()
-            pc.write(work / "31/invalid.json", {"error": "Step 2 is not editable", "violations": []})
-            refused(work, accept_all(work), r"31: failed validation: Step 2.*--regenerate 31; attempt 1 of 3")
         with self.subTest("stale review"):
             refused(self.work, accept_all(self.work, Path(self.tmp.name) / "stale.json",
                                           **{"4": {"events_sha256": "0" * 64}}), r"4: the review approves different events")
@@ -463,9 +457,6 @@ class ReleaseTest(unittest.TestCase):
         with self.subTest("unsigned review"):
             refused(self.work, accept_all(self.work, Path(self.tmp.name) / "unsigned.json", **{"20": {"reviewer": ""}}),
                     r"20: needs a signed review")
-        with self.subTest("rejected"):
-            refused(self.work, accept_all(self.work, Path(self.tmp.name) / "rejected.json",
-                                          **{"21": {"decision": "reject"}}), r"21: rejected by fixture")
         with self.subTest("events edited after generation"):
             work = self.copy("drift")
             events = pc.read(work / "28/events.json")
@@ -482,26 +473,19 @@ class ReleaseTest(unittest.TestCase):
                 pc.generate(generate_args(pilot))
             refused(pilot, accept_all(pilot), r"covers 1 of 29")
 
-    def capped(self, name, tid):
-        """A copy of the work directory where `tid` has used all 3 attempts."""
-        work = self.copy(name)
-        for n in ("1", "2"):
-            shutil.copytree(work / tid, work / pc.SUPERSEDED / tid / n)
-        return work
-
-    def test_capped_cases_are_excluded_with_their_reason(self):
-        work = self.capped("capped", "28")
+    def test_unaccepted_cases_are_excluded_with_their_reason(self):
+        work = self.copy("invalid")
         for name in ("events.json", "validation.json"):
             (work / "28" / name).unlink()
         pc.write(work / "28/invalid.json", {"error": "Step 33 is not editable", "violations": []})
-        work_rejected = self.capped("capped-rejected", "21")
+        work_rejected = self.copy("rejected")
         out = Path(self.tmp.name) / "excluded"
         for label, w, reviews, tid, reason in [
-                ("invalid at the cap", work, accept_all(work), "28",
-                 "attempt cap reached (3 of 3); final attempt failed validation: Step 33 is not editable"),
-                ("rejected at the cap", work_rejected,
+                ("invalid on its single attempt", work, accept_all(work), "28",
+                 "failed validation: Step 33 is not editable"),
+                ("rejected on its single attempt", work_rejected,
                  accept_all(work_rejected, **{"21": {"decision": "reject", "reason": "too loose"}}), "21",
-                 "attempt cap reached (3 of 3); final attempt rejected by fixture: too loose")]:
+                 "rejected by fixture: too loose")]:
             with self.subTest(label):
                 target = self.release(w, reviews, out / tid)
                 manifest = pc.read(target / "manifest.json")
@@ -510,18 +494,18 @@ class ReleaseTest(unittest.TestCase):
                 self.assertEqual(manifest["attempted_count"], 29)            # every case, as step_decoy
                 self.assertEqual(len(manifest["accepted_ids"]), 28)
                 self.assertNotIn(tid, manifest["accepted_ids"])
-                self.assertEqual(manifest["regenerated"], {tid: 2})
+                self.assertNotIn("regenerated", manifest)
                 ids = {str(r["task_id"]) for r in pc.read(target / "trajectories/tau_dataset_failed.json")}
                 self.assertEqual(ids, set(CASES) - {tid})
                 self.assertEqual({str(l["trajectory_id"]) for l in pc.read(target / "ground_truth.json")}, ids)
                 audit = pc.read(target / "audit.json")
                 self.assertEqual(audit[tid]["excluded"], reason)
-                self.assertEqual(len(audit[tid]["superseded"]), 2)         # every attempt documented
-        # Only stuck cases are excluded: at the cap, a missing review or drift still blocks.
-        with self.subTest("missing review at the cap"), self.assertRaisesRegex(ValueError, "21: needs a signed review"):
+                self.assertNotIn("superseded", audit[tid])
+        # Only unaccepted cases are excluded: a missing review or drift still blocks.
+        with self.subTest("missing review"), self.assertRaisesRegex(ValueError, "21: needs a signed review"):
             self.release(work_rejected, accept_all(work_rejected, Path(self.tmp.name) / "r.json", **{"21": None}),
                          out / "blocked")
-        with self.subTest("drift at the cap"), self.assertRaisesRegex(ValueError, "21: candidate changed"):
+        with self.subTest("drift"), self.assertRaisesRegex(ValueError, "21: candidate changed"):
             events = pc.read(work_rejected / "21/events.json")
             events[-1]["content"] += " "
             pc.write(work_rejected / "21/events.json", events)
@@ -553,10 +537,11 @@ class ReleaseTest(unittest.TestCase):
             self.assertEqual(label, LABELS[str(label["trajectory_id"])])
         audit = pc.read(target / "audit.json")
         self.assertEqual(audit["2"]["root"], {"step_number": 7, "failure_category": "Misinterpretation of Tool Output"})
-        self.assertEqual(audit["2"]["attempt"], 1)
+        self.assertFalse({"attempt", "superseded"} & set(audit["2"]))
         manifest = pc.read(target / "manifest.json")
-        self.assertEqual((manifest["variant"], manifest["generator"]["model_id"], manifest["generator"]["max_attempts"]),
-                         ("presentation_change", MODEL, 3))
+        self.assertEqual((manifest["variant"], manifest["generator"]["model_id"]), ("presentation_change", MODEL))
+        self.assertNotIn("max_attempts", manifest["generator"])
+        self.assertNotIn("regenerated", manifest)
         self.assertEqual((manifest["excluded_ids"], manifest["excluded"], manifest["attempted_count"]), ([], {}, 29))
         self.assertEqual(len(manifest["accepted_ids"]), manifest["attempted_count"])
         self.assertEqual(manifest["parent"]["sha256"]["ground_truth"], pc.digest(TAU_GT.read_bytes()))

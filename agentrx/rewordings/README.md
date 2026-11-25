@@ -75,7 +75,6 @@ done; wait
 |---|---|
 | `--model` | `haiku` / `sonnet` / `opus` (full IDs `claude-haiku-5-5`, etc.) |
 | `--ids 2` | Single-trajectory pilot (a pilot work dir can never be released) |
-| `--max-attempts` | Regeneration cap, default 3 (first attempt + 2 regenerations) |
 | `--prose-roles` / `--policy-roles` | Role names for a non-Tau domain (Tau defaults assistant / system) |
 
 Each case prints `<id>: EDIT (N edits)` or `<id>: INVALID`. The work directory is
@@ -84,19 +83,9 @@ same command. Each valid case gets `proposal.json`, `events.json`, and a
 `validation.json` listing every change plus the `events_sha256` the review must
 name. An invalid proposal is kept as `invalid.json` for review, not dropped.
 
-**Regenerate** a failed or rejected case (counts against the cap):
-
-```bash
-python -m agentrx.rewordings.presentation_change generate --domain tau \
-  --trajectories "$base/tau_dataset_failed.json" \
-  --ground-truth "$base/tau_ground_truth.json" \
-  --model sonnet --effort medium \
-  --work runs/presentation_change/tau/sonnet-medium --regenerate 28 55
-```
-
-The previous attempt is moved to `_superseded/<id>/<n>/` and recorded in the
-audit. A case still not valid after the cap is excluded at release (below),
-not forced through.
+Each case gets a **single attempt**; there are no retries. A case that is
+invalid or has no edit is excluded at release with its reason (below), not
+forced through.
 
 ---
 
@@ -110,7 +99,7 @@ python -m agentrx.rewordings.presentation_change review-sheet \
 ```
 
 This writes `review_sheet.md` and `reviews.template.json`. For each case the
-sheet shows the attempt number, the root and other failures, the model's
+sheet shows the root and other failures, the model's
 rationale, and every change with its checks. Prose edits appear in full,
 before and after; edits on annotated failure steps are flagged with ⚠.
 
@@ -119,7 +108,7 @@ Python has already checked structure and values, so the review is about
 annotated failure must stay exactly as clear and as wrong. Fill `decision`,
 `reviewer` and `reason` in the template and save it as `reviews.json`. Keep
 `events_sha256` as written — it ties the review to the exact events you read, so
-a review written before a regeneration is stale and refused.
+a review whose `events_sha256` does not match is stale and refused.
 
 ```json
 {
@@ -148,23 +137,22 @@ python run.py "$release_dir/trajectories" --domain tau \
 ```
 
 **Every case must be accounted for.** Following `RELEASE_PLAN.md`, a release
-covers all labeled trajectories (29 for Tau), each generated, valid and
-accepted — unless it is excluded at the attempt cap. Release refuses, with one
-message listing every case that needs attention, when:
+covers all labeled trajectories (29 for Tau), each generated and reviewed.
+Release refuses, with one message listing every case that needs attention, when:
 
 - the work directory does not cover every labeled trajectory;
 - a case is missing;
-- a case with attempts left is invalid, has no edit, or was rejected;
 - a review is missing, unsigned, or stale;
 - the inputs changed since generation;
 - a rebuilt case differs from its saved events;
 - the version already exists.
 
-A case still not releasable at the cap is **excluded**, as step-decoy left out
-its task 31: left out of `trajectories/` and `ground_truth.json`, and documented
-with its reason in the manifest's `excluded_ids` / `excluded` and in the audit
-(which keeps every attempt). Only stuck cases are excluded; attempts-left,
-stale review, or drift still block the release.
+A case whose single attempt is invalid, has no edit, was rejected, or fails the
+current checks is **excluded**, as step-decoy left out its task 31: left out of
+`trajectories/` and `ground_truth.json`, and documented with its reason in the
+manifest's `excluded_ids` / `excluded` and in the audit. Only those cases are
+excluded; a missing case, a missing or stale review, or drift still block the
+release.
 
 Each release contains:
 
@@ -172,10 +160,9 @@ Each release contains:
   identical to the baseline except its `traj`.
 - `ground_truth.json` — the baseline labels plus `original_step_number`
   (equal to `step_number`, since steps never move).
-- `audit.json` — each case's proposal, generation metadata, attempt number,
-  superseded attempts, review, applied changes, root failure, and any
-  exclusion reason.
-- `manifest.json` — the step-decoy keys plus `helpers_sha256`, `regenerated`,
+- `audit.json` — each case's proposal, generation metadata, review, applied
+  changes, root failure, and any exclusion reason.
+- `manifest.json` — the step-decoy keys plus `helpers_sha256` and
   `excluded_ids` / `excluded`; `attempted_count` counts every case.
 
 ---
@@ -210,8 +197,8 @@ python -m pytest tests/test_presentation_change.py
 ```
 
 The suite mocks the Claude Code CLI (no model is called) and covers the edit
-rules, `check_preserved()` tampering checks, generation and the regeneration
-cap, the release gates (including exclusion), and the compare classification.
+rules, `check_preserved()` tampering checks, single-attempt generation, the
+release gates (including exclusion), and the compare classification.
 
 ---
 

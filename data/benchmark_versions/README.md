@@ -222,24 +222,14 @@ every change and the `events_sha256` the review must name.
 
 **Every case must be accounted for.** Following [RELEASE_PLAN.md](../../RELEASE_PLAN.md),
 a presentation-change release covers all labeled trajectories (29 for Tau).
-Each one must be generated, valid and accepted, unless it is excluded at the
-attempt cap (below). If a case is invalid, has no edit, or is rejected in
-review, regenerate it by rerunning the same command with `--regenerate <id>`.
-The previous attempt is kept under `_superseded/<id>/<n>/` and recorded in the
-audit.
-
-**Regeneration is capped.** Each case gets at most `--max-attempts` attempts,
-default 3: the first one plus two regenerations. The cap is locked in
-`config.json` and recorded in the manifest. Regenerating until a reviewer
-accepts would bias the release toward easy-to-accept edits. A case that is
-still not releasable after the cap, because its final attempt is invalid, has no
-edit, was rejected, or fails the current checks, cannot be regenerated. Release
-then excludes it, as step-decoy releases left out task 31. The excluded case is
-left out of `trajectories/` and `ground_truth.json`. It is documented, with its
-reason, in the manifest's `excluded_ids` and `excluded` and in the audit, which
-also keeps every attempt. Report it as an outcome; don't raise the cap. Only
-stuck cases are excluded. A case with attempts left, a missing or stale review,
-or drift still blocks the release.
+Each one must be generated and reviewed. Each case gets a single attempt;
+there is no regeneration. A case that is invalid, has no edit, was rejected in
+review, or fails the current checks is excluded, as step-decoy releases left
+out task 31. The excluded case is left out of `trajectories/` and
+`ground_truth.json`. It is documented, with its reason, in the manifest's
+`excluded_ids` and `excluded` and in the audit. Report it as an outcome. Only
+those cases are excluded: a missing case, a missing or stale review, or drift
+still blocks the release.
 
 Write the review sheet, then review **each case**:
 
@@ -248,7 +238,7 @@ python -m agentrx.rewordings.presentation_change review-sheet --work runs/presen
 ```
 
 This writes `review_sheet.md` and `reviews.template.json` in the work directory.
-For each case the sheet shows its attempt number, its root and other failures,
+For each case the sheet shows its root and other failures,
 the model's rationale, and every change with its checks. Prose edits appear in
 full, before and after, and edits on annotated failure steps are flagged with ⚠.
 The sheet also reports whether each review in an existing `reviews.json` is
@@ -258,7 +248,7 @@ about meaning: each paraphrase must say exactly what the original said, and
 every annotated failure must stay exactly as clear and as wrong. Fill in
 `decision`, `reviewer` and `reason` in the template and save it as
 `reviews.json`. Keep `events_sha256` as written, because it ties the review to
-the exact events you read. A review written before a case was regenerated is
+the exact events you read. A review whose `events_sha256` does not match is
 stale and is refused.
 
 ```json
@@ -285,8 +275,6 @@ fix for each. It refuses in these cases:
 
 - the work directory does not cover every labeled trajectory;
 - a case is missing;
-- a case with attempts left is invalid, has no edit or was rejected (at the cap
-  it is excluded instead);
 - a review is missing, unsigned or stale;
 - the inputs changed since generation;
 - a rebuilt case differs from its saved events;
@@ -296,13 +284,11 @@ fix for each. It refuses in these cases:
 record identical to the baseline except its `traj`. `ground_truth.json` is the baseline labels
 unchanged, plus `original_step_number`, which always equals `step_number`; it
 is there only so the file has the same shape as a step-decoy release.
-`audit.json` records each case's proposal, generation metadata, attempt number,
-superseded attempts, review, applied changes and root failure, and, for an
-excluded case, its exclusion reason. The manifest uses the step-decoy keys, and
-`attempted_count` counts every case, excluded ones included. It adds
-`helpers_sha256` (the shared code hash), `regenerated` (attempts per
-regenerated case), and `excluded_ids` and `excluded` (each excluded case with
-its reason). `total_cost_usd` includes superseded attempts.
+`audit.json` records each case's proposal, generation metadata, review, applied
+changes and root failure, and, for an excluded case, its exclusion reason. The
+manifest uses the step-decoy keys, and `attempted_count` counts every case,
+excluded ones included. It adds `helpers_sha256` (the shared code hash) and
+`excluded_ids` and `excluded` (each excluded case with its reason).
 
 To measure verdict changes, use clean and variant reports from the same judge
 configuration, each containing a single decision per case:
