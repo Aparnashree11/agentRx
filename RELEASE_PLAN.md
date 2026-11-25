@@ -127,9 +127,29 @@ The framework is run on Magentic-One only when every condition below holds, and 
    - Category accuracy: 0.3448, 0.2759 and 0.3103.
 5. Mark the withdrawn release as withdrawn in `data/benchmark_versions/README.md`, and add a line to the changelog (Section 5).
 
-### Rollback rehearsal
+### Rollback rehearsal (record of one run)
 
-No rehearsal has been run yet. The known input/output for a future rehearsal: 29 τ-bench trajectories and 3 sol runs reproduce step 0.4138 ×3 and category 0.3448 / 0.2759 / 0.3103, against target `ac01913` / `tau_retail/baseline/v1.0.0`.
+| Field | Value |
+|---|---|
+| Date and time | 2026-11-24, 21:15:53–21:15:56 EST |
+| Run by | Pranudeep Metuku (rollback owner) |
+| Current version: commit / data version / judge version | `7016575` / `tau_retail` baseline v1.0.0 plus 9 rewording releases at v0.1.0 / `gpt-6.1-sol` via Copilot CLI 1.0.102 |
+| Target: commit / data version | `ac01913` / `tau_retail/baseline/v1.0.0`. Checkout succeeded, and `ac01913` is still reachable from `main` after the merge (`32ed483`). |
+| Time to switch | 1 s from recording the start state to the end of scoring; 2 s for the whole rehearsal (scripted) |
+| Steps done by hand | None in this rehearsal, which was scripted. Manual in the written procedure: clearing `/tmp`, comparing the computed values, editing the README and changelog. |
+| Known input → known output | 29 τ-bench trajectories, 3 sol runs → step 0.4138 ×3; category 0.3448 / 0.2759 / 0.3103. Read from the scorer's output files, not the headline line. **Matched: yes.** |
+| Hash check | Changing one byte in a pinned input made the reproducer abort with `HASH CHECK FAILED`, exit code 1. |
+| Problems found | See below. |
+
+**Problems found**
+
+1. **The reproducer can report success when the scorer fails.** It hides scorer errors and reads fixed `/tmp/baseline_rN.json` files. With the scorer deleted and stale files present, it printed the correct numbers and exited 0. This is still true on `32ed483`. Until it is fixed, a rollback must delete `/tmp/baseline_r*.json` first and read the scorer's output files directly.
+2. **The headline line is hard-coded** and doesn't check the computed values.
+3. **File paths differ between the target and `main`.** The baseline results are under `results/track_a/baseline/` at `ac01913` and `results/baseline/` on `main`. The hashes match, so a rollback must use the reproducer as it exists at `ac01913`.
+4. **No previous version exists for single-release rollback.** All nine rewording releases are v0.1.0, so "roll back to that rewording's previous version" can't happen yet.
+5. **No changelog file exists** at `main` or `ac01913`, so step 5 of the procedure has nowhere to write.
+6. **Only scoring is rolled back.** Rerunning the judge needs Copilot credentials and gives different output each run.
+7. **The judge version isn't pinned.** The logs record only `gpt-6.1-sol` and the Copilot CLI version (1.0.102), not a model version. A silent model update can't be detected from this record.
 
 ## 5. What users are told (G18), and what they can do when the output is wrong (G9)
 
